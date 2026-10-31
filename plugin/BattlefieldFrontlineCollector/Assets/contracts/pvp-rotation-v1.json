@@ -1,0 +1,36 @@
+{
+  "schema": "pvpchronicle-pvp-rotation/v1",
+  "version": 1,
+  "frontline": {
+    "referenceUtc": "2026-04-27T15:00:00Z",
+    "intervalMinutes": 1440,
+    "sequence": ["seize", "secure", "naadam", "triumph", "seize", "shatter", "naadam", "triumph"],
+    "maps": {
+      "secure": {"dutyId": 127, "names": {"zh-CN": "周边遗迹群（阵地战）", "zh-TW": "周邊遺跡群（陣地戰）", "en": "Borderland Ruins (Secure)", "ja": "外縁遺跡群（制圧戦）", "de": "Äußere Ruinen (Sicherung)", "fr": "Ruines frontalières (sécurisation)", "th": "ซากปรักชายแดน (ยึดครอง)", "vi": "Di tích Biên giới (Chiếm đóng)"}},
+      "seize": {"dutyId": 130, "names": {"zh-CN": "尘封秘岩（争夺战）", "zh-TW": "塵封秘岩（爭奪戰）", "en": "Seal Rock (Seize)", "ja": "シールロック（争奪戦）", "de": "Robbenholm (Eroberung)", "fr": "Rocher des tréfonds (annexion)", "th": "ศิลาผนึก (ช่วงชิง)", "vi": "Seal Rock (Tranh đoạt)"}},
+      "shatter": {"dutyId": 180, "names": {"zh-CN": "荣誉野（碎冰战）", "zh-TW": "榮譽野（碎冰戰）", "en": "Fields of Glory (Shatter)", "ja": "フィールド・オブ・グローリー（砕氷戦）", "de": "Feld der Ehre (Zersplitterung)", "fr": "Champs de la Gloire (brise-glace)", "th": "ทุ่งแห่งเกียรติยศ (ทลายน้ำแข็ง)", "vi": "Cánh đồng Vinh quang (Phá băng)"}},
+      "naadam": {"dutyId": 701, "names": {"zh-CN": "昂萨哈凯尔（竞争战）", "zh-TW": "昂薩哈凱爾（競爭戰）", "en": "Onsal Hakair (Danshig Naadam)", "ja": "オンサル・ハカイル（終節戦）", "de": "Onsal Hakair (Danshig Naadam)", "fr": "Onsal Hakair (Danshig Naadam)", "th": "Onsal Hakair (Danshig Naadam)", "vi": "Onsal Hakair (Danshig Naadam)"}},
+      "triumph": {"dutyId": 1080, "names": {"zh-CN": "沃刻其特（演习战）", "zh-TW": "沃刻其特（演習戰）", "en": "Worqor Chirteh (Triumph)", "ja": "ウォーコー・チーテ（演習戦）", "de": "Worqor Chirteh (Triumph)", "fr": "Worqor Chirteh (triomphe)", "th": "Worqor Chirteh (ชัยชนะ)", "vi": "Worqor Chirteh (Khải hoàn)"}}
+    }
+  },
+  "crystallineConflict": {
+    "referenceUtc": "2026-04-28T13:00:00Z",
+    "intervalMinutes": 60,
+    "sequence": ["palaistra", "volcanic", "bayside", "cloudnine", "castletown", "harmonias", "redsands"],
+    "maps": {
+      "palaistra": {"names": {"zh-CN": "角力学校", "zh-TW": "角力學校", "en": "The Palaistra", "ja": "パライストラ", "de": "Palästra", "fr": "Le Palestre", "th": "The Palaistra", "vi": "The Palaistra"}},
+      "volcanic": {"names": {"zh-CN": "火山之心", "zh-TW": "火山之心", "en": "The Volcanic Heart", "ja": "ヴォルカニック・ハート", "de": "Vulkanherz", "fr": "Le Cœur volcanique", "th": "The Volcanic Heart", "vi": "The Volcanic Heart"}},
+      "bayside": {"names": {"zh-CN": "海岸斗场", "zh-TW": "海岸鬥場", "en": "Bayside Battleground", "ja": "ベイサイド・バトルグラウンド", "de": "Küstenkampffeld", "fr": "Le Champ de bataille littoral", "th": "Bayside Battleground", "vi": "Bayside Battleground"}},
+      "cloudnine": {"names": {"zh-CN": "九霄云上", "zh-TW": "九霄雲上", "en": "Cloud Nine", "ja": "クラウドナイン", "de": "Wolke Sieben", "fr": "Le Petit Nuage", "th": "Cloud Nine", "vi": "Cloud Nine"}},
+      "castletown": {"names": {"zh-CN": "机关大殿", "zh-TW": "機關大殿", "en": "Clockwork Castletown", "ja": "東方絡繰御殿", "de": "Mechanische Menagerie", "fr": "Le Traquenard oriental", "th": "Clockwork Castletown", "vi": "Clockwork Castletown"}},
+      "harmonias": {"names": {"zh-CN": "休兵书库", "zh-TW": "休兵書庫", "en": "Archeia Harmonias", "ja": "アストラガロス・ハルモニアス", "de": "Archeia Harmonias", "fr": "Archeia Harmonias", "th": "Archeia Harmonias", "vi": "Archeia Harmonias"}},
+      "redsands": {"names": {"zh-CN": "赤土红沙", "zh-TW": "赤土紅沙", "en": "Red Sands", "ja": "レッド・サンズ", "de": "Roter Sand", "fr": "Les Sables sanglants", "th": "Red Sands", "vi": "Red Sands"}}
+    }
+  },
+  "sources": [
+    "https://na.finalfantasyxiv.com/lodestone/playguide/contentsguide/frontline/",
+    "https://na.finalfantasyxiv.com/lodestone/playguide/contentsguide/crystallineconflict/",
+    "https://github.com/ffxiv-wakeng/pvp-calendar"
+  ],
+  "note": "Rotation constants are versioned. Frontline resets at 15:00 UTC; the current Crystalline Conflict schedule uses 60-minute slots."
+}

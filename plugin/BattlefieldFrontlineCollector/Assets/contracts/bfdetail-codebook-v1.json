@@ -1,0 +1,26 @@
+{
+  "schema":"pvpchronicle-bfdetail-codebook/v1",
+  "version":1,
+  "shapes":[
+    {"id":1,"fields":["ok","matchUid","realm","status","detail"]},
+    {"id":2,"fields":["schema","scoreTimeline","partyKeySource","movementTimeline","captureFeatures","observerTeam","coverage","evidenceNotice","actions","objectiveTimeline","statusSnapshots","deathTimeline","statusTimeline","coordinationChats","targetMarkers","fieldMarkers","anomalyCandidates","anomalyCoverage","anomalyModel","anomalyDistributions","behaviorGroups","behaviorModel","fourSmallDisplayThreshold"]},
+    {"id":3,"fields":["elapsedMs","maelstrom","adders","flames","playerBattleHigh"]},
+    {"id":4,"fields":["elapsedMs","visibleActors","factions","actors"]},
+    {"id":5,"fields":["team","count","x","y","z","averageHpPercent","averageMpPercent","observedHpLoss","observedHpGain"]},
+    {"id":6,"fields":["entityId","name","worldId","classJobId","team","alliance","x","y","z","currentHp","maxHp","currentMp","maxMp","shieldPercent","observedHpLoss","observedHpGain","fellToZero","statuses"]},
+    {"id":7,"fields":["statusId","statusName","sourceEntityId","remainingSeconds"]},
+    {"id":8,"fields":["vitalsFrames","scoreChanges","positionScope","healthFlowScope"]},
+    {"id":9,"fields":["elapsedMs","targetEntityId","sourceEntityId","statusId","durationSeconds","change"]},
+    {"id":10,"fields":["elapsedMs","targetEntityId"]},
+    {"id":11,"fields":["key","labelZh","score","confidence","evidenceScope"]},
+    {"id":12,"fields":["kind","playerName","worldId","classJobId","unit","upperBounds","counts","highlightCounts","observations","referenceValue","tolerance","actionId","evidenceScope"]},
+    {"id":13,"fields":["kind","playerName","worldId","classJobId","unit","upperBounds","counts","highlightCounts","observations","referenceValue","actionId","evidenceScope"]},
+    {"id":14,"fields":["name","worldId","classJobId","kills","deaths","assists","damage"]},
+    {"id":15,"fields":["team","alliance","modelScore","cohesion","burstSync","advanceSupport","advanceSupportLinks","candidateKind","dependencyLinks","partyKeySource","kills","deaths","assists","damage","members"]},
+    {"id":16,"fields":["elapsedMs","markerIndex","markerKey","targetEntityId","change","targetName","targetWorldId","targetJobId","targetTeam","targetAlliance","operatorEvidence","targetObjectKind","targetBaseId","targetDataId","targetSubKind","targetOwnerId","targetX","targetY","targetZ","targetNameEvidence"]},
+    {"id":17,"fields":["movementIntervals","captureGapRejected","rangeUsesWithExactPositions","rangeUsesMissingPositions","reactionOpportunities","gcdWindows","tripleWeaveWindows","movementSignalsRejectedLegacy","movementCalibrationSuppressed","movementEligibleIdentities"]},
+    {"id":18,"fields":["elapsedMs","actionId","actionType","actionName","sourceEntityId","sourceName","sourceWorldId","sourceJobId","sourceTeam","sourceAlliance","sourceOwnerEntityId","sourceOwnerName","sourceOwnerWorldId","sourceOwnerJobId","targetEntityId","targetName","targetWorldId","targetJobId","targetTeam","targetAlliance","targetOwnerEntityId","targetOwnerName","targetOwnerWorldId","targetOwnerJobId","damage","healing","effectKind","targetCurrentHp","targetMaxHp","targetShieldPercent"]},
+    {"id":19,"fields":["elapsedMs","actionId","actionType","nominalRange","effectRange","actionCategoryId","recast100Ms","cooldownGroup","affectsPosition","globalSequence","sourceSequence","animationLockMs","actionName","sourceEntityId","sourceX","sourceY","sourceZ","sourceName","sourceWorldId","sourceJobId","sourceTeam","sourceAlliance","sourceOwnerEntityId","sourceOwnerName","sourceOwnerWorldId","sourceOwnerJobId","targetEntityId","targetName","targetIndex","targetX","targetY","targetZ","targetWorldId","targetJobId","targetTeam","targetAlliance","targetOwnerEntityId","targetOwnerName","targetOwnerWorldId","targetOwnerJobId","damage","healing","effectKind","targetCurrentHp","targetMaxHp","targetShieldPercent","identityResolution"]}
+  ],
+  "symbols":["CN","JP","NA","EU","OCE","ready","damage","healing","miss","status_apply","status_remove","dot","hot","high","medium","low","verified","pilot_candidate","unresolved","result_packet_verified"]
+}

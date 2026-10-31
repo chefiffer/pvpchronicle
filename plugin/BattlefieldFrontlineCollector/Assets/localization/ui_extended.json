@@ -1,0 +1,4481 @@
+{
+  "schema": "battlefield-ui-localization/v2",
+  "source": "Offline full-coverage draft with a checked-in human-reviewed terminology layer",
+  "translations": {
+    "liveObservedKda": {
+      "de": "Beobachtetes K/D/A dieser Partie",
+      "fr": "K/D/A observé de la partie",
+      "th": "K/D/A สะสมที่สังเกตได้ในแมตช์นี้",
+      "vi": "K/D/A tích lũy quan sát được trong trận"
+    },
+    "liveObservedKdaBoundary": {
+      "de": "Zuordnung aus sichtbaren K.-o.-Ereignissen und direktem Schaden der vorherigen 15 Sekunden; kein verbindliches Ergebnis-KDA",
+      "fr": "Attribué à partir des K.-O. visibles et des dégâts directs des 15 secondes précédentes ; ce n’est pas le KDA officiel du résultat",
+      "th": "อ้างอิงจากการล้มที่มองเห็นและความเสียหายโดยตรงใน 15 วินาทีก่อนหน้า ไม่ใช่ KDA ทางการจากผลการแข่งขัน",
+      "vi": "Suy ra từ các lần gục có thể quan sát và sát thương trực tiếp trong 15 giây trước đó; không phải KDA chính thức từ kết quả"
+    },
+    "noObservedKda": {
+      "de": "Noch kein zuordenbarer K.-o. beobachtet",
+      "fr": "Aucun K.-O. attribuable observé pour le moment",
+      "th": "ยังไม่พบการล้มที่สามารถระบุผู้เกี่ยวข้องได้",
+      "vi": "Chưa quan sát thấy lần hạ gục nào có thể quy thuộc"
+    },
+    "ccUploadCompleteDetailPending": {
+      "de": "Partie hochgeladen; nur der Detailabruf ist fehlgeschlagen und kann ohne erneuten Upload wiederholt werden.",
+      "fr": "Partie téléversée ; seul le téléchargement des détails a échoué et peut être réessayé sans nouveau téléversement.",
+      "th": "อัปโหลดแมตช์แล้ว มีเพียงการดาวน์โหลดรายละเอียดที่ล้มเหลว สามารถลองใหม่ได้โดยไม่ต้องอัปโหลดซ้ำ",
+      "vi": "Trận đã được tải lên; chỉ tải chi tiết thất bại và có thể thử lại mà không cần tải lại trận."
+    },
+    "tabCalendar": {
+      "de": "PvP-Kalender",
+      "fr": "Calendrier JcJ",
+      "th": "ปฏิทิน PvP",
+      "vi": "Lịch PvP"
+    },
+    "calendarTitle": {
+      "de": "PvP-Rotation und Ergebnisse",
+      "fr": "Rotation et résultats JcJ",
+      "th": "รอบแผนที่และผล PvP",
+      "vi": "Lịch xoay và kết quả PvP"
+    },
+    "calendarHelp": {
+      "de": "Frontline und Crystalline Conflict zeigen jeweils die aktuelle und die nächste Rotation in Ortszeit; Kalender und Ergebnisse bleiben in getrennten Bereichen.",
+      "fr": "Frontline et Crystalline Conflict affichent séparément la rotation actuelle et la suivante en heure locale ; leurs calendriers et résultats restent dans des sections distinctes.",
+      "th": "Frontline และ Crystalline Conflict แสดงรอบปัจจุบันและรอบถัดไปตามเวลาท้องถิ่นแยกกัน โดยปฏิทินและผลการเล่นของแต่ละโหมดอยู่คนละส่วน",
+      "vi": "Frontline và Crystalline Conflict hiển thị riêng vòng hiện tại và vòng kế tiếp theo giờ địa phương; lịch và kết quả của từng chế độ nằm trong các khu vực độc lập."
+    },
+    "frontlineNow": {
+      "de": "Aktuelle Front",
+      "fr": "Front actuel",
+      "th": "Frontline ปัจจุบัน",
+      "vi": "Frontline hiện tại"
+    },
+    "crystallineNow": {
+      "de": "Aktueller Crystalline Conflict",
+      "fr": "Crystalline Conflict actuel",
+      "th": "Crystalline Conflict ปัจจุบัน",
+      "vi": "Crystalline Conflict hiện tại"
+    },
+    "nextRotation": {
+      "de": "Nächster Wechsel in",
+      "fr": "Prochaine rotation dans",
+      "th": "รอบถัดไปใน",
+      "vi": "Đổi bản đồ sau"
+    },
+    "nextRotationMap": {
+      "de": "Nächste Rotation",
+      "fr": "Rotation suivante",
+      "th": "รอบแผนที่ถัดไป",
+      "vi": "Vòng tiếp theo"
+    },
+    "calendarPrevious": {
+      "de": "Vorheriger Monat",
+      "fr": "Mois précédent",
+      "th": "เดือนก่อน",
+      "vi": "Tháng trước"
+    },
+    "calendarNext": {
+      "de": "Nächster Monat",
+      "fr": "Mois suivant",
+      "th": "เดือนถัดไป",
+      "vi": "Tháng sau"
+    },
+    "today": {
+      "de": "Heute",
+      "fr": "Aujourd’hui",
+      "th": "วันนี้",
+      "vi": "Hôm nay"
+    },
+    "matchesPlayed": {
+      "de": "Partien",
+      "fr": "Parties",
+      "th": "จำนวนแมตช์",
+      "vi": "Số trận"
+    },
+    "wins": {
+      "de": "Siege",
+      "fr": "Victoires",
+      "th": "ชนะ",
+      "vi": "Thắng"
+    },
+    "winRate": {
+      "de": "Siegrate",
+      "fr": "Taux de victoire",
+      "th": "อัตราชนะ",
+      "vi": "Tỷ lệ thắng"
+    },
+    "noMatches": {
+      "de": "An diesem Tag wurden keine Partien erfasst.",
+      "fr": "Aucune partie capturée ce jour-là.",
+      "th": "ไม่มีแมตช์ที่บันทึกในวันนี้",
+      "vi": "Không có trận đã ghi trong ngày này."
+    },
+    "calendarDayStats": {
+      "de": "{0} Partien · {1:0}% Siege",
+      "fr": "{0} parties · {1:0}% de victoires",
+      "th": "{0} แมตช์ · ชนะ {1:0}%",
+      "vi": "{0} trận · thắng {1:0}%"
+    },
+    "calendarNoLocalMatches": {
+      "de": "Keine lokalen Partien",
+      "fr": "Aucune partie locale",
+      "th": "ยังไม่มีแมตช์ในเครื่อง",
+      "vi": "Chưa có trận cục bộ"
+    },
+    "calendarLocalMatches": {
+      "de": "Lokale Partien dieses Tages · anklicken, um Details zu öffnen",
+      "fr": "Parties locales de cette journée · cliquer pour ouvrir les détails",
+      "th": "แมตช์ในเครื่องของวันนี้ · คลิกเพื่อเปิดรายละเอียด",
+      "vi": "Trận cục bộ trong ngày · nhấp để mở chi tiết"
+    },
+    "ccStatsUnavailable": {
+      "de": "Die Crystalline-Conflict-Rotation ist verfügbar. 5-gegen-5-Ergebnisse erscheinen, sobald der Sammler diesen Modus unterstützt.",
+      "fr": "La rotation de Crystalline Conflict est disponible. Les résultats 5 contre 5 apparaîtront lorsque le collecteur prendra ce mode en charge.",
+      "th": "มีรอบ Crystalline Conflict แล้ว สถิติ 5v5 จะแสดงเมื่อระบบบันทึกรองรับโหมดนี้",
+      "vi": "Đã có lịch Crystalline Conflict. Kết quả 5v5 sẽ xuất hiện khi bộ thu hỗ trợ chế độ này."
+    },
+    "ccMapPerformance": {
+      "de": "Crystalline Conflict nach Arena",
+      "fr": "Crystalline Conflict par arène",
+      "th": "ผลงาน Crystalline Conflict แยกตามสนาม",
+      "vi": "Crystalline Conflict theo đấu trường"
+    },
+    "ccWeekCalendar": {
+      "de": "Crystalline Conflict diese Woche",
+      "fr": "Crystalline Conflict cette semaine",
+      "th": "ตาราง Crystalline Conflict สัปดาห์นี้",
+      "vi": "Crystalline Conflict tuần này"
+    },
+    "ccWeekCalendarHelp": {
+      "de": "Ortszeit · Wochentage waagerecht / Stunden senkrecht · {0}",
+      "fr": "Heure locale · jours en colonnes / heures en lignes · {0}",
+      "th": "เวลาท้องถิ่น · วันเรียงแนวนอน / ชั่วโมงเรียงแนวตั้ง · {0}",
+      "vi": "Giờ địa phương · thứ theo chiều ngang / giờ theo chiều dọc · {0}"
+    },
+    "ccTodayPerformance": {
+      "de": "Crystalline Conflict heute",
+      "fr": "Crystalline Conflict aujourd’hui",
+      "th": "Crystalline Conflict วันนี้",
+      "vi": "Crystalline Conflict hôm nay"
+    },
+    "ccTodayNoMatches": {
+      "de": "Heute wurden keine Partien erfasst",
+      "fr": "Aucune partie capturée aujourd’hui",
+      "th": "วันนี้ยังไม่มีแมตช์ที่บันทึก",
+      "vi": "Hôm nay chưa có trận được ghi"
+    },
+    "ccCrystalReplay": {
+      "de": "2D-Wiedergabe der Kristallspur",
+      "fr": "Relecture 2D de la trajectoire du cristal",
+      "th": "รีเพลย์เส้นทางคริสตัลแบบ 2D",
+      "vi": "Phát lại quỹ đạo pha lê 2D"
+    },
+    "ccCrystalReplayEvidence": {
+      "de": "Die goldene Spur verbindet nur kontinuierlich geladene Kristallkoordinaten; Beobachtungslücken werden nicht interpoliert.",
+      "fr": "La trajectoire dorée relie uniquement les coordonnées du cristal chargées sans interruption ; les lacunes ne sont pas interpolées.",
+      "th": "เส้นสีทองเชื่อมเฉพาะพิกัดคริสตัลที่โหลดต่อเนื่อง และไม่เติมเส้นทางในช่วงที่สังเกตไม่ได้",
+      "vi": "Đường màu vàng chỉ nối các tọa độ pha lê được tải liên tục; khoảng trống quan sát không được nội suy."
+    },
+    "ccProgressTimeline": {
+      "de": "Kristallfortschritt und Kontrollpunkte",
+      "fr": "Progression du cristal et points de contrôle",
+      "th": "ความคืบหน้าคริสตัลและจุดตรวจ",
+      "vi": "Tiến độ pha lê và điểm kiểm soát"
+    },
+    "ccProgressTimelineEvidence": {
+      "de": "Die obere Hälfte zeigt unseren Angriff, die untere den gegnerischen Vorstoß. Gold zeigt den ersten Kontrollpunkt-Fortschritt; die Werte stammen direkt aus dem Match-Director.",
+      "fr": "La moitié supérieure montre notre attaque, l’inférieure la poussée adverse. L’or indique la première progression au point de contrôle ; les valeurs viennent directement du directeur de partie.",
+      "th": "ครึ่งบนคือการบุกของฝ่ายเรา ครึ่งล่างคือการดันของศัตรู เส้นสีทองคือความคืบหน้าการผ่านจุดตรวจครั้งแรก โดยอ่านค่าจากตัวควบคุมแมตช์โดยตรง",
+      "vi": "Nửa trên là đợt tấn công của đội ta, nửa dưới là đợt đẩy của đối phương. Đường vàng là tiến độ vượt điểm kiểm soát lần đầu, đọc trực tiếp từ bộ điều khiển trận đấu."
+    },
+    "ccCheckpointLegend": {
+      "de": "Gold: Fortschritt am Kontrollpunkt",
+      "fr": "Or : progression du point de contrôle",
+      "th": "เส้นสีทอง: ความคืบหน้าของจุดตรวจ",
+      "vi": "Vàng: tiến độ vượt điểm kiểm soát"
+    },
+    "ccNoProgressTimeline": {
+      "de": "Diese ältere Aufzeichnung enthält keine Kristallfortschrittsdaten. Neue Aufzeichnungen erfassen sie ab Beginn.",
+      "fr": "Cette ancienne capture ne contient pas la progression du cristal. Les nouvelles captures l’enregistrent dès le début.",
+      "th": "บันทึกเก่านี้ไม่มีข้อมูลความคืบหน้าคริสตัล บันทึกใหม่จะเก็บตั้งแต่เริ่มแมตช์",
+      "vi": "Bản ghi cũ này không có dữ liệu tiến độ pha lê. Bản ghi mới sẽ thu thập ngay từ đầu."
+    },
+    "ccPreparationPeriod": {
+      "de": "Vorbereitung (30 s)",
+      "fr": "Préparation (30 s)",
+      "th": "ช่วงเตรียมตัว (30 วินาที)",
+      "vi": "Chuẩn bị (30 giây)"
+    },
+    "ccOwnAttackPositive": {
+      "de": "+ unser Angriff",
+      "fr": "+ notre attaque",
+      "th": "+ ฝ่ายเราบุก",
+      "vi": "+ đội ta tấn công"
+    },
+    "ccEnemyAttackNegative": {
+      "de": "− gegnerischer Angriff",
+      "fr": "− attaque adverse",
+      "th": "− ศัตรูบุก",
+      "vi": "− đối phương tấn công"
+    },
+    "ccBombCrossExplosion": {
+      "de": "Kreuzeruption der Bombe",
+      "fr": "Éruption en croix du bombo",
+      "th": "ระเบิดกากบาทของบอมบ์",
+      "vi": "Vụ nổ chữ thập của bom"
+    },
+    "ccTacticalCrystal": {
+      "de": "Taktischer Kristall",
+      "fr": "Cristal tactique",
+      "th": "คริสตัลยุทธวิธี",
+      "vi": "Pha lê chiến thuật"
+    },
+    "coordinateGrid": {
+      "de": "Koordinatengitter",
+      "fr": "grille de coordonnées",
+      "th": "ตารางพิกัด",
+      "vi": "lưới tọa độ"
+    },
+    "date": {
+      "de": "Datum",
+      "fr": "Date",
+      "th": "วันที่",
+      "vi": "Ngày"
+    },
+    "ccResultEvidence": {
+      "de": "Nur lokal erfasste Ergebnisdaten",
+      "fr": "Résultats locaux uniquement",
+      "th": "ใช้เฉพาะผลการแข่งขันที่บันทึกในเครื่อง",
+      "vi": "Chỉ dùng kết quả ghi cục bộ"
+    },
+    "ccNoMatchData": {
+      "de": "Noch keine Crystalline-Conflict-Ergebnisse erfasst. Nach einer lockeren oder Rangpartie erscheinen hier Siegraten und häufige Jobs je Arena.",
+      "fr": "Aucun résultat de Crystalline Conflict n’a encore été capturé. Après une partie normale ou classée, ce panneau affichera les taux de victoire et les jobs fréquents par arène.",
+      "th": "ยังไม่มีผล Crystalline Conflict เมื่อจบแมตช์ทั่วไปหรือจัดอันดับ แผงนี้จะแสดงอัตราชนะและอาชีพที่ใช้บ่อยแยกตามสนาม",
+      "vi": "Chưa ghi nhận kết quả Crystalline Conflict. Sau một trận thường hoặc xếp hạng, bảng này sẽ hiển thị tỷ lệ thắng và nghề thường dùng theo đấu trường."
+    },
+    "ccAstra": {
+      "de": "Astra",
+      "fr": "Astra",
+      "th": "ทีม Astra",
+      "vi": "Đội Astra"
+    },
+    "ccUmbra": {
+      "de": "Umbra",
+      "fr": "Umbra",
+      "th": "ทีม Umbra",
+      "vi": "Đội Umbra"
+    },
+    "crystalTime": {
+      "de": "Kristalltransport",
+      "fr": "Temps de transport",
+      "th": "เวลาขนส่งคริสตัล",
+      "vi": "Thời gian đẩy pha lê"
+    },
+    "ccScorePending": {
+      "de": "Zu kleine Kohorte für Region, Karte und Job (mindestens 20 Zeilen und 5 Identitäten)",
+      "fr": "Cohorte région/carte/job insuffisante (au moins 20 lignes et 5 identités)",
+      "th": "ข้อมูลกลุ่มเซิร์ฟเวอร์ แผนที่ และอาชีพเดียวกันยังน้อยเกินไป (ต้องมี 20 แถวและ 5 บุคคล)",
+      "vi": "Nhóm cùng khu vực, bản đồ và nghề còn quá nhỏ (cần 20 dòng và 5 danh tính)"
+    },
+    "ccTendencyPending": {
+      "de": "Stichprobe unzureichend",
+      "fr": "échantillon insuffisant",
+      "th": "ตัวอย่างไม่เพียงพอ",
+      "vi": "chưa đủ mẫu"
+    },
+    "ccLegacyResultNoScoreboard": {
+      "de": "Dieser alte Eintrag enthält nur die lokale Ergebnisübersicht. Neue Aufzeichnungen enthalten die offizielle Tabelle aller zehn Spieler.",
+      "fr": "Cette ancienne entrée ne contient que le résumé local. Les nouveaux enregistrements incluent le tableau officiel des dix joueurs.",
+      "th": "ข้อมูลเก่านี้มีเพียงผลสรุปของผู้เล่นในเครื่อง ข้อมูลใหม่จะแสดงตารางผลของผู้เล่นทั้งสิบคน",
+      "vi": "Bản ghi cũ này chỉ có tóm tắt kết quả cục bộ. Bản ghi mới sẽ có bảng kết quả chính thức của cả mười người chơi."
+    },
+    "ccPractice": {
+      "de": "Locker",
+      "fr": "Normal",
+      "th": "ทั่วไป",
+      "vi": "Đấu thường"
+    },
+    "ccRanked": {
+      "de": "Rang",
+      "fr": "Classé",
+      "th": "จัดอันดับ",
+      "vi": "Xếp hạng"
+    },
+    "ccCompactResult": {
+      "de": "{0} · {1:0}%",
+      "fr": "{0} · {1:0}%",
+      "th": "{0} · {1:0}%",
+      "vi": "{0} · {1:0}%"
+    },
+    "ccActReplayArchive": {
+      "de": "Historische ACT-Analyse für Crystalline Conflict",
+      "fr": "Analyse ACT historique de Crystalline Conflict",
+      "th": "รีเพลย์ Crystalline Conflict จาก ACT เก่า",
+      "vi": "Phân tích Crystalline Conflict từ ACT cũ"
+    },
+    "ccActReplayEvidence": {
+      "de": "Nur im ACT sichtbare Belege; Sieger und Teams werden nicht geschätzt",
+      "fr": "Preuves visibles dans ACT uniquement ; victoire et équipes non déduites",
+      "th": "ใช้เฉพาะหลักฐานที่ ACT มองเห็น ไม่คาดเดาผู้ชนะหรือทีม",
+      "vi": "Chỉ dùng bằng chứng ACT quan sát được; không suy đoán thắng thua hay đội"
+    },
+    "ccActReplayEmpty": {
+      "de": "Kein historisches ACT-Archiv für Crystalline Conflict importiert.",
+      "fr": "Aucune archive ACT historique de Crystalline Conflict importée.",
+      "th": "ยังไม่ได้นำเข้ารีเพลย์ Crystalline Conflict จาก ACT เก่า",
+      "vi": "Chưa nhập kho phân tích Crystalline Conflict từ ACT cũ."
+    },
+    "ccActReplayUnknownResult": {
+      "de": "Kein offizielles Ergebnispaket: Sieger und Warteschlangentyp unbekannt",
+      "fr": "Aucun paquet de résultat officiel : victoire et type de file indisponibles",
+      "th": "ไม่มีแพ็กเก็ตผลอย่างเป็นทางการ จึงไม่ทราบผู้ชนะและประเภทคิว",
+      "vi": "Không có gói kết quả chính thức: không xác định thắng thua và loại hàng đợi"
+    },
+    "ccActReplayCoverage": {
+      "de": "Sichtbare Spieler {0} · dekodierte Fähigkeitsereignisse {1}",
+      "fr": "Joueurs visibles {0} · événements de compétence décodés {1}",
+      "th": "ผู้เล่นที่มองเห็น {0} · เหตุการณ์สกิลที่ถอดรหัส {1}",
+      "vi": "Người chơi quan sát được {0} · sự kiện kỹ năng đã giải mã {1}"
+    },
+    "ccObservedActions": {
+      "de": "Aktionsübersicht des ausgewählten Spielers",
+      "fr": "Répartition des actions du joueur sélectionné",
+      "th": "สรุปสกิลของผู้เล่นที่เลือก",
+      "vi": "Phân tích kỹ năng của người chơi đã chọn"
+    },
+    "noObservedActions": {
+      "de": "Diesem Spieler konnten keine Aktionseffekte zugeordnet werden.",
+      "fr": "Aucun effet d'action n'a pu être attribué à ce joueur.",
+      "th": "ไม่พบเอฟเฟกต์สกิลที่ระบุว่าเป็นของผู้เล่นนี้",
+      "vi": "Không có hiệu ứng kỹ năng nào có thể quy cho người chơi này."
+    },
+    "count": {
+      "de": "Anzahl",
+      "fr": "Nombre",
+      "th": "จำนวน",
+      "vi": "Số lần"
+    },
+    "effectiveHealing": {
+      "de": "Effektive Heilung",
+      "fr": "Soins effectifs",
+      "th": "การรักษาที่มีผล",
+      "vi": "Hồi phục hiệu quả"
+    },
+    "localPlayer": {
+      "de": "Lokaler Spieler",
+      "fr": "Joueur local",
+      "th": "ผู้เล่นในเครื่อง",
+      "vi": "Người chơi cục bộ"
+    },
+    "reload": {
+      "de": "Neu laden",
+      "fr": "Recharger",
+      "th": "โหลดใหม่",
+      "vi": "Tải lại"
+    },
+    "time": {
+      "de": "Uhrzeit",
+      "fr": "Heure",
+      "th": "เวลา",
+      "vi": "Thời gian"
+    },
+    "damageTaken": {
+      "de": "Geleisteter Schaden",
+      "fr": "Dommages causés",
+      "th": "รับความเสียหาย",
+      "vi": "Mất đi tổn thất"
+    },
+    "map": {
+      "de": "Arena",
+      "fr": "Arène",
+      "th": "สนาม",
+      "vi": "Đấu trường"
+    },
+    "ccRankHistory": {
+      "de": "Rangverlauf im Crystalline Conflict",
+      "fr": "Évolution du rang en Crystalline Conflict",
+      "th": "ประวัติแรงก์ Crystalline Conflict",
+      "vi": "Lịch sử hạng Crystalline Conflict"
+    },
+    "ccRankHistoryEvidence": {
+      "de": "Nur tatsächlich im Spielprofil beobachtete Rangänderungen",
+      "fr": "Uniquement les changements de rang réellement observés dans le profil du jeu",
+      "th": "บันทึกเฉพาะการเปลี่ยนแรงก์ที่สังเกตได้จริงจากโปรไฟล์ในเกม",
+      "vi": "Chỉ ghi các thay đổi hạng thực sự quan sát được trong hồ sơ trò chơi"
+    },
+    "noCcRankHistory": {
+      "de": "Für diesen Charakter wurde noch kein Rang beobachtet. Die Aufzeichnung beginnt, sobald das PvP-Profil im Spiel geladen ist.",
+      "fr": "Aucun rang n’a encore été observé pour ce personnage. L’enregistrement commence après le chargement du profil JcJ en jeu.",
+      "th": "ยังไม่พบแรงก์ของตัวละครนี้ ระบบจะเริ่มบันทึกเมื่อโปรไฟล์ PvP ในเกมโหลดแล้ว",
+      "vi": "Chưa quan sát được hạng của nhân vật này. Việc ghi sẽ bắt đầu sau khi hồ sơ PvP trong trò chơi được tải."
+    },
+    "ccRankSourceProfile": {
+      "de": "Belegquelle: PvP-Profil im Spiel",
+      "fr": "Source de preuve : profil JcJ en jeu",
+      "th": "แหล่งหลักฐาน: โปรไฟล์ PvP ในเกม",
+      "vi": "Nguồn bằng chứng: hồ sơ PvP trong trò chơi"
+    },
+    "rankUnranked": {
+      "de": "Ohne Rang",
+      "fr": "Non classé",
+      "th": "ยังไม่มีแรงก์",
+      "vi": "Chưa xếp hạng"
+    },
+    "rankBronze": {
+      "de": "Bronze",
+      "fr": "Bronze",
+      "th": "บรอนซ์",
+      "vi": "Đồng"
+    },
+    "rankSilver": {
+      "de": "Silber",
+      "fr": "Argent",
+      "th": "ซิลเวอร์",
+      "vi": "Bạc"
+    },
+    "rankGold": {
+      "de": "Gold",
+      "fr": "Or",
+      "th": "โกลด์",
+      "vi": "Vàng"
+    },
+    "rankPlatinum": {
+      "de": "Platin",
+      "fr": "Platine",
+      "th": "แพลทินัม",
+      "vi": "Bạch kim"
+    },
+    "rankDiamond": {
+      "de": "Diamant",
+      "fr": "Diamant",
+      "th": "ไดมอนด์",
+      "vi": "Kim cương"
+    },
+    "rankCrystal": {
+      "de": "Kristall",
+      "fr": "Cristal",
+      "th": "คริสตัล",
+      "vi": "Pha lê"
+    },
+    "rankOmega": {
+      "de": "Omega",
+      "fr": "Oméga",
+      "th": "โอเมกา",
+      "vi": "Omega"
+    },
+    "rankUltima": {
+      "de": "Ultima",
+      "fr": "Ultima",
+      "th": "อัลติมา",
+      "vi": "Ultima"
+    },
+    "rotationTimeZone": {
+      "de": "Anzeigezeitzone: {0}",
+      "fr": "Fuseau affiché : {0}",
+      "th": "เขตเวลาที่แสดง: {0}",
+      "vi": "Múi giờ hiển thị: {0}"
+    },
+    "serverMaintenance": {
+      "de": "Serverwartung; die Partie ist lokal gespeichert und wird später automatisch hochgeladen",
+      "fr": "Maintenance du serveur ; la partie est enregistrée localement et sera téléversée automatiquement plus tard",
+      "th": "เซิร์ฟเวอร์อยู่ระหว่างการบำรุงรักษา บันทึกแมตช์ไว้ในเครื่องแล้วและจะอัปโหลดอัตโนมัติภายหลัง",
+      "vi": "Máy chủ đang bảo trì; trận đấu đã được lưu cục bộ và sẽ tự động tải lên sau"
+    },
+    "recording": {
+      "de": "Aufzeichnung der Frontlinie",
+      "fr": "Enregistrement en première ligne",
+      "th": "บันทึกบรรทัดด้านหน้า",
+      "vi": "Đang thu lại dòng trước"
+    },
+    "waiting": {
+      "de": "Warten auf die nächste Schlacht",
+      "fr": "En attente de la prochaine bataille",
+      "th": "กำลังรอสนามรบครั้งถัดไป",
+      "vi": "Đang chờ trận chiến tiếp theo"
+    },
+    "tagline": {
+      "de": "Automatische Aufzeichnung · Lokale Analyse · Optionale Logs-Wertung",
+      "fr": "Enregistrement automatique · Analyse locale · Score Logs facultatif",
+      "th": "บันทึกอัตโนมัติ · วิเคราะห์ในเครื่อง · เลือกอัปโหลดเพื่อรับคะแนน Logs",
+      "vi": "Ghi tự động · Phân tích cục bộ · Có thể tải lên để nhận điểm Logs"
+    },
+    "mapDev": {
+      "de": "Top-Down-Kartenhintergründe sind verfügbar; Kartenereignisse und Höhenwiedergabe bleiben in der Entwicklung.",
+      "fr": "Des fonds cartographiques en haut sont disponibles; les événements cartographiques et les rediffusions d'altitude demeurent en développement.",
+      "th": "พื้นหลังบนลงล่างมี; แผนที่เหตุการณ์และการเล่นอีกครั้งยังคงอยู่ในการพัฒนา",
+      "vi": "Nền tảng của bản đồ trên cùng có sẵn; sự kiện bản đồ và việc xem lại độ cao vẫn còn trong quá trình phát triển."
+    },
+    "tabStatus": {
+      "de": "Status",
+      "fr": "État",
+      "th": "สถานะ",
+      "vi": "Trạng thái"
+    },
+    "tabMatches": {
+      "de": "Lokale Kämpfe",
+      "fr": "Combats locaux",
+      "th": "บันทึกการรบในเครื่อง",
+      "vi": "Trận đã lưu"
+    },
+    "tabFrontlineMatches": {
+      "de": "PvP-Front",
+      "fr": "Le Front",
+      "th": "Frontline",
+      "vi": "Frontline"
+    },
+    "tabCrystallineMatches": {
+      "de": "Crystalline Conflict",
+      "fr": "Crystalline Conflict",
+      "th": "Crystalline Conflict",
+      "vi": "Crystalline Conflict"
+    },
+    "tabRivalWingsMatches": {
+      "de": "Stahlschwingen",
+      "fr": "Ailes rivales",
+      "th": "Rival Wings",
+      "vi": "Rival Wings"
+    },
+    "frontlineMode": {
+      "de": "PvP-Front",
+      "fr": "Le Front",
+      "th": "Frontline",
+      "vi": "Frontline"
+    },
+    "crystallineMode": {
+      "de": "Crystalline Conflict",
+      "fr": "Crystalline Conflict",
+      "th": "Crystalline Conflict",
+      "vi": "Crystalline Conflict"
+    },
+    "rivalWingsMode": {
+      "de": "Stahlschwingen",
+      "fr": "Ailes rivales",
+      "th": "Rival Wings",
+      "vi": "Rival Wings"
+    },
+    "victory": {
+      "de": "Sieg",
+      "fr": "Victoire",
+      "th": "ชนะ",
+      "vi": "Chiến thắng"
+    },
+    "defeat": {
+      "de": "Niederlage",
+      "fr": "Défaite",
+      "th": "แพ้",
+      "vi": "Thất bại"
+    },
+    "crystallineRecordsHelp": {
+      "de": "Ergebnisdaten und historische ACT-Analysen befinden sich gesammelt auf dieser Seite",
+      "fr": "Les résultats et les analyses ACT historiques sont regroupés sur cette page",
+      "th": "รวมผลการแข่งขันและการวิเคราะห์ ACT เก่าไว้ในหน้านี้",
+      "vi": "Kết quả và phân tích ACT cũ được tập trung tại trang này"
+    },
+    "crystallineLocalResults": {
+      "de": "Lokale Ergebnisdaten",
+      "fr": "Résultats locaux",
+      "th": "ผลการแข่งขันในเครื่อง",
+      "vi": "Kết quả cục bộ"
+    },
+    "rankBeforeAfter": {
+      "de": "Rangänderung",
+      "fr": "Évolution du rang",
+      "th": "การเปลี่ยนแรงก์",
+      "vi": "Thay đổi hạng"
+    },
+    "ccActReplayUnknownResultShort": {
+      "de": "Historisches ACT · Ergebnis unbekannt",
+      "fr": "ACT historique · résultat indisponible",
+      "th": "ACT เก่า · ไม่มีผลทางการ",
+      "vi": "ACT cũ · không có kết quả chính thức"
+    },
+    "rivalWingsUnavailable": {
+      "de": "Die eigene Stahlschwingen-Seite ist bereit. Der Sammler erzeugt jedoch noch keine verifizierten Ergebnisse oder Analysen; Daten der PvP-Front werden hier nicht ersatzweise angezeigt.",
+      "fr": "La page dédiée aux Ailes rivales est prête, mais le collecteur ne produit pas encore de résultats ni d’analyses vérifiés. Les données du Front ne sont jamais utilisées en remplacement.",
+      "th": "มีหน้าบันทึก Rival Wings แยกแล้ว แต่ระบบยังไม่มีผลหรือรีเพลย์ที่ตรวจสอบได้ และจะไม่นำข้อมูล Frontline มาใช้แทน",
+      "vi": "Trang Rival Wings riêng đã sẵn sàng, nhưng bộ thu chưa tạo kết quả hay bản phát lại đã xác minh; dữ liệu Frontline không được dùng thay thế."
+    },
+    "tabSettings": {
+      "de": "Upload-Einstellungen",
+      "fr": "Paramètres d’envoi",
+      "th": "การตั้งค่าการอัปโหลด",
+      "vi": "Cài đặt tải lên"
+    },
+    "visibleModes": {
+      "de": "Sichtbare PvP-Modi",
+      "fr": "Modes JcJ visibles",
+      "th": "โหมด PvP ที่แสดง",
+      "vi": "Chế độ PvP hiển thị"
+    },
+    "visibleModesHelp": {
+      "de": "Ändert nur Navigation und Kalender; die Aufzeichnung läuft weiter.",
+      "fr": "Modifie uniquement la navigation et le calendrier ; l’enregistrement continue.",
+      "th": "เปลี่ยนเฉพาะเมนูและปฏิทิน การบันทึกยังทำงานต่อ",
+      "vi": "Chỉ thay đổi điều hướng và lịch; việc ghi dữ liệu vẫn tiếp tục."
+    },
+    "hiddenModesKeepData": {
+      "de": "Ausgeblendete Modi werden weiterhin lokal aufgezeichnet und gespeichert. Sie können jederzeit wieder eingeblendet werden.",
+      "fr": "Les modes masqués continuent d’être enregistrés localement. Vous pouvez les réafficher à tout moment.",
+      "th": "โหมดที่ซ่อนยังคงบันทึกและเก็บแมตช์ในเครื่อง เปิดแสดงใหม่ได้ทุกเมื่อ",
+      "vi": "Chế độ bị ẩn vẫn ghi và lưu trận cục bộ; có thể bật lại bất cứ lúc nào."
+    },
+    "allModesHidden": {
+      "de": "Front und Crystalline Conflict sind ausgeblendet. Aktivieren Sie sie in den Plugin-Einstellungen.",
+      "fr": "Le Front et Crystalline Conflict sont masqués. Réactivez-les dans les paramètres du plugin.",
+      "th": "ซ่อน Frontline และ Crystalline Conflict อยู่ เปิดใหม่ได้ในการตั้งค่าปลั๊กอิน",
+      "vi": "Frontline và Crystalline Conflict đang bị ẩn. Hãy bật lại trong cài đặt plugin."
+    },
+    "captureState": {
+      "de": "Einfangen",
+      "fr": "Capture",
+      "th": "จับภาพ",
+      "vi": "Thu"
+    },
+    "active": {
+      "de": "Aktiv",
+      "fr": "Actif",
+      "th": "ทํางาน",
+      "vi": "Hoạt động"
+    },
+    "idle": {
+      "de": "Idle",
+      "fr": "Idée",
+      "th": "ว่าง",
+      "vi": "Nghỉ"
+    },
+    "elapsed": {
+      "de": "verstrichen",
+      "fr": "Échec",
+      "th": "ย่อหาย",
+      "vi": "Comment"
+    },
+    "visible": {
+      "de": "Sichtbare Spieler",
+      "fr": "Joueurs visibles",
+      "th": "ตัวเล่นที่เห็นได้",
+      "vi": "Người chơi nhìn thấy"
+    },
+    "dropped": {
+      "de": "Tropfenproben",
+      "fr": "Échantillons déposés",
+      "th": "สุ่มตัวอย่าง",
+      "vi": "Mẫu đã bỏ"
+    },
+    "matchId": {
+      "de": "Übereinstimmungskennung",
+      "fr": "Identification de correspondance",
+      "th": "ตรงกับหมายเลข",
+      "vi": "Mã khớp"
+    },
+    "file": {
+      "de": "Datei",
+      "fr": "Fichier",
+      "th": "แฟ้ม",
+      "vi": "Tập tin"
+    },
+    "waitingHelp": {
+      "de": "Capture startet automatisch in unterstützten Frontline-Aufgaben und speichert Ergebnis oder Ausgang. Lokale Überprüfung funktioniert ohne Upload.",
+      "fr": "Capture démarre automatiquement dans les fonctions de Frontline supportées et enregistre le résultat ou la sortie. L'examen local fonctionne sans téléchargement.",
+      "th": "การจับภาพจะเริ่มทํางานโดยอัตโนมัติในการรองรับหน้าที่บรรทัดหน้า และบันทึกเมื่อมีผลหรือออก การทบทวนภายในทํางานโดยไม่ต้องอัปโหลด",
+      "vi": "Bắt đầu tự động trong nhiệm vụ Frontline hỗ trợ và tiết kiệm kết quả hoặc thoát. Xem xét địa phương hoạt động mà không tải lên."
+    },
+    "openFolder": {
+      "de": "Offener Erfassungsordner",
+      "fr": "Ouvrir le dossier de capture",
+      "th": "เปิดโฟลเดอร์จับภาพ",
+      "vi": "Mở thư mục thu"
+    },
+    "mechanismObject": {
+      "de": "Gefechtsfeldmechanismus",
+      "fr": "mécanisme du champ de bataille",
+      "th": "กลไกการต่อสู้",
+      "vi": "Cơ chế chiến trường."
+    },
+    "loadedObject": {
+      "de": "Beladenes Objekt",
+      "fr": "objet chargé",
+      "th": "วัตถุที่โหลด",
+      "vi": "đối tượng đã nạp"
+    },
+    "loaded_game_object_name": {
+      "de": "Name erfasst vom geladenen Clientobjekt",
+      "fr": "nom capturé de l'objet client chargé",
+      "th": "ชื่อที่จับได้จากออบเจกต์ของไคลเอนต์ที่บรรจุอยู่",
+      "vi": "tên được lấy từ đối tượng khách tải"
+    },
+    "object_metadata_only": {
+      "de": "Nur Objektart und ID wurden erfasst",
+      "fr": "seul le type d'objet et l'identité ont été capturés",
+      "th": "วัตถุชนิดเดียวและหมายเลขถูกจับ",
+      "vi": "Chỉ có đối tượng tử tế và chứng minh mới bị bắt"
+    },
+    "legacy_no_object_metadata": {
+      "de": "Legacy Record ohne Objekt-Metadaten",
+      "fr": "enregistrement historique sans métadonnées objet",
+      "th": "บันทึกมรดกโดยไม่มีข้อมูลกํากับภาพแบบออบเจกต์",
+      "vi": "Ghi chép di sản không có siêu dữ liệu đối tượng"
+    },
+    "openImportFolder": {
+      "de": "Importordner öffnen",
+      "fr": "Ouvrir le dossier d'importation",
+      "th": "เปิดโฟลเดอร์นําเข้า",
+      "vi": "Mở thư mục nhập"
+    },
+    "importCaptures": {
+      "de": "Scannen und Importieren von Matches",
+      "fr": "Scanner et importer des correspondances",
+      "th": "ค้นหาและนําเข้าที่เข้าเงื่อนไข",
+      "vi": "Comment"
+    },
+    "importRunning": {
+      "de": "Importieren im Hintergrund...",
+      "fr": "Importation en arrière-plan...",
+      "th": "กําลังนําเข้าพื้นหลัง...",
+      "vi": "Đang nhập vào nền..."
+    },
+    "importFailed": {
+      "de": "Nicht erfolgte Einfuhr",
+      "fr": "L'importation a échoué",
+      "th": "การนําเข้าล้มเหลว",
+      "vi": "Nhập thất bại"
+    },
+    "importComplete": {
+      "de": "{0} importiert, {1} übersprungen, {2} fehlgeschlagen",
+      "fr": "{0} importés, {1} ignorés, {2} échoués",
+      "th": "นำเข้า {0}, ข้าม {1}, ล้มเหลว {2}",
+      "vi": "Đã nhập {0}, bỏ qua {1}, lỗi {2}"
+    },
+    "localCaptureId": {
+      "de": "Lokale Erfassung",
+      "fr": "capture locale",
+      "th": "จับภาพภายใน",
+      "vi": "Thu cục bộ"
+    },
+    "localMatches": {
+      "de": "Lokale Spiele",
+      "fr": "Matchs locaux",
+      "th": "ตรงกันภายใน",
+      "vi": "Khớp"
+    },
+    "matchDetailModeHint": {
+      "de": "Zeigen dieses Spiels Logs; Rückkehr für die Zeit Streuung Überblick",
+      "fr": "Affichage des journaux de ce match; retour pour le temps scatter aperçu",
+      "th": "แสดงปูมบันทึกของการแข่งขันนี้; การกลับมาสําหรับเวลารวมที่กระจัดกระจาย",
+      "vi": "Hiển thị bản ghi của trận đấu này; trở lại để phân tán thời gian"
+    },
+    "regionLockedToHomeWorld": {
+      "de": "Gesperrt in der Heimatwelt des Charakters",
+      "fr": "Verrouillé au monde du personnage",
+      "th": "ถูกขังไว้ในโลกของตัวละคร",
+      "vi": "Bị khóa trong thế giới nhà của nhân vật"
+    },
+    "logsTimeHistory": {
+      "de": "Persönliche Logs im Laufe der Zeit",
+      "fr": "Registres personnels dans le temps",
+      "th": "ปูมบันทึกส่วนตัวเมื่อเวลาผ่านไป",
+      "vi": "Bản ghi cá nhân qua thời gian"
+    },
+    "logsTimeHistoryHelp": {
+      "de": "Filter beeinflussen nur den Plot; der Match-Index bleibt vollständig",
+      "fr": "Les filtres n'affectent que le tracé; l'indice de correspondance reste complet",
+      "th": "ตัวกรองจะมีผลกับกราฟเท่านั้น ดัชนีที่เข้าคู่กันยังคงสมบูรณ์",
+      "vi": "Bộ lọc chỉ tác động đến đồ thị; chỉ mục khớp còn lại hoàn tất"
+    },
+    "jobFilter": {
+      "de": "Arbeit",
+      "fr": "Emploi",
+      "th": "งาน",
+      "vi": "Jom"
+    },
+    "mapFilter": {
+      "de": "Karte",
+      "fr": "Carte",
+      "th": "แผนที่",
+      "vi": "Bản đồ"
+    },
+    "allJobs": {
+      "de": "Alle Jobs",
+      "fr": "Tous les emplois",
+      "th": "งานทั้งหมด",
+      "vi": "Mọi công việc"
+    },
+    "allMaps": {
+      "de": "Alle Karten",
+      "fr": "Toutes les cartes",
+      "th": "แผนที่ทั้งหมด",
+      "vi": "Mọi bản đồ"
+    },
+    "losses": {
+      "de": "Niederlagen",
+      "fr": "Défaites",
+      "th": "แพ้",
+      "vi": "Trận thua"
+    },
+    "draws": {
+      "de": "Unentschieden",
+      "fr": "Matchs nuls",
+      "th": "เสมอ",
+      "vi": "Hòa"
+    },
+    "draw": {
+      "de": "Unentschieden",
+      "fr": "Match nul",
+      "th": "เสมอ",
+      "vi": "Hòa"
+    },
+    "calendarDayNoDecision": {
+      "de": "{0} Kämpfe · kein entschiedenes Ergebnis",
+      "fr": "{0} matchs · aucun résultat décidé",
+      "th": "{0} แมตช์ · ไม่มีผลแพ้ชนะ",
+      "vi": "{0} trận · chưa có kết quả thắng thua"
+    },
+    "flMapPerformance": {
+      "de": "Frontline-Ergebnisse dieses Charakters",
+      "fr": "Résultats Frontline de ce personnage",
+      "th": "ผลงาน Frontline ของตัวละครนี้",
+      "vi": "Thành tích Frontline của nhân vật này"
+    },
+    "localAccountResultsOnly": {
+      "de": "Fünf Karten; Platzierungen aus dem Spielergebnis",
+      "fr": "Cinq cartes ; classements issus du résultat du jeu",
+      "th": "ห้าแผนที่; อันดับอิงจากผลสรุปในเกม",
+      "vi": "Năm bản đồ; thứ hạng lấy từ kết quả trong game"
+    },
+    "placementFirst": {
+      "de": "1. Platz",
+      "fr": "1re place",
+      "th": "อันดับ 1",
+      "vi": "Hạng 1"
+    },
+    "placementSecond": {
+      "de": "2. Platz",
+      "fr": "2e place",
+      "th": "อันดับ 2",
+      "vi": "Hạng 2"
+    },
+    "placementThird": {
+      "de": "3. Platz",
+      "fr": "3e place",
+      "th": "อันดับ 3",
+      "vi": "Hạng 3"
+    },
+    "ccWinRateRule": {
+      "de": "Siegquote = Siege / (Siege + Niederlagen). Unentschieden zählen als Kämpfe, aber nicht zum Nenner.",
+      "fr": "Taux de victoire = victoires / (victoires + défaites). Les nuls comptent comme matchs, mais pas dans le dénominateur.",
+      "th": "อัตราชนะ = ชนะ / (ชนะ + แพ้) ผลเสมอนับเป็นแมตช์แต่ไม่รวมในตัวหาร",
+      "vi": "Tỷ lệ thắng = thắng / (thắng + thua). Trận hòa được tính vào số trận nhưng không vào mẫu số."
+    },
+    "ccWinLossDraw": {
+      "de": "S {0} · N {1} · U {2} · {3}",
+      "fr": "V {0} · D {1} · N {2} · {3}",
+      "th": "ชนะ {0} · แพ้ {1} · เสมอ {2} · {3}",
+      "vi": "Thắng {0} · Thua {1} · Hòa {2} · {3}"
+    },
+    "rankedHistoryCount": {
+      "de": "{0} gewertet / {1} gefiltert",
+      "fr": "{0} classés / {1} filtrés",
+      "th": "จัดอันดับแล้ว {0} / กรองแล้ว {1}",
+      "vi": "Đã xếp hạng {0} / đã lọc {1}"
+    },
+    "compressedMapTimeline": {
+      "de": "Inaktive Rotationstage werden für diese Karte komprimiert; Punkte behalten ihre tatsächlichen Übereinstimmungszeiten bei.",
+      "fr": "Les jours de rotation inactifs sont compressés pour cette carte; les points conservent leur temps de correspondance réel.",
+      "th": "วัน ใน การ หมุน ไม่ ได้ รับ การ บีบ ให้ เป็น แผนที่ นี้; จุด ต่าง ๆ ยัง คง ใช้ เวลา ที่ ตรง กัน จริง ๆ.",
+      "vi": "Ngày quay bị động được nén cho bản đồ này; điểm vẫn còn thời gian trùng khớp."
+    },
+    "noRankedHistory": {
+      "de": "Keine persönlichen Logs in diesem Filter",
+      "fr": "Aucune connexion personnelle dans ce filtre",
+      "th": "ไม่มีปูมบันทึกส่วนตัวในตัวกรองนี้",
+      "vi": "Không có bản ghi cá nhân trong bộ lọc này"
+    },
+    "unrankedMatch": {
+      "de": "Ausstehende Protokolle",
+      "fr": "Registres en attente",
+      "th": "การรอการทํางาน",
+      "vi": "Bản ghi đang đợi"
+    },
+    "noPlaystyleResult": {
+      "de": "Playstyle noch ausstehend",
+      "fr": "Style de lecture en attente",
+      "th": "การรอเล่น",
+      "vi": "Comment"
+    },
+    "localPlayerUnresolved": {
+      "de": "Lokaler Spieler konnte nicht eindeutig gelöst werden",
+      "fr": "Le joueur local n'a pas pu être résolu uniquement",
+      "th": "ไม่สามารถแก้ไขผู้เล่นท้องถิ่นได้",
+      "vi": "Không thể giải quyết độc đáo người chơi cục bộ"
+    },
+    "unknownMap": {
+      "de": "Unbekannte Karte",
+      "fr": "Carte inconnue",
+      "th": "ไม่ทราบแผนที่",
+      "vi": "sơ đồ lạ"
+    },
+    "empty": {
+      "de": "Eine lokale Überprüfung erscheint nach einem abgeschlossenen Spiel.",
+      "fr": "Un examen local apparaîtra après une correspondance complète.",
+      "th": "การทบทวนภายในจะปรากฏหลังจากการแข่งขันเสร็จสิ้นแล้ว",
+      "vi": "Một bản xem xét cục bộ sẽ xuất hiện sau khi hoàn tất trận đấu."
+    },
+    "match": {
+      "de": "Übereinstimmung",
+      "fr": "Correspondance",
+      "th": "ตรงกัน",
+      "vi": "Khớp"
+    },
+    "noLogs": {
+      "de": "Noch keine Datenbankprotokolle",
+      "fr": "Pas encore de registre de base de données",
+      "th": "ยังไม่มีปูมบันทึกฐานข้อมูล",
+      "vi": "Chưa có bản ghi cơ sở dữ liệu"
+    },
+    "retry": {
+      "de": "Upload wiederholen",
+      "fr": "Réessayer le téléchargement",
+      "th": "ลองอัปโหลดใหม่",
+      "vi": "Thử lại tải lên"
+    },
+    "uploadRank": {
+      "de": "Hochladen und Berechnen von Logs",
+      "fr": "Télécharger et calculer les journaux",
+      "th": "อัปโหลดและคํานวณปูมบันทึก",
+      "vi": "Tải lên và tính toán bản ghi"
+    },
+    "openWeb": {
+      "de": "Open Web Analyse",
+      "fr": "Analyse Web ouverte",
+      "th": "เปิดการวิเคราะห์เว็บ",
+      "vi": "Mở phân tích web"
+    },
+    "player": {
+      "de": "Spieler",
+      "fr": "Joueur",
+      "th": "ผู้เล่น",
+      "vi": "Bộ phát"
+    },
+    "team": {
+      "de": "Team",
+      "fr": "Équipe",
+      "th": "ทีม",
+      "vi": "Đội"
+    },
+    "teamAndSquad": {
+      "de": "Fraktion/Trupp",
+      "fr": "Faction/équipe",
+      "th": "แอคชั่น / หมู่",
+      "vi": "Nhóm"
+    },
+    "job": {
+      "de": "Arbeit",
+      "fr": "Emploi",
+      "th": "งาน",
+      "vi": "Jom"
+    },
+    "maelstrom": {
+      "de": "Maelstrom",
+      "fr": "Maelstrom",
+      "th": "มวล",
+      "vi": "Maelstrom"
+    },
+    "adders": {
+      "de": "Zwillingszusätze",
+      "fr": "Additifs jumeaux",
+      "th": "ตัวเพิ่มคู่",
+      "vi": "Thêm đôi"
+    },
+    "flames": {
+      "de": "Unsterbliche Flammen",
+      "fr": "Flammes immortales",
+      "th": "ไฟ ที่ ลุก ไหม้ ตลอด กาล",
+      "vi": "Lửa bất tử"
+    },
+    "unknownTeam": {
+      "de": "Unbekanntes Team",
+      "fr": "Équipe inconnue",
+      "th": "ไม่ทราบทีม",
+      "vi": "Nhóm lạ"
+    },
+    "damageLogs": {
+      "de": "Schadensprotokolle",
+      "fr": "Registres des dommages",
+      "th": "ปูมบันทึกความเสียหาย",
+      "vi": "Bản ghi thiệt hại"
+    },
+    "healingLogs": {
+      "de": "Healing Logs",
+      "fr": "Registres de guérison",
+      "th": "บันทึกการรักษา",
+      "vi": "Nhật ký chữa lành"
+    },
+    "overallLogs": {
+      "de": "Gesamtprotokolle",
+      "fr": "Registres généraux",
+      "th": "ปูมบันทึกทั้งหมด",
+      "vi": "Toàn bộ bản ghi"
+    },
+    "damage": {
+      "de": "Schäden",
+      "fr": "Dommages",
+      "th": "ความเสียหาย",
+      "vi": "Thiệt hại"
+    },
+    "healing": {
+      "de": "Heilung",
+      "fr": "Guérison",
+      "th": "รักษา",
+      "vi": "Hồi phục"
+    },
+    "tendency": {
+      "de": "Tendenz",
+      "fr": "Tendance",
+      "th": "ความจุ",
+      "vi": "Quan trọng"
+    },
+    "evidence": {
+      "de": "Lokale Überprüfung verwendet direkte Übereinstimmung Beweise. Datenbankprotokolle erfordern Upload. Ergebnis-Total-Tendenzen sind nur Kandidaten mit geringem Vertrauen.",
+      "fr": "L'examen local utilise des preuves de correspondance directe. Les journaux de base de données doivent être téléchargés. Les tendances totales ne sont que des candidats peu confiants.",
+      "th": "การทบทวนในท้องถิ่น ใช้หลักฐานที่ตรงกันโดยตรง ปูมบันทึกของฐานข้อมูลจําเป็นต้องอัปโหลด แนวโน้มของผลลัพท์คือ ผู้สมัครความมั่นใจต่ําเท่านั้น",
+      "vi": "Xem xét địa phương sử dụng trực tiếp bằng chứng khớp. Bản ghi cơ sở dữ liệu cần được tải lên. Khuynh hướng kết quả là những ứng cử viên ít tự tin."
+    },
+    "pressure": {
+      "de": "Druck",
+      "fr": "Pression",
+      "th": "ตั้งค่า",
+      "vi": "Áp lực"
+    },
+    "finisher": {
+      "de": "Finisher",
+      "fr": "Finisseur",
+      "th": "ตัวสําเร็จงาน",
+      "vi": "Bộ in xong"
+    },
+    "follow_fire": {
+      "de": "Folge dem Feuer",
+      "fr": "Suivre le feu",
+      "th": "ยิงตาม",
+      "vi": "Hỏa lực theo sau"
+    },
+    "support": {
+      "de": "Unterstützung",
+      "fr": "Appui",
+      "th": "สนับสนุน",
+      "vi": "Hỗ trợ"
+    },
+    "objective": {
+      "de": "Ziel",
+      "fr": "Objectif",
+      "th": "วัตถุ",
+      "vi": "Mục tiêu"
+    },
+    "survival": {
+      "de": "Überleben",
+      "fr": "Survie",
+      "th": "รอด",
+      "vi": "Sống sót"
+    },
+    "single_target": {
+      "de": "Einzelzieltendenz",
+      "fr": "Tendance à un seul objectif",
+      "th": "หมุน & 90",
+      "vi": "Một chiều"
+    },
+    "melee_aggro": {
+      "de": "Melee Feuerstarter",
+      "fr": "Démarrage Melee",
+      "th": "เครื่องดับเพลิง Mele",
+      "vi": "Name"
+    },
+    "ranged_aggro": {
+      "de": "Fernfeuerstarter",
+      "fr": "Démarreur de feu rangé",
+      "th": "ตัวเริ่มการยิงแบบพิสัย",
+      "vi": "GenericName"
+    },
+    "coordination_core": {
+      "de": "Vier-Personen-ähnliche Koordination",
+      "fr": "Coordination de quatre personnes",
+      "th": "การประสานงานแบบ 4 คน",
+      "vi": "Hợp nhất 4 người"
+    },
+    "commander": {
+      "de": "Kommandantneigung",
+      "fr": "Tendance du commandant",
+      "th": "แนวโน้มของผู้บัญชาการ",
+      "vi": "Chỉ huy trưởng."
+    },
+    "macro_sender": {
+      "de": "Tendenz zum Makrosender",
+      "fr": "Tendances macro-sender",
+      "th": "แนวโน้ม Macro- sennder",
+      "vi": "Khuynh hướng tính toán vĩ mô"
+    },
+    "disruptor": {
+      "de": "Disruptorneigung",
+      "fr": "Tendance du disrupteur",
+      "th": "แนวโน้มการสลายตัว",
+      "vi": "Khuynh hướng phá vỡ"
+    },
+    "firebreak": {
+      "de": "Neigung zum Brandbruch",
+      "fr": "Incendie",
+      "th": "แนว โน้ม ที่ จะ หยุด ยิง",
+      "vi": "Khuynh hướng bùng cháy"
+    },
+    "enemy_ice_raider": {
+      "de": "Enemy-Eis-Raider",
+      "fr": "Détachement ennemi",
+      "th": "ผู้บุกโจมตีศัตรู",
+      "vi": "Kẻ cướp của địch"
+    },
+    "lower_node_controller": {
+      "de": "Regler mit unterem Knoten",
+      "fr": "Contrôleur de nœud inférieur",
+      "th": "ตัวควบคุมระดับล่าง",
+      "vi": "Điều khiển nút dưới"
+    },
+    "enemyIceEvidence": {
+      "de": "Verwendet nur direkt beobachtete Schäden am Heimeis eines anderen Teams, umgerechnet nach objektivem Wert; zentrale A1 ist ausgeschlossen.",
+      "fr": "N'utilise que les dommages observés directement sur la glace d'une autre équipe, convertis en valeur objective; le centre A1 est exclu.",
+      "th": "ใช้เฉพาะการสังเกตความเสียหายโดยตรง กับน้ําแข็งที่บ้านของทีมอื่น ๆ เปลี่ยนแปลงโดยค่าวัตถุประสงค์; ศูนย์ A1 ถูกกันออกไป",
+      "vi": "Chỉ sử dụng trực tiếp quan sát thiệt hại băng ở nhà của đội khác, chuyển đổi theo giá trị khách quan; Trung tâm A1 bị loại trừ."
+    },
+    "lowerNodeEvidence": {
+      "de": "Kombiniert derzeit die Beobachtung auf niedrigerer Route mit Ergebnisbesetzungen; spätere feindliche Knoten können noch nicht einem Spieler zugewiesen werden.",
+      "fr": "À l'heure actuelle, on combine l'observation de la route inférieure avec les occupations résultantes; les revenus de la tique du noeud ennemi ne peuvent pas encore être attribués à un seul joueur.",
+      "th": "ปัจจุบันมีการรวมการสังเกตระดับล่างกับอาชีพผลลัพธ์; ต่อมารายได้ของศัตรู-โหนด รายได้ยังคงไม่สามารถได้รับมอบหมายให้กับผู้เล่นหนึ่ง",
+      "vi": "Hiện nay kết hợp quan sát cấp thấp với việc chiếm đóng kết quả; sau này kẻ thù-node ve thu nhập chưa thể được chỉ định cho một người chơi."
+    },
+    "moogleRisk": {
+      "de": "Überlebensrisikokandidat",
+      "fr": "Candidat à un risque de survie",
+      "th": "ผู้สมัครที่มีความเสี่ยงสูง",
+      "vi": "Ứng cử viên rủi ro sống sót"
+    },
+    "positioning": {
+      "de": "Positionierungskandidat",
+      "fr": "Position du candidat",
+      "th": "ตําแหน่งผู้สมัคร",
+      "vi": "Ứng cử viên định vị"
+    },
+    "needsEventEvidence": {
+      "de": "Unzureichende Beweise: Aktionsziele, Kontrolle, Chat / Marker oder Pro-Spieler-Positionen sind erforderlich.",
+      "fr": "Preuves insuffisantes : des cibles d'action, un contrôle, un chat/marqueur ou des positions par joueur sont requis.",
+      "th": "หลักฐานไม่เพียงพอ: เป้าหมายการกระทํา, การควบคุม, การสนทนา/สัญลักษณ์ หรือตําแหน่งผู้เล่นต่อคน",
+      "vi": "Không đủ bằng chứng: cần phải có các mục tiêu hành động, điều khiển, các vị trí tán gẫu hoặc mỗi người chơi."
+    },
+    "coordinationDisclaimer": {
+      "de": "Nur beobachtbare Synchronität kann abgeleitet werden; ein externes Vier-Personen-Premade kann nicht bestätigt werden.",
+      "fr": "Seule la synchronisation observable peut être déduite; un prémade externe de quatre personnes ne peut pas être confirmé.",
+      "th": "การประสานที่สังเกตได้เท่านั้นที่สามารถตรวจสอบได้ สี่บุคคลภายนอกไม่สามารถยืนยันได้",
+      "vi": "Chỉ có khả năng quan sát đồng bộ mới có thể bị vô hiệu hóa; không thể xác nhận bốn người bên ngoài đã làm sẵn."
+    },
+    "fourSmallStructure": {
+      "de": "Struktur",
+      "fr": "structure",
+      "th": "โครงสร้าง",
+      "vi": "cấu trúc"
+    },
+    "burstSync": {
+      "de": "Burst Sync",
+      "fr": "Synchronisation de l'éclatement",
+      "th": "หมุน & 90",
+      "vi": "đồng bộ vỡ"
+    },
+    "advanceSupport": {
+      "de": "Vorauszahlung",
+      "fr": "appui préalable",
+      "th": "รองรับก่อน",
+      "vi": "hỗ trợ trước"
+    },
+    "sweet_duo": {
+      "de": "Sweet-Duo-Kandidat",
+      "fr": "candidat doux-duo",
+      "th": "ผู้เข้าแข่งขันน่ารัก",
+      "vi": "ứng cử viên ngọt ngào"
+    },
+    "three_core": {
+      "de": "Drei-Spieler-Kernkandidat",
+      "fr": "trois joueurs candidat principal",
+      "th": "ผู้เข้าแข่งขันหลัก 3 คน",
+      "vi": "Ứng cử viên chính ba người chơi"
+    },
+    "four_core": {
+      "de": "Vier-Spieler-Kernkandidat",
+      "fr": "candidat principal à quatre joueurs",
+      "th": "ผู้เข้าแข่งขันหลัก 4 คน",
+      "vi": "Ứng viên chính 4 người chơi"
+    },
+    "four_core_plus_follower": {
+      "de": "Vier-Spieler-Core + beobachteter Follower",
+      "fr": "noyau quatre joueurs + suiveur observé",
+      "th": "แกนเล่นสี่ + สาวกสังเกต",
+      "vi": "lõi 4 người chơi + theo dõi"
+    },
+    "movementCalibrationInvalid": {
+      "de": "Kalibrierung des Bewegungsmodells fehlgeschlagen; Spielerwarnungen unterdrückt",
+      "fr": "Défaut d'étalonnage du modèle de mouvement; alertes du lecteur supprimées",
+      "th": "การปรับตั้งรุ่นการเคลื่อนไหวล้มเหลว; แจ้งเตือนตัวเล่นถูกระงับ",
+      "vi": "Mô hình chuyển động thất bại; người chơi cảnh báo bị đàn áp"
+    },
+    "focusMarkedPlayer": {
+      "de": "Markieren und verfolgen Sie diesen markierten Player",
+      "fr": "Mettre en évidence et tracer ce joueur marqué",
+      "th": "เน้นและติดตามตัวเล่นที่ทําเครื่องหมายนี้",
+      "vi": "Tô sáng và theo dõi người chơi đã ghi dấu này"
+    },
+    "autoUpload": {
+      "de": "Automatisches Hochladen nach jedem Match",
+      "fr": "Télécharger automatiquement après chaque match",
+      "th": "อัปโหลดอัตโนมัติหลังจากตรงกันแล้ว",
+      "vi": "Tải lên tự động sau mỗi trận đấu"
+    },
+    "uploadHelp": {
+      "de": "Wenn deaktiviert, funktioniert das lokale Speichern und Überprüfen weiterhin, aber die Perzentile der Datenbankprotokolle sind nicht verfügbar.",
+      "fr": "Lorsque désactivé, l'enregistrement local et l'examen fonctionnent encore, mais la base de données Logs percentiles ne sont pas disponibles.",
+      "th": "เมื่อปิดการทํางาน การบันทึกและทบทวนภายในยังคงทํางานอยู่ แต่ระบบติดตามฐานข้อมูลไม่สามารถทํางานได้",
+      "vi": "Khi bị tắt, lưu và xem lại cục bộ vẫn hoạt động, nhưng không có bản ghi cơ sở dữ liệu."
+    },
+    "openAfter": {
+      "de": "Offene lokale Überprüfung nach Ergebnissen",
+      "fr": "Ouvrir l'examen local après les résultats",
+      "th": "เปิดการทบทวนภายในระบบหลังจากผลลัพธ์แล้ว",
+      "vi": "Mở bản đánh giá cục bộ sau khi kết quả"
+    },
+    "serverHint": {
+      "de": "https://your-server",
+      "fr": "https://votre serveur",
+      "th": "http: service",
+      "vi": "Thư mục homeComment"
+    },
+    "openAccount": {
+      "de": "Anmelden und Verwalten von Schlüsseln",
+      "fr": "Connexion et gestion des clés",
+      "th": "เซ็นและจัดการกุญแจ",
+      "vi": "Name"
+    },
+    "accountHelp": {
+      "de": "Registrieren Sie einen 7-Tage-Maschinen- oder Zeichenkontocode",
+      "fr": "Enregistrez une machine de 7 jours ou un code de compte de caractères",
+      "th": "ลงทะเบียนเครื่องหรือรหัสบัญชีผู้ใช้ 7 วัน",
+      "vi": "Đăng ký một máy 7 ngày hoặc mã tài khoản tài khoản"
+    },
+    "automaticRegistration": {
+      "de": "Automatische Plugin Registrierung",
+      "fr": "Enregistrement automatique du plugin",
+      "th": "ลงทะเบียนส่วนเสริมอัตโนมัติ",
+      "vi": "Đăng ký bổ sung tự động"
+    },
+    "detectedMachine": {
+      "de": "Aktuelle Computer-ID",
+      "fr": "ID actuel de l'ordinateur",
+      "th": "หมายเลขเครื่องคอมพิวเตอร์ปัจจุบัน",
+      "vi": "ID máy tính hiện tại"
+    },
+    "detectedAccount": {
+      "de": "Aktuelles Spielkonto",
+      "fr": "Compte de jeu actuel",
+      "th": "บัญชีเกมปัจจุบัน",
+      "vi": "Tài khoản trò chơi hiện thời"
+    },
+    "registerMachine": {
+      "de": "Registrieren Sie diesen Computer",
+      "fr": "Enregistrez cet ordinateur",
+      "th": "ล็อกอินคอมพิวเตอร์นี้",
+      "vi": "Đăng ký máy tính này"
+    },
+    "registerAccount": {
+      "de": "Aktuelles Spielkonto registrieren",
+      "fr": "Enregistrez votre compte de jeu actuel",
+      "th": "ลงทะเบียนบัญชีเกมปัจจุบัน",
+      "vi": "Tài khoản trò chơi đăng ký hiện thời"
+    },
+    "thisComputer": {
+      "de": "Dieser Computer",
+      "fr": "Cet ordinateur",
+      "th": "คอมพิวเตอร์เครื่องนี้",
+      "vi": "Máy tính này"
+    },
+    "accountUnavailable": {
+      "de": "Melde dich zuerst bei einem Charakter an",
+      "fr": "Connectez-vous à un personnage d'abord",
+      "th": "บันทึกการทํางานเป็นอักขระตัวแรก",
+      "vi": "Đăng nhập vào một ký tự trước"
+    },
+    "automaticRegistrationHelp": {
+      "de": "Wählen Sie einen Maschinen- oder Kontocode. Nach der Discord-Bestätigung wird der Nachweis automatisch gespeichert.",
+      "fr": "Choisissez une machine ou un code de compte. Après confirmation de la discorde, le titre est enregistré automatiquement.",
+      "th": "เลือกเครื่องหรือรหัสบัญชี หลังจากยืนยันข้อมูลแล้ว ความน่าเชื่อถือจะถูกบันทึกโดยอัตโนมัติ",
+      "vi": "Chọn một máy hoặc mã tài khoản. Sau khi hủy xác nhận, thẻ ủy nhiệm được tự động lưu."
+    },
+    "registrationWaiting": {
+      "de": "Warten auf Discord Bestätigung...",
+      "fr": "Attendre la confirmation du désaccord...",
+      "th": "กําลังรอการยืนยัน...",
+      "vi": "Đang chờ lệnh hủy bỏ..."
+    },
+    "registrationComplete": {
+      "de": "Registrierung vollständig. Das Credential wurde automatisch gespeichert.",
+      "fr": "Inscription terminée. Le justificatif a été automatiquement enregistré.",
+      "th": "การลงทะเบียนเสร็จสมบูรณ์ ความน่าเชื่อถือได้ถูกบันทึกโดยอัตโนมัติ",
+      "vi": "Đăng ký hoàn tất. Giấy ủy nhiệm đã được tự động lưu."
+    },
+    "registrationStartFailed": {
+      "de": "Die Registrierung konnte nicht beginnen.",
+      "fr": "Impossible de commencer l'enregistrement.",
+      "th": "ไม่สามารถเริ่มการลงทะเบียนได้",
+      "vi": "Không thể khởi chạy đăng ký."
+    },
+    "registrationClaimFailed": {
+      "de": "Der Server hat das Credential nicht geliefert.",
+      "fr": "Le serveur n'a pas livré le justificatif.",
+      "th": "เซิร์ฟเวอร์ไม่ได้ทําการส่งมอบค่าความเชื่อถือ",
+      "vi": "Máy phục vụ không cung cấp thẻ ủy nhiệm."
+    },
+    "registrationExpired": {
+      "de": "Der Registrierungsantrag ist abgelaufen. Bitte versuchen Sie es noch einmal.",
+      "fr": "La demande d'enregistrement a expiré. Veuillez réessayer.",
+      "th": "คําร้องขอลงทะเบียนหมดอายุแล้ว กรุณาลองอีกครั้ง",
+      "vi": "Yêu cầu đăng ký hết hạn. Xin hãy thử lại."
+    },
+    "registrationNetworkFailed": {
+      "de": "Die Registrierungsnetzwerkverbindung ist fehlgeschlagen.",
+      "fr": "La connexion réseau d'enregistrement a échoué.",
+      "th": "ล้มเหลวในการตรวจสอบการเชื่อมต่อเครือข่าย",
+      "vi": "Kết nối mạng đăng ký bị lỗi."
+    },
+    "tokenHint": {
+      "de": "7-Tage-Anmeldeinformationen (geschützt durch Windows)",
+      "fr": "Certificat de 7 jours (protégée par Windows)",
+      "th": "ความน่าเชื่อถือ 7 วัน (ป้องกันโดยวินโดวส์)",
+      "vi": "Chứng nhận 7 ngày (được Windows bảo vệ)"
+    },
+    "region": {
+      "de": "Datenregion",
+      "fr": "Région de données",
+      "th": "ขอบเขตข้อมูล",
+      "vi": "Vùng dữ liệu"
+    },
+    "language": {
+      "de": "Oberflächensprache",
+      "fr": "Langue de l’interface",
+      "th": "ภาษาของส่วนติดต่อ",
+      "vi": "Ngôn ngữ giao diện"
+    },
+    "privacy": {
+      "de": "Datenschutz: Account-IDs werden niemals exportiert. Position, HP und MP decken nur Akteure ab, die von Ihrem Client geladen werden. Tokens werden nie geschrieben, um Dateien zu vergleichen.",
+      "fr": "Confidentialité : les identifiants de compte ne sont jamais exportés. Position, HP et MP couvrent uniquement les acteurs chargés par votre client. Les jetons ne sont jamais écrits pour correspondre à des fichiers.",
+      "th": "ชื่อ: ตําแหน่ง, ครอบคลุม HP และ MP เฉพาะนักแสดงที่โหลดโดยลูกค้าของคุณ Takes ไม่เคยถูกเขียนให้ตรงกับไฟล์",
+      "vi": "Riêng tư: ID tài khoản không bao giờ được xuất khẩu. Vị trí, HP và MP chỉ được khách hàng của anh chở. Sắc không bao giờ khớp với tập tin."
+    },
+    "ranked": {
+      "de": "Rangfolge",
+      "fr": "Classé",
+      "th": "ประมวลผล",
+      "vi": "Chạy trốn"
+    },
+    "uploading": {
+      "de": "Hochladen",
+      "fr": "Envoi",
+      "th": "กําลังอัปโหลด",
+      "vi": "Tải lên"
+    },
+    "uploadCompressing": {
+      "de": "Verdichten",
+      "fr": "Compression",
+      "th": "การบีบอัด",
+      "vi": "Đang nén"
+    },
+    "uploadSending": {
+      "de": "Hochladen",
+      "fr": "Envoi",
+      "th": "กําลังอัปโหลด",
+      "vi": "Tải lên"
+    },
+    "uploadProcessing": {
+      "de": "Serveranalyse",
+      "fr": "Analyse du serveur",
+      "th": "การวิเคราะห์เซิร์ฟเวอร์",
+      "vi": "Phân tích máy phục vụ"
+    },
+    "uploadComplete": {
+      "de": "Upload und Analyse komplett",
+      "fr": "Téléchargement et analyse terminés",
+      "th": "อัปโหลดและวิเคราะห์เรียบร้อยแล้ว",
+      "vi": "Tải lên và phân tích hoàn tất"
+    },
+    "uploadFailedStage": {
+      "de": "Upload fehlgeschlagen",
+      "fr": "Le chargement a échoué",
+      "th": "การอัปโหลดล้มเหลว",
+      "vi": "Tải lên thất bại"
+    },
+    "failed": {
+      "de": "Fehlgeschlagen",
+      "fr": "Échec",
+      "th": "ล้มเหลว",
+      "vi": "Thất bại"
+    },
+    "uploadError": {
+      "de": "Fehler beim Laden",
+      "fr": "Défaut de chargement",
+      "th": "การอัปโหลดล้มเหลว",
+      "vi": "Tải lên thất bại"
+    },
+    "missingToken": {
+      "de": "Upload-Token ist leer",
+      "fr": "Le jeton de chargement est vide",
+      "th": "ไม่มีตั๋วอัปโหลด",
+      "vi": "Comment"
+    },
+    "invalidToken": {
+      "de": "Upload-Token ist ungültig",
+      "fr": "Télécharger le jeton est invalide",
+      "th": "อัปโหลดตั๋วไม่ถูกต้อง",
+      "vi": "Comment"
+    },
+    "networkError": {
+      "de": "Kann den Server nicht erreichen",
+      "fr": "Impossible d'atteindre le serveur",
+      "th": "ไม่สามารถเข้าถึงเซิร์ฟเวอร์ได้",
+      "vi": "Không thể tới máy phục vụ"
+    },
+    "analysisTimeout": {
+      "de": "Server-Analyse ausgezeitet; Retry später",
+      "fr": "Analyse du serveur timed out; réessayer plus tard",
+      "th": "การวิเคราะห์เซิร์ฟเวอร์หมดเวลาแล้ว; ลองใหม่ในภายหลัง",
+      "vi": "Phân tích máy phục vụ đã quá giờ; hãy thử lại sau"
+    },
+    "requestDetail": {
+      "de": "Detaillierte Analyse des Antrags",
+      "fr": "Demander une analyse détaillée",
+      "th": "ต้องการวิเคราะห์รายละเอียด",
+      "vi": "Yêu cầu phân tích chi tiết"
+    },
+    "refreshDetail": {
+      "de": "Detaillierte Analyse auffrischen",
+      "fr": "Actualiser l'analyse détaillée",
+      "th": "ปรับปรุงรายละเอียดใหม่",
+      "vi": "Cập nhật phân tích chi tiết"
+    },
+    "detailError": {
+      "de": "Detaillierte Analyse fehlgeschlagen",
+      "fr": "L'analyse détaillée a échoué",
+      "th": "การวิเคราะห์รายละเอียดล้มเหลว",
+      "vi": "Việc phân tích chi tiết thất bại"
+    },
+    "detailAnalysis": {
+      "de": "Detaillierte Match-Analyse",
+      "fr": "Analyse détaillée des correspondances",
+      "th": "การวิเคราะห์รายละเอียดที่เข้ากันได้",
+      "vi": "Phân tích khớp chi tiết"
+    },
+    "scoreChanges": {
+      "de": "Score Änderungen",
+      "fr": "Changements de score",
+      "th": "เปลี่ยนคะแนน",
+      "vi": "Thay đổi điểm"
+    },
+    "vitalsFrames": {
+      "de": "Beobachtete Rahmen",
+      "fr": "Cadres observés",
+      "th": "กรอบที่สังเกตได้",
+      "vi": "Khung đã quan sát"
+    },
+    "latestScore": {
+      "de": "Letzte beobachtete Punktzahl",
+      "fr": "Dernier score observé",
+      "th": "คะแนนที่สังเกตได้ล่าสุด",
+      "vi": "Điểm mới nhất quan sát được"
+    },
+    "visiblePeak": {
+      "de": "Peak sichtbar",
+      "fr": "Cap visible",
+      "th": "มองเห็นได้สูงสุด",
+      "vi": "Nhìn thấy đỉnh"
+    },
+    "observedHpLoss": {
+      "de": "Beobachteter HP-Verlust",
+      "fr": "Perte de HP observée",
+      "th": "แจ้งให้ทราบถึงการสูญเสีย HP",
+      "vi": "Nhìn thấy mất HP"
+    },
+    "observedHpGain": {
+      "de": "Beobachteter HP-Gewinn",
+      "fr": "Gain de HP observé",
+      "th": "ได้รับ HP ที่สังเกตได้",
+      "vi": "Nhìn thấy thu nhập HP"
+    },
+    "lastCenter": {
+      "de": "Letztes Gruppenzentrum",
+      "fr": "Dernier centre de groupe",
+      "th": "ศูนย์กลุ่มสุดท้าย",
+      "vi": "Trung tâm nhóm cuối"
+    },
+    "openDetailWindow": {
+      "de": "Offener Replay Workspace",
+      "fr": "Ouvrir l'espace de travail",
+      "th": "เปิดการเล่นพื้นที่ทํางาน",
+      "vi": "Không gian làm việc lại mở"
+    },
+    "detailUnavailable": {
+      "de": "Eine detaillierte Analyse ist noch nicht fertig. Fordern Sie es zuerst von der Übereinstimmungsliste an.",
+      "fr": "Une analyse détaillée n'est pas prête. Demandez-le d'abord dans la liste de correspondance.",
+      "th": "การวิเคราะห์รายละเอียดยังไม่พร้อม ขอจากรายชื่อที่เข้าคู่กันก่อน",
+      "vi": "Phân tích chi tiết chưa sẵn sàng. Yêu cầu nó từ danh sách trận đấu trước."
+    },
+    "players": {
+      "de": "Spieler",
+      "fr": "joueurs",
+      "th": "ผู้เล่น",
+      "vi": "người chơi"
+    },
+    "adaptiveTimeline": {
+      "de": "Adaptive Timeline",
+      "fr": "Calendrier adaptatif",
+      "th": "ตารางเวลาที่ปรับเปลี่ยนได้",
+      "vi": "Thời gian thích nghi"
+    },
+    "frameTime": {
+      "de": "Rahmenzeit",
+      "fr": "Heure du cadre",
+      "th": "เวลาเฟรม",
+      "vi": "Thời gian khung"
+    },
+    "replayOverview": {
+      "de": "Replay Überblick",
+      "fr": "Rejouer l'aperçu",
+      "th": "เล่นภาพรวมใหม่",
+      "vi": "Chơi lại tổng quát"
+    },
+    "markerHistory": {
+      "de": "Markierverlauf",
+      "fr": "Historique du marquage",
+      "th": "ประวัติผู้ทําเครื่องหมาย",
+      "vi": "Lịch sử đánh dấu"
+    },
+    "fieldMarkers": {
+      "de": "Feldmarkierungen",
+      "fr": "Marqueurs de champ",
+      "th": "แบบอักษร:",
+      "vi": "Dấu trường"
+    },
+    "fieldMarkerDiagnostics": {
+      "de": "Kontrollierte Feldmarkierungsdiagnose",
+      "fr": "Diagnostic contrôlé des marqueurs de terrain",
+      "th": "การวินิจฉัยหมุดสนามแบบควบคุม",
+      "vi": "Chẩn đoán dấu sân có kiểm soát"
+    },
+    "fieldMarkerDiagnosticsHelp": {
+      "de": "Nur für kontrollierte Zwei-Personen-Tests mit Zustimmung beider Beteiligten aktivieren. Rohbytes werden nicht gespeichert, nur Prüfsummen und Spielerentitätskandidaten; der Bediener wird nicht erraten.",
+      "fr": "À activer uniquement lors d’un essai contrôlé à deux personnes avec leur consentement. Les octets réseau bruts ne sont pas conservés, seulement les empreintes et les entités joueur candidates, sans deviner l’auteur.",
+      "th": "เปิดใช้เฉพาะการทดสอบแบบควบคุมสองคนที่ทั้งสองฝ่ายยินยอม จะไม่เก็บไบต์เครือข่ายดิบ เก็บเพียงค่าแฮชและตัวเลือกเอนทิตีผู้เล่น และจะไม่คาดเดาผู้สั่ง",
+      "vi": "Chỉ bật cho thử nghiệm đối chứng hai người khi cả hai đồng ý. Không lưu byte mạng thô, chỉ lưu bản tóm lược băm và ứng viên thực thể người chơi; không suy đoán người thao tác."
+    },
+    "targetMarkers": {
+      "de": "Zielmarkierungen",
+      "fr": "Marqueurs cibles",
+      "th": "เครื่องหมายเป้าหมาย",
+      "vi": "Đánh dấu đích"
+    },
+    "markerEvidence": {
+      "de": "Anwenden, Verschieben, Ersetzen und Entfernen von Ereignissen, die aus dem Status des Clientmarkers stammen; der Befehlsaktor ist nicht ausgesetzt.",
+      "fr": "Appliquer, déplacer, remplacer et supprimer les événements proviennent de l'état de marqueur client; l'acteur de commande n'est pas exposé.",
+      "th": "ปรับใช้, ย้าย, แทนที่ และลบเหตุการณ์ต่าง ๆ มาจากสถานะตัวชี้ของไคลเอนต์; ตัวแสดงคําสั่งยังไม่ถูกเผยออกมา",
+      "vi": "Áp dụng, di chuyển, thay thế và gỡ bỏ sự kiện đến từ trạng thái đánh dấu khách hàng; diễn viên lệnh không bị phơi bày."
+    },
+    "markerEvidenceV2": {
+      "de": "Markeränderungen kommen aus dem Client-Zustand. Ein Befehlsaktor wird nur für einen eindeutig gepaarten lokalen Befehl angezeigt; die Fernübertragung hat kein Operatorfeld.",
+      "fr": "Les changements de marquage viennent de l'état client. Un acteur de commande n'est montré que pour une commande locale unique; la diffusion à distance n'a pas de champ opérateur.",
+      "th": "การเปลี่ยนเครื่องหมายมาจากสถานะลูกค้า นักแสดงคําสั่งจะแสดงเฉพาะกับคําสั่งท้องถิ่นที่ไม่ซ้ํากัน การออกอากาศระยะไกลไม่มีสนามผู้ดําเนินการ",
+      "vi": "Sự thay đổi dấu hiệu đến từ tình trạng khách hàng. Một diễn viên chỉ huy chỉ được hiển thị cho một mệnh lệnh địa phương có một cặp duy nhất; đài phát thanh từ xa không có trường điều hành."
+    },
+    "markerType": {
+      "de": "Markierung",
+      "fr": "Marqueur",
+      "th": "ตัวทําเครื่องหมาย",
+      "vi": "Dấu hiệu"
+    },
+    "markerOperation": {
+      "de": "Betrieb",
+      "fr": "Fonctionnement",
+      "th": "ปฏิบัติการ",
+      "vi": "Thao tác"
+    },
+    "markerPosition": {
+      "de": "Position",
+      "fr": "Fonction",
+      "th": "ตําแหน่ง",
+      "vi": "Vị trí"
+    },
+    "markerOperator": {
+      "de": "Befehlshaber",
+      "fr": "Acteur de commande",
+      "th": "นักแสดงคําสั่ง",
+      "vi": "Diễn viên lệnh"
+    },
+    "operatorUnavailable": {
+      "de": "Nicht exponiert durch Kundenstaat",
+      "fr": "Non exposé par l'État client",
+      "th": "ไม่ได้รับสัญญาณจากสถานะไคลเอนต์",
+      "vi": "Không bị tình trạng khách phơi bày"
+    },
+    "network_source_verified": {
+      "de": "Legacy Network Pairing (beweist den Remote Command Actor nicht)",
+      "fr": "Jumelage réseau héritage (ne prouve pas l'acteur de commande distant)",
+      "th": "การจับคู่เครือข่ายของผู้รับมรดก (ไม่ได้พิสูจน์ตัวแสดงคําสั่งระยะไกล)",
+      "vi": "Kết hợp mạng di truyền (không chứng minh diễn viên lệnh từ xa)"
+    },
+    "local_command_verified": {
+      "de": "Lokales Kommando einzigartig gepaart mit dem Zustandswechsel",
+      "fr": "Commande locale associée uniquement au changement d'état",
+      "th": "คําสั่งท้องถิ่นไม่ซ้ํากับการเปลี่ยนแปลงของรัฐ",
+      "vi": "Lệnh cục bộ chỉ kết hợp với thay đổi trạng thái"
+    },
+    "network_target_marker_verified": {
+      "de": "Network Marker Command Actor eindeutig gepaart mit der Zustandsänderung",
+      "fr": "Acteur de commande de marqueur réseau associé au changement d'état",
+      "th": "นักแสดงเป้าหมายเครือข่าย จับคู่กับการเปลี่ยนแปลงของรัฐ",
+      "vi": "Chỉ có lệnh đánh dấu mạng kết hợp với thay đổi trạng thái"
+    },
+    "client_marker_state_no_operator": {
+      "de": "Nur Markerzustand; Befehlsaktor unbekannt",
+      "fr": "État du marqueur seulement; acteur de commande inconnu",
+      "th": "สถานะผู้ทําเครื่องหมายเท่านั้น; ไม่ทราบตัวแสดงคําสั่ง",
+      "vi": "Chỉ đánh dấu trạng thái; diễn viên lệnh không rõ"
+    },
+    "network_field_marker_payload_matched": {
+      "de": "Server-Feldmarkerpaket eindeutig mit der Statusänderung übereinstimmt",
+      "fr": "Le paquet de marqueur de champ du serveur correspond à la modification d'état",
+      "th": "แพ็กเกตของตัวทําเครื่องหมายของเซิร์ฟเวอร์ ไม่ซ้ํากับการเปลี่ยนแปลงของรัฐ",
+      "vi": "Bộ nhận diện trường máy phục vụ đặc biệt khớp với thay đổi trạng thái"
+    },
+    "network_field_marker_candidate_unverified": {
+      "de": "Ungeprüfter Netzwerkpaket-Kandidat; Befehlsakteur unbekannt",
+      "fr": "Paquet réseau candidat non vérifié ; auteur de la commande inconnu",
+      "th": "แพ็กเกตเครือข่ายที่เป็นตัวเลือกยังไม่ผ่านการตรวจสอบ จึงไม่ทราบผู้สั่ง",
+      "vi": "Gói mạng ứng viên chưa được xác minh; không rõ người thao tác"
+    },
+    "network_field_marker_operator_verified_v1": {
+      "de": "Feldmarkierungs-Befehlsakteur durch kontrollierten Test verifiziert",
+      "fr": "Auteur du marqueur de terrain vérifié par un essai contrôlé",
+      "th": "ผู้สั่งหมุดสนามผ่านการยืนยันด้วยการทดสอบแบบควบคุม",
+      "vi": "Người đặt dấu sân đã được xác minh bằng thử nghiệm đối chứng"
+    },
+    "legacy_snapshot_no_operator": {
+      "de": "Legacy Record hat keine Command-Akteur Beweise",
+      "fr": "Le dossier de l'héritage n'a aucune preuve de commandant-acteur",
+      "th": "บันทึกมรดกไม่มีหลักฐานคําสั่ง",
+      "vi": "Hồ sơ thừa kế không có bằng chứng chỉ huy"
+    },
+    "nearActorCandidate": {
+      "de": "Fast-Fuß-Kandidat",
+      "fr": "Candidat quasi-pied",
+      "th": "ผู้สมัครที่ใกล้เคียง",
+      "vi": "Ứng cử viên gần chân"
+    },
+    "noMarkerEvents": {
+      "de": "Es wurden keine Markeränderungen dieses Typs erfasst",
+      "fr": "Aucun changement de marqueur de ce type n'a été enregistré",
+      "th": "ไม่มีการเปลี่ยนแปลงเครื่องหมายการค้า",
+      "vi": "Không có thay đổi dấu hiệu kiểu này đã được ghi"
+    },
+    "markerSnapshot": {
+      "de": "Gegenwart, als der Fang begann",
+      "fr": "Présent au début de la capture",
+      "th": "นําเสนอเมื่อการจับกุมเริ่มต้น",
+      "vi": "Hiện tại khi bắt đầu"
+    },
+    "markerApply": {
+      "de": "Beantragen",
+      "fr": "Appliquer",
+      "th": "ปรับใช้",
+      "vi": "Áp dụng"
+    },
+    "markerMove": {
+      "de": "Bewegung",
+      "fr": "Déplacer",
+      "th": "ย้าย",
+      "vi": "Chuyển"
+    },
+    "markerRemove": {
+      "de": "Entfernen",
+      "fr": "Supprimer",
+      "th": "ลบ",
+      "vi": "Bỏ"
+    },
+    "markerNearbyDisclaimer": {
+      "de": "Nahfuß bedeutet nur räumliche Nähe zum Beobachtungszeitpunkt; es identifiziert weder den Befehlsakteur noch beweist es, dass der Spieler ins Visier genommen wurde.",
+      "fr": "Le quasi-pied signifie seulement la proximité spatiale au moment de l'observation; il n'identifie ni ne prouve que le joueur a été ciblé.",
+      "th": "ใกล้-Fet หมายถึงเฉพาะพื้นที่ใกล้เคียงในเวลาสังเกตการณ์; มันไม่ระบุถึง นักแสดงคําสั่งหรือพิสูจน์ผู้เล่นเป็นเป้าหมาย",
+      "vi": "Gần bàn chân có nghĩa là chỉ gần không gian vào thời điểm quan sát; nó không nhận diện diễn viên lệnh hoặc chứng minh người chơi là mục tiêu."
+    },
+    "liveCombatSlice": {
+      "de": "Live-Kampfstück",
+      "fr": "Tranche de combat vivante",
+      "th": "การต่อสู้สด",
+      "vi": "Thịt sống"
+    },
+    "liveMarkerMap": {
+      "de": "Live Marker Karte",
+      "fr": "Carte des marqueurs vivants",
+      "th": "แปรงทาสี",
+      "vi": "Bản đồ đánh dấu trực tiếp"
+    },
+    "liveMarkerMapHelp": {
+      "de": "Zeigt Feld- und Zielmarker an, die derzeit für diesen Client sichtbar sind. Rechtszieher zum Schwenken, Rad zum Zoom, Doppel-Rechtsklick zum Zurücksetzen.",
+      "fr": "Affiche les marqueurs de champ et de cible actuellement visibles pour ce client. Drag droit vers le panoramique, roue vers le zoom, double-droit-cliquez pour réinitialiser.",
+      "th": "แสดงเครื่องหมายช่องข้อมูลและเป้าหมายที่ปรากฏอยู่กับไคลเอนต์นี้ ลากขวาไปกระทะ ล้อเพื่อขยาย ดับเบิลคลิกขวาเพื่อรีเซ็ต",
+      "vi": "Hiện dấu hiệu đích cho ứng dụng khách này. Rẽ phải để đẩy, bánh xe để phóng to, nhấn chuột phải để khởi động lại."
+    },
+    "playersAndLogs": {
+      "de": "Spieler und Logs",
+      "fr": "Joueurs et journaux",
+      "th": "ผู้เล่นและปูมบันทึก",
+      "vi": "Người chơi và bản ghi"
+    },
+    "behaviorCandidates": {
+      "de": "Verhaltenskandidaten",
+      "fr": "Candidats au comportement",
+      "th": "ผู้สมัครพฤติกรรม",
+      "vi": "Ứng dụng"
+    },
+    "battlefieldFlow": {
+      "de": "Battlefield Flow und Engagement",
+      "fr": "Flux de champs de bataille et engagement",
+      "th": "การต่อสู้ไหลและหมั้น",
+      "vi": "Tham gia chiến trường"
+    },
+    "movementEvidence": {
+      "de": "Zeigt sichtbare Fraktionszentren und die letzten 10 Sekunden der Bewegung. Dies ist keine allwissende Karte.",
+      "fr": "Affiche les centres de faction visibles et les 10 dernières secondes de mouvement. Ce n'est pas une carte omnisciente.",
+      "th": "แสดงศูนย์บริหารที่มองเห็นได้ และการเคลื่อนไหว 10 วินาทีสุดท้าย นี่ไม่ใช่แผนที่",
+      "vi": "Cho thấy các trung tâm có thể nhìn thấy và 10 giây cuối cùng của chuyển động. Đây không phải là bản đồ chi tiết."
+    },
+    "scoreTimeline": {
+      "de": "Drei-Fraktionen-Score-Timeline",
+      "fr": "Chronologie des scores à trois actions",
+      "th": "เวลาทําคะแนน 3 ครั้ง",
+      "vi": "Dòng thời gian điểm ba phần"
+    },
+    "scoreEvidence": {
+      "de": "Direkte Punktzahl Beobachtungen des Kunden InstanceContentDirector.",
+      "fr": "Observations directes du client InstanceContentDirector.",
+      "th": "การสังเกตผลคะแนนโดยตรง จากผู้ตรวจสอบเนื้อหาภายในของลูกค้า",
+      "vi": "Ghi điểm trực tiếp từ hội nghị khách hàng."
+    },
+    "observedCombatFlow": {
+      "de": "Beobachteter Kampffluss",
+      "fr": "Débit de combat observé",
+      "th": "การไหลของแนวรบที่สังเกตได้",
+      "vi": "Quan sát dòng chảy chiến đấu"
+    },
+    "hpFlowEvidence": {
+      "de": "Obere Balken sind ausgehende Aktionsschäden; untere Balken sind eingehende Aktionsschäden. Nur Aktionseffekte, die der Kunde erhält, werden gezählt.",
+      "fr": "Les barres supérieures sont des dommages d'action sortantes; les barres inférieures sont des dommages d'action entrants. Seuls les effets d'action reçus par le client sont comptés.",
+      "th": "แท่งด้านบนเป็นความเสียหายต่อการทํางานภายนอก; แท่งล่างเป็นความเสียหายเกิดขึ้น จํานวนของลูกเล่นที่ได้รับจากไคลเอนต์เท่านั้น",
+      "vi": "Những thanh trên bị hư hại khi hành động; còn những thanh dưới thì bị hư hại. Chỉ có hiệu ứng hành động mà khách hàng nhận được."
+    },
+    "noMovement": {
+      "de": "Keine sichtbare Positionsprobe nahe dieser Zeit",
+      "fr": "Aucun échantillon de position visible près de cette heure",
+      "th": "ไม่มีตัวอย่างที่มองเห็นได้ ใกล้เคียงกับครั้งนี้",
+      "vi": "Không thấy mẫu vị trí gần thời gian này"
+    },
+    "tenSecondTrail": {
+      "de": "Letzte 10 Sekunden · Karte X/Z-Koordinaten",
+      "fr": "Dernières 10 secondes · coordonnées carte X/Z",
+      "th": "เมื่อ 10 วินาทีที่แล้ว พิกัด X/Z",
+      "vi": "Tọa độ X/Z"
+    },
+    "noScore": {
+      "de": "Keine direkten Bewertungen",
+      "fr": "Pas d'observation directe des scores",
+      "th": "ไม่มีการสังเกตคะแนนโดยตรง",
+      "vi": "Không có điểm trực tiếp quan sát"
+    },
+    "noHealthFlow": {
+      "de": "Keine erfassten Action-Schadensereignisse für den Kampffluss",
+      "fr": "Aucun incident d'action-dommage capturé pour le flux de combat",
+      "th": "ไม่พบการกระทําใด ๆ ที่จับได้",
+      "vi": "Không có sự kiện xảy ra trong chiến trường."
+    },
+    "hpLossUpper": {
+      "de": "Oberteil: ausgehender Schaden",
+      "fr": "Supérieur: dommages sortants",
+      "th": "บน: ความเสียหายภายนอก",
+      "vi": "Trên: thiệt hại đi"
+    },
+    "hpGainLower": {
+      "de": "Geringer: ankommender Schaden",
+      "fr": "Inférieur: dommages entrants",
+      "th": "ล่าง: ความเสียหายที่เข้ามา",
+      "vi": "Thấp hơn: thiệt hại đến"
+    },
+    "currentSlice": {
+      "de": "Aktueller Rahmen",
+      "fr": "Cadre actuel",
+      "th": "กรอบปัจจุบัน",
+      "vi": "Khung hiện tại"
+    },
+    "evidenceBoundary": {
+      "de": "Nachweisgrenze",
+      "fr": "Limite des preuves",
+      "th": "ขอบเขตหลักฐาน",
+      "vi": "Giới hạn bằng chứng"
+    },
+    "playerTableHelp": {
+      "de": "Klicken Sie auf einen Header, um das Sortieren umzuschalten. Reihen bleiben intakt; Säulen können verkleinert, neu geordnet oder versteckt werden.",
+      "fr": "Cliquez sur un en-tête pour basculer le tri. Les lignes restent intactes; les colonnes peuvent être redimensionnées, réorganisées ou cachées.",
+      "th": "คลิกหัวจดหมายเพื่อสลับการเรียงลําดับ แถวยังคงเหมือนเดิม คอลัมน์สามารถปรับขนาด, เรียงใหม่หรือซ่อน",
+      "vi": "Nhấn vào đầu trang để bật/tắt sắp xếp. Hàng nguyên vẹn; cột có thể được thay đổi kích cỡ, sắp xếp lại hoặc ẩn."
+    },
+    "behaviorEvidence": {
+      "de": "Verwendet das allgemeine Verhalten aus dem Web-Prototyp und zeigt kartenspezifische Spielstile, wenn sie durch Beweise unterstützt werden. Protokolle erscheinen nur mit Ereignisbeweisen; feindliche Kommandant und Makro-Sender Inferenz bleibt mit geringem Vertrauen.",
+      "fr": "Utilise le comportement général défini à partir du prototype web et montre des styles de jeu spécifiques à la carte lorsqu'ils sont supportés par des preuves. Les journaux n'apparaissent qu'avec des preuves d'événements; le commandant ennemi et l'inférence macro-sender demeurent peu fiables.",
+      "th": "ใช้พฤติกรรมทั่วไปที่ตั้งไว้จากต้นแบบเว็บ และแสดงรูปแบบการเล่นแบบเจาะจงบนแผนที่ เมื่อถูกรองรับด้วยหลักฐาน ปูมบันทึกปรากฏเฉพาะกับหลักฐานเหตุการณ์เท่านั้น ผู้บัญชาการฝ่ายศัตรูและอนุมานผู้ติดตาม",
+      "vi": "Sử dụng hành vi chung được thiết lập từ mẫu web và hiển thị kiểu chơi cụ thể bản đồ khi được hỗ trợ bởi bằng chứng. Nhật ký chỉ xuất hiện với bằng chứng sự kiện; chỉ huy kẻ thù và sự suy giảm vĩ mô vẫn còn thiếu tự tin."
+    },
+    "noBehavior": {
+      "de": "Kein Kandidat zum Ausstellen",
+      "fr": "Aucun candidat à afficher",
+      "th": "ไม่มีผู้สมัครที่จะแสดง",
+      "vi": "Không có ứng dụng cần hiển thị"
+    },
+    "detailWindowTitle": {
+      "de": "Battlefield Chronicle · Detaillierte Analyse",
+      "fr": "Chronique de Battlefield · Analyse détaillée",
+      "th": "การวิเคราะห์รายละเอียด",
+      "vi": "Phân tích chi tiết về trận chiến"
+    },
+    "matchReplay": {
+      "de": "Match-Wiederholung",
+      "fr": "Match replay",
+      "th": "ตรงกันกับชื่อเล่น",
+      "vi": "Khớp lại"
+    },
+    "detailEvidenceNotice": {
+      "de": "Position, HP und MP decken nur Akteure ab, die vom Uploader geladen werden. Sichtbare HP-Änderungen können nicht auf Aktionen zurückgeführt werden. Aktionen, Status, Ziele und Mechanismen erscheinen nur, wenn direkte Ereignisse existieren.",
+      "fr": "Position, HP et MP ne couvrent que les acteurs chargés par le téléchargeur. Les modifications visibles de HP ne peuvent être attribuées à des actions. Les actions, statuts, objectifs et mécanismes n'apparaissent que lorsque des événements directs existent.",
+      "th": "ตําแหน่ง, ปก HP และ MP เฉพาะนักแสดงที่ถูกโหลดโดยผู้อัปโหลด ไม่สามารถกําหนดการเปลี่ยนแปลงของ HP ได้ การกระทํา, สถานะ, เป้าหมาย และกลไก จะปรากฏขึ้นเฉพาะเมื่อเหตุการณ์โดยตรงเกิดขึ้น",
+      "vi": "Vị trí, HP và MP chỉ có diễn viên được tải lên bởi người tải lên. Không thể quy thay đổi hiển thị HP cho hành động. Hành động, địa vị, mục tiêu và cơ khí chỉ xuất hiện khi có sự kiện trực tiếp."
+    },
+    "combatSlice": {
+      "de": "Battlefield-Stück (5 Sekunden)",
+      "fr": "Tranche de champ de bataille (5 secondes)",
+      "th": "ชิ้นส่วนต่อสู้ (5 วินาที)",
+      "vi": "lát chiến trường (4 giây)"
+    },
+    "sliceEvidence": {
+      "de": "Output, Schaden genommen und Heilung sind getrennt. Fehlende Action-Effekt-Evidenz wird als nicht erfasst gezeigt.",
+      "fr": "La sortie, les dommages pris et la guérison sont séparés. Les données manquantes sur les effets d'action ne sont pas prises en compte.",
+      "th": "ผลส่งออก ความเสียหายและการรักษาแยกกันอยู่ หลักฐานของการกระทําหายไป แสดงให้เห็นว่าไม่ถูกจับ",
+      "vi": "Kết quả, tổn thất bị lấy và chữa lành bị tách ra. Thiếu bằng chứng hiệu quả hành động được cho thấy không bị bắt."
+    },
+    "output": {
+      "de": "Output",
+      "fr": "Produit",
+      "th": "ส่งออก",
+      "vi": "Xuất"
+    },
+    "observedDamageTaken": {
+      "de": "Schadenskandidat (sichtbarer HP-Verlust)",
+      "fr": "Candidat aux dommages (perte visible de HP)",
+      "th": "ผู้สมัครรับความเสียหาย (HP แพ้ได้)",
+      "vi": "Ứng cử viên bị thiệt hại (mất khả năng nhìn thấy HP)"
+    },
+    "observedHealing": {
+      "de": "Heilkandidat (sichtbarer HP-Gewinn)",
+      "fr": "Candidat à la guérison (gain de HP visible)",
+      "th": "ผู้สมัครรักษา (HP ได้)",
+      "vi": "Ứng cử viên chữa lành (nhận được HP hữu hình)"
+    },
+    "downs": {
+      "de": "Daunen",
+      "fr": "Baisses",
+      "th": "ลง",
+      "vi": "Xuống"
+    },
+    "objectivesAndScore": {
+      "de": "Ziele/Score",
+      "fr": "Objectifs / score",
+      "th": "วัตถุ / คะแนน",
+      "vi": "Mục tiêu / Điểm"
+    },
+    "notCaptured": {
+      "de": "Nicht erfasst",
+      "fr": "Non capturé",
+      "th": "ไม่ได้จับ",
+      "vi": "Không bị bắt."
+    },
+    "actionsNotCaptured": {
+      "de": "Es wurden keine Aktion-Effekt-Ereignisse erfasst, so dass Aktionen, Quellen und Ziele nicht aufgelistet werden können.",
+      "fr": "Aucun effet d'action n'a été capturé, de sorte que les actions, les sources et les cibles ne peuvent pas être énumérées.",
+      "th": "ไม่มีเหตุการณ์ใดเกิดขึ้นโดยการกระทําใด ๆ เกิดขึ้น ดังนั้น การกระทํา แหล่งที่มาและเป้าหมายจึงไม่สามารถอยู่ในรายการได้",
+      "vi": "Không có sự kiện hiệu quả hành động nào bị bắt, nên không thể liệt kê các hành động, nguồn lực và mục tiêu."
+    },
+    "noVitalsChange": {
+      "de": "Keine beobachtbare HP-Änderung in dieser Scheibe.",
+      "fr": "Aucun changement de HP observable dans cette tranche.",
+      "th": "ไม่มีการเปลี่ยนแปลง HP ในชิ้นนี้",
+      "vi": "Không thấy được sự thay đổi của HP trong miếng này."
+    },
+    "noScoreSample": {
+      "de": "Keine Bewertungsstichprobe",
+      "fr": "Aucun échantillon de score",
+      "th": "ไม่มีตัวอย่างคะแนน",
+      "vi": "Chưa lấy mẫu điểm"
+    },
+    "source": {
+      "de": "Quelle",
+      "fr": "Source",
+      "th": "แหล่งที่มา",
+      "vi": "Nguồn"
+    },
+    "target": {
+      "de": "Ziel",
+      "fr": "Objectif",
+      "th": "เป้าหมาย",
+      "vi": "Mục tiêu"
+    },
+    "action": {
+      "de": "Aktion",
+      "fr": "Décision",
+      "th": "การกระทํา",
+      "vi": "Hành động"
+    },
+    "actions": {
+      "de": "Aktionsprotokolle",
+      "fr": "Comptes rendus d ' action",
+      "th": "บันทึกการกระทํา",
+      "vi": "Ghi hành động"
+    },
+    "amount": {
+      "de": "Betrag",
+      "fr": "Montant",
+      "th": "ค่า",
+      "vi": "Số lượng"
+    },
+    "state": {
+      "de": "Staat",
+      "fr": "État",
+      "th": "สถานะ",
+      "vi": "Tình trạng"
+    },
+    "down": {
+      "de": "nach unten",
+      "fr": "Baisse",
+      "th": "ลง",
+      "vi": "& Xuống"
+    },
+    "visiblePlayerVitals": {
+      "de": "Sichtbarer Player HP / MP",
+      "fr": "Lecteur visible HP / MP",
+      "th": "เครื่องเล่น HP / MP",
+      "vi": "Máy nghe lén HP / MP"
+    },
+    "deathRecords": {
+      "de": "Todesanzeigen",
+      "fr": "Dossiers de décès",
+      "th": "ประวัติการเสียชีวิต",
+      "vi": "Hồ sơ tử vong"
+    },
+    "deathRecordHelp": {
+      "de": "Wählen Sie einen nach unten, um die HP-, MP-, Aktions- / Statusnachweise und Verhaltensränge des Spielers während der vorangegangenen 15 Sekunden zu überprüfen.",
+      "fr": "Sélectionnez un bas pour inspecter les valeurs HP, MP, action/status et comportement du joueur au cours des 15 secondes précédentes.",
+      "th": "เลือกลงไปตรวจสอบ HP, MP ของผู้เล่น การกระทํา/status หลักฐานและลักษณะพฤติกรรมในช่วง 15 วินาทีก่อนหน้า",
+      "vi": "Chọn xuống để kiểm tra chứng cứ và hành vi của người chơi trong 15 giây trước."
+    },
+    "legacyCaptureTitle": {
+      "de": "Legacy Capture Format",
+      "fr": "Format de capture historique",
+      "th": "รูปแบบการจับภาพจดหมายเวียน",
+      "vi": "Định dạng thu thừa kế"
+    },
+    "legacyCaptureWarning": {
+      "de": "Dieses Match zeichnete keine Aktion, keinen Status oder genaue Todesereignisse auf, so dass sie danach nicht rekonstruiert werden können. Überprüfen Sie mit einer neuen Übereinstimmung, die von Version 0.8.1 oder höher erfasst wurde.",
+      "fr": "Cette correspondance n'a pas enregistré d'action, de statut ou d'événements de mort exacts, de sorte qu'ils ne peuvent pas être reconstruits après. Vérifiez avec un nouveau match capturé par la version 0.8.1 ou ultérieure.",
+      "th": "การ สู้ รบ นี้ ไม่ ได้ บันทึก การ กระทํา, สถานะ, หรือ เหตุ การณ์ ที่ ทํา ให้ ถึง ตาย อย่าง แน่นอน ดัง นั้น จึง ไม่ สามารถ สร้าง เหตุ การณ์ เหล่า นั้น ขึ้น ใหม่ หลัง จาก นั้น. ตรวจสอบด้วยตัวจับใหม่โดยเวอร์ชัน 0. 8. 1 หรือในภายหลัง",
+      "vi": "Trận đấu này không ghi lại hành động, tình trạng, hay chính xác sự kiện tử vong, vì thế không thể tái thiết sau đó. Kiểm tra với một trận đấu mới được chụp bởi phiên bản 0.8.1 hoặc sau này."
+    },
+    "noDeathRecords": {
+      "de": "In diesem Spiel wurde kein Down-Event beobachtet.",
+      "fr": "Aucun événement négatif n'a été observé dans ce match.",
+      "th": "ไม่ มี การ สังเกต เหตุ การณ์ ที่ ลง มา ใน การ แข่งขัน ครั้ง นี้.",
+      "vi": "Không có sự kiện xuống dốc nào được quan sát trong trận đấu này."
+    },
+    "lastFifteenSeconds": {
+      "de": "15 Sekunden vor dem Tod",
+      "fr": "15 secondes avant la mort",
+      "th": "15 วินาทีก่อนเสียชีวิต",
+      "vi": "15 giây trước khi chết"
+    },
+    "statusesAndActions": {
+      "de": "Pre-Death Status und Aktionen",
+      "fr": "Statuts et actions antérieurs à la mort",
+      "th": "สถานะก่อนตายและการกระทํา",
+      "vi": "Trạng thái và hành động tiền chết"
+    },
+    "statusesNotCaptured": {
+      "de": "Status-Snapshots wurden für dieses Spiel nicht erfasst.",
+      "fr": "Les instantanés d'état n'ont pas été capturés pour ce match.",
+      "th": "ภาพถ่ายจากสถานะไม่ได้ถูกจับภาพให้ตรงกัน",
+      "vi": "Ảnh chụp trạng thái không được chụp cho trận đấu này."
+    },
+    "status": {
+      "de": "Status",
+      "fr": "État",
+      "th": "สถานะ",
+      "vi": "Trạng thái"
+    },
+    "periodicDamageSettlement": {
+      "de": "Periodische Schadenskacke",
+      "fr": "Cochez les dommages périodiques",
+      "th": "เคล็ดลับความเสียหายต่องวด",
+      "vi": "Đánh dấu định kỳ"
+    },
+    "periodicHealingSettlement": {
+      "de": "Periodische heilende Zecke",
+      "fr": "tique de guérison périodique",
+      "th": "เห็บ รักษา ต่อ ไป",
+      "vi": "Con bọ định kỳ"
+    },
+    "periodicSourceUnresolved": {
+      "de": "Nicht in diesem periodischen Paket enthaltener Antragsteller",
+      "fr": "Applicateur non présent dans ce paquet périodique",
+      "th": "ไม่อยู่ในชุดธาตุนี้",
+      "vi": "Phụ đề không có trong gói tuần hoàn này"
+    },
+    "gameMechanic": {
+      "de": "Spielmechanik",
+      "fr": "Mécanicien du jeu",
+      "th": "กลไกเกม",
+      "vi": "Comment"
+    },
+    "unknownActionEvent": {
+      "de": "Unbenanntes Aktionsereignis",
+      "fr": "Evénement d'action sans nom",
+      "th": "ไม่มีชื่อเหตุการณ์",
+      "vi": "Sự kiện hành động không tên"
+    },
+    "remaining": {
+      "de": "Sekunden nach links",
+      "fr": "Deuxième gauche",
+      "th": "วินาทีที่เหลือ",
+      "vi": "Còn lại giây"
+    },
+    "unknownPlayer": {
+      "de": "Unbekannter Spieler",
+      "fr": "Joueur inconnu",
+      "th": "ไม่ทราบตัวเล่น",
+      "vi": "Người chơi lạ"
+    },
+    "unknownWorld": {
+      "de": "Unbekannte Welt",
+      "fr": "Monde inconnu",
+      "th": "ไม่ทราบโลก",
+      "vi": "Thế giới không rõ"
+    },
+    "summon": {
+      "de": "Sumpf",
+      "fr": "Invoquer",
+      "th": "เรียกตัว",
+      "vi": "Triệu hồi"
+    },
+    "owner": {
+      "de": "Eigentümer",
+      "fr": "propriétaire",
+      "th": "เจ้าของ",
+      "vi": "người chủ"
+    },
+    "environmentSource": {
+      "de": "Umwelt oder periodische Wirkung",
+      "fr": "Environnement ou effet périodique",
+      "th": "ไม่ใช้เอฟเฟ็คต์",
+      "vi": "Hiệu ứng tuần hoàn hoặc môi trường"
+    },
+    "unresolvedActor": {
+      "de": "Ungelöster Akteur",
+      "fr": "Acteur non résolu",
+      "th": "นักแสดงที่ไม่ประสบความสําเร็จ",
+      "vi": "Diễn viên chưa được giải quyết"
+    },
+    "confidenceLow": {
+      "de": "Geringes Vertrauen",
+      "fr": "Faible confiance",
+      "th": "ความมั่นใจต่ํา",
+      "vi": "Thiếu tự tin"
+    },
+    "confidenceMedium": {
+      "de": "Mittleres Vertrauen",
+      "fr": "Confiance moyenne",
+      "th": "ความมั่นใจปานกลาง",
+      "vi": "Tự tin vừa"
+    },
+    "confidenceHigh": {
+      "de": "Hohes Vertrauen",
+      "fr": "Haute confiance",
+      "th": "ความมั่นใจสูง",
+      "vi": "Rất tự tin"
+    },
+    "change": {
+      "de": "Änderung",
+      "fr": "Changement",
+      "th": "การเปลี่ยนแปลง",
+      "vi": "Thay đổi"
+    },
+    "applied": {
+      "de": "Angewandt",
+      "fr": "Appliquée",
+      "th": "ปรับใช้",
+      "vi": "Ứng dụng"
+    },
+    "removed": {
+      "de": "Entfernt",
+      "fr": "Supprimé",
+      "th": "ลบแล้ว",
+      "vi": "Đã gỡ bỏ"
+    },
+    "afterHp": {
+      "de": "HP nach dem Ereignis",
+      "fr": "HP après l'événement",
+      "th": "HP หลังจากเหตุการณ์แล้ว",
+      "vi": "HP sau sự kiện"
+    },
+    "shield": {
+      "de": "Schutzschild",
+      "fr": "bouclier",
+      "th": "โล่",
+      "vi": "khiên"
+    },
+    "hpAndShield": {
+      "de": "HP (+ Schild)",
+      "fr": "HP (+ bouclier)",
+      "th": "HP (+ โล่)",
+      "vi": "HP (mành cộng)"
+    },
+    "eventType": {
+      "de": "Veranstaltung",
+      "fr": "Événement",
+      "th": "เหตุการณ์",
+      "vi": "Sự kiện"
+    },
+    "actionOrStatus": {
+      "de": "Aktion/Status",
+      "fr": "Action / statut",
+      "th": "การกระทํา / สถานะ",
+      "vi": "Hành động/ Trạng thái"
+    },
+    "vitals": {
+      "de": "Vitals Snapshot",
+      "fr": "Aperçu des éléments vitaux",
+      "th": "จับภาพที่สําคัญ",
+      "vi": "Hình chụp vi sinh vật"
+    },
+    "damageEvent": {
+      "de": "Geleisteter Schaden",
+      "fr": "Dommages causés",
+      "th": "รับความเสียหาย",
+      "vi": "Mất đi tổn thất"
+    },
+    "healingEvent": {
+      "de": "Heilung",
+      "fr": "Guérison",
+      "th": "รักษา",
+      "vi": "Hồi phục"
+    },
+    "actionEvent": {
+      "de": "Aktionsereignis",
+      "fr": "Manifestation d'action",
+      "th": "การกระทํา",
+      "vi": "Hành động"
+    },
+    "statusApplied": {
+      "de": "Angewendeter Status",
+      "fr": "Statut appliqué",
+      "th": "ปรับใช้สถานะแล้ว",
+      "vi": "Trạng thái được áp dụng"
+    },
+    "statusRemoved": {
+      "de": "Status gestrichen",
+      "fr": "Statut enlevé",
+      "th": "สถานะถูกลบ",
+      "vi": "Trạng thái bị gỡ bỏ"
+    },
+    "statusObserved": {
+      "de": "Status Snapshot",
+      "fr": "instantané d'état",
+      "th": "จับภาพสถานะ",
+      "vi": "Hình chụp trạng thái"
+    },
+    "behaviorRankings": {
+      "de": "Spielerverhalten rangiert",
+      "fr": "Classement du comportement des joueurs",
+      "th": "ลําดับพฤติกรรมของผู้เล่น",
+      "vi": "Ứng xử của người chơi"
+    },
+    "rank": {
+      "de": "Rang",
+      "fr": "Classement",
+      "th": "หมุน & 90",
+      "vi": "Rak"
+    },
+    "mapControls": {
+      "de": "Ziehen zum Verschieben · rechter Regler zum Zoomen · Doppelklick zum Zurücksetzen",
+      "fr": "Glisser pour déplacer · curseur droit pour zoomer · double-clic pour réinitialiser",
+      "th": "ลากเพื่อเลื่อน · ใช้แถบด้านขวาเพื่อซูม · ดับเบิลคลิกเพื่อรีเซ็ต",
+      "vi": "Kéo để di chuyển · thanh trượt bên phải để thu phóng · nhấp đúp để đặt lại"
+    },
+    "mapZoom": {
+      "de": "Kartenzoom",
+      "fr": "Zoom de la carte",
+      "th": "ซูมแผนที่",
+      "vi": "Thu phóng bản đồ"
+    },
+    "mapOverlay": {
+      "de": "Karte mit X/Z-Koordinaten überlagert",
+      "fr": "Carte recouverte de coordonnées X/Z",
+      "th": "แผนที่ที่ตัดกับพิกัด X/Z",
+      "vi": "Ánh xạ được bao phủ bởi tọa độ X/Z"
+    },
+    "noObjectiveEvents": {
+      "de": "Keine Ressourcenpunkt- oder Mechanikzustandsereignisse erfasst",
+      "fr": "Aucun événement de point de ressource ou d'état mécanicien capturé",
+      "th": "ไม่มีเหตุการณ์ต่าง ๆ ที่เกี่ยวกับทรัพยากร หรือสถานะเครื่องถูกบันทึก",
+      "vi": "Không có sự kiện tài nguyên nào được thu hồi"
+    },
+    "mapBorderland": {
+      "de": "Die Borderland Ruinen (Secure)",
+      "fr": "Les ruines de la frontière (Secure)",
+      "th": "ซาก ปรัก หัก พัง ของ พรม แดน (ความ หายนะ)",
+      "vi": "Tàn tích vùng biên giới"
+    },
+    "mapSealRock": {
+      "de": "Seal Rock (Seize)",
+      "fr": "Roche de phoque (seuil)",
+      "th": "ซีลร็อค (Seize)",
+      "vi": "Đá hải cẩu (seize)"
+    },
+    "mapShatter": {
+      "de": "Die Felder der Herrlichkeit (Shatter)",
+      "fr": "Les champs de gloire (Shatter)",
+      "th": "ทุ่ง นา แห่ง สง่า ราศี (เสียง แตร)",
+      "vi": "Những cánh đồng vinh quang (chia sẻ)"
+    },
+    "mapOnsal": {
+      "de": "Onsal Hakair (Danshig Naadam)",
+      "fr": "Onsal Hakair (Danshig Naadam)",
+      "th": "ออนซัล ฮา เวียร์ (Danshig Naadam)",
+      "vi": "Onsal Hakair (Danshig Naadam)"
+    },
+    "mapWorqor": {
+      "de": "Worqor Chirteh (Triumph)",
+      "fr": "Worqor Chirteh (Triumph)",
+      "th": "Worchor Chirthe (Tremph)",
+      "vi": "Warqor Chirteh (Triumph)"
+    },
+    "four_small": {
+      "de": "Vier-Spieler-Koordinationstendenz",
+      "fr": "Tendance à la coordination des quatre joueurs",
+      "th": "แนวโน้มการประสานงานของตัวเล่น",
+      "vi": "Khuynh hướng phối hợp bốn người chơi"
+    },
+    "solo": {
+      "de": "Unabhängige Spieltendenz",
+      "fr": "Tendance au jeu indépendant",
+      "th": "แนวโน้มการเล่นอิสระ",
+      "vi": "Khuynh hướng chơi độc lập"
+    },
+    "melee_firestarter": {
+      "de": "Melee Feuerstarter",
+      "fr": "Démarrage Melee",
+      "th": "เครื่องดับเพลิง Mele",
+      "vi": "Name"
+    },
+    "ranged_firestarter": {
+      "de": "Fernfeuerstarter",
+      "fr": "Démarreur de feu rangé",
+      "th": "ตัวเริ่มการยิงแบบพิสัย",
+      "vi": "GenericName"
+    },
+    "fragility": {
+      "de": "Mogul-Risiko-Tendenz (Low-Score-Warnung)",
+      "fr": "Tendance au risque de mogul (avertissement de bas niveau)",
+      "th": "แนวโน้มของโมกุลเสี่ยง (คําเตือนคะแนนต่ํา)",
+      "vi": "Khuynh hướng rủi ro Mogul ( Báo động chậm)"
+    },
+    "navigation": {
+      "de": "Tendenz zur schlechten Positionierung (Low-Score-Warnung)",
+      "fr": "Tendance au mauvais positionnement (avertissement bas)",
+      "th": "แนวโน้มการวางตําแหน่งต่ํา (คําเตือนคะแนนต่ํา)",
+      "vi": "Khuynh hướng định vị nghèo (sự cảnh báo nhỏ)"
+    },
+    "local": {
+      "de": "Lokal",
+      "fr": "Local",
+      "th": "ภายใน",
+      "vi": "Cục bộ"
+    },
+    "liveCombatTitle": {
+      "de": "Battlefield Chronicle: Live-Kampf-Slice",
+      "fr": "Battlefield Chronicle · Coupe de combat en direct",
+      "th": "การต่อสู้รอบคัดเลือก",
+      "vi": "Trận chiến trước khi kết thúc."
+    },
+    "openLiveCombat": {
+      "de": "Offene lebende Scheibe",
+      "fr": "Ouvrir la tranche vivante",
+      "th": "เปิดภาพสด",
+      "vi": "Há miệng ra"
+    },
+    "liveTendencyCandidates": {
+      "de": "Live Tendenz Kandidaten",
+      "fr": "Candidats à la tendance vivante",
+      "th": "ผู้ ประสงค์ จะ มี ชีวิต อยู่",
+      "vi": "Những ứng viên có khuynh hướng sống"
+    },
+    "liveTendencyBoundary": {
+      "de": "Navigationskandidaten sammeln direkte Beweise, die tatsächlich von diesem Client geladen wurden, seit das Spiel begann. Sie beweisen kein externes vorgefertigtes oder feindliches Kommando und ersetzen kein Post-Match-Scoring.",
+      "fr": "Les candidats à la navigation accumulent des preuves directes chargées par ce client depuis le début du match. Ils ne prouvent pas un commandement externe prémade ou ennemi et ne remplacent pas la notation post-match.",
+      "th": "ผู้สมัครนําร่องสะสมหลักฐานโดยตรงจริงโหลดโดยลูกความนี้ ตั้งแต่การแข่งขันเริ่มต้น พวกเขาไม่พิสูจน์การวางจําหน่ายหรือคําสั่งของศัตรู และไม่มีการแทนที่เครื่องหมายหลังการแข่งขัน",
+      "vi": "Các ứng viên định vị tích lũy bằng chứng trực tiếp từ khi cuộc đấu bắt đầu. Họ không chứng minh lệnh từ bên ngoài hay lệnh của kẻ thù và cũng không thay thế dấu vết sau trận đấu."
+    },
+    "liveCurrentScoreHelp": {
+      "de": "Autoritative aktuelle Punktzahl vom Client Battlefield Director gelesen.",
+      "fr": "Note actuelle autorisée lue par le directeur du champ de bataille client.",
+      "th": "ผลคะแนนปัจจุบันอ่านได้จากผู้อํานวยการสมรภูมิของลูกค้า",
+      "vi": "Kết quả hiện tại là từ giám đốc chiến trường khách hàng."
+    },
+    "liveProjectedScoreHelp": {
+      "de": "Das Projekt Parentheses hat bereits objektive Einnahmen zugesagt: aktuelle Punktzahl plus{0}. Die Veröffentlichung erfordert regelmäßige objektive Beweise; Tötungen, Kandidatenziele und unbestätigte Zustände sind ausgeschlossen.",
+      "fr": "Projet Parenthèses déjà engagé revenu objectif: score actuel plus{0}. La publication exige des preuves objectives périodiques; les meurtres, les objectifs des candidats et les états non confirmés sont exclus.",
+      "th": "โปรเจกต์ FamilyHes ได้ทํารายได้ตามวัตถุประสงค์แล้ว: คะแนนปัจจุบัน บวก{0}การประชาสัมพันธ์ต้องการหลักฐานที่แน่ชัดในระยะก่อนตาย การฆ่า วัตถุประสงค์ของผู้สมัคร และรัฐที่ไม่ได้ยืนยันถูกกีดกัน",
+      "vi": "Dự án Bulsees đã cam kết thu nhập khách quan: điểm hiện tại cộng với{0}. Công bố đòi hỏi bằng chứng tuần hoàn đánh giá khách quan; giết, mục tiêu ứng cử viên và trạng thái chưa được xác nhận bị loại trừ."
+    },
+    "noLiveTendencyEvidence": {
+      "de": "Unzureichende direkte Beweise",
+      "fr": "Manque de preuves directes",
+      "th": "หลักฐานโดยตรงไม่เพียงพอ",
+      "vi": "Không đủ bằng chứng trực tiếp"
+    },
+    "sharedBurstBuckets": {
+      "de": "{0} gemeinsame Burst-Fenster",
+      "fr": "{0} fenêtres de burst communes",
+      "th": "หน้าต่างเบิร์สร่วม {0} ครั้ง",
+      "vi": "{0} cửa sổ dồn sát thương chung"
+    },
+    "evidenceCount": {
+      "de": "Belege {0}",
+      "fr": "Éléments de preuve {0}",
+      "th": "หลักฐาน {0}",
+      "vi": "Bằng chứng {0}"
+    },
+    "copyPlayerName": {
+      "de": "Spielername kopieren",
+      "fr": "Copier le nom du lecteur",
+      "th": "ชื่อผู้เล่นคัดลอก",
+      "vi": "Chép tên người chơi"
+    },
+    "selectVisiblePlayer": {
+      "de": "Ziel sichtbarer Spieler",
+      "fr": "Ciblez le lecteur visible",
+      "th": "ตัวเล่นแบบแสดงเป้าหมาย",
+      "vi": "Màu tiêu đề:"
+    },
+    "liveCombatHint": {
+      "de": "Erst kürzlich erhielten lokale Kampfveranstaltungen",
+      "fr": "Seulement récemment reçu des événements de combat locaux",
+      "th": "เมื่อเร็ว ๆ นี้ ได้รับเหตุการณ์การต่อสู้ในท้องถิ่น",
+      "vi": "Chỉ vừa nhận được sự kiện giao chiến địa phương"
+    },
+    "liveObserverBoundary": {
+      "de": "Beobachter beladenes Gebiet; feindliche Truppen sind bis zum Ergebnis unbekannt",
+      "fr": "Zone chargée par les observateurs; les unités ennemies sont inconnues jusqu'aux résultats",
+      "th": "พื้นที่บรรจุผู้สังเกตการณ์; หน่วยศัตรูไม่รู้จักจนกระทั่งผลลัพธ์",
+      "vi": "Khu vực đầy người; đội địch không rõ cho đến khi kết quả"
+    },
+    "liveWindow": {
+      "de": "Fenster",
+      "fr": "Fenêtre",
+      "th": "หน้าต่าง",
+      "vi": "Cửa sổ"
+    },
+    "liveDirection": {
+      "de": "Richtung",
+      "fr": "Direction",
+      "th": "ทิศทาง",
+      "vi": "Hướng"
+    },
+    "liveAll": {
+      "de": "alle",
+      "fr": "Tous",
+      "th": "ทั้งหมด",
+      "vi": "Tất cả"
+    },
+    "liveOutgoing": {
+      "de": "Örtliche Ausgänge",
+      "fr": "Départ local",
+      "th": "การออกภายใน",
+      "vi": "Tiêu cục bộ"
+    },
+    "liveIncoming": {
+      "de": "Lokaler Eingang",
+      "fr": "Entrée locale",
+      "th": "การเข้ามาภายใน",
+      "vi": "Gửi tới cục bộ"
+    },
+    "secondsBeforeEncounterEnd": {
+      "de": "Vor dem Kampfende",
+      "fr": "Avant la fin du combat",
+      "th": "ก่อนสิ้นสุดการต่อสู้",
+      "vi": "Trước khi kết thúc trận đấu"
+    },
+    "beforeEncounterEnd": {
+      "de": "Vor Ende",
+      "fr": "Avant la fin",
+      "th": "ก่อนสิ้นสุด",
+      "vi": "Trước khi kết thúc"
+    },
+    "freezeBuffer": {
+      "de": "Freeze Fight Puffer",
+      "fr": "Geler le tampon de combat",
+      "th": "บัฟเฟอร์เพื่อหยุดการต่อสู้",
+      "vi": "Bộ đệm chiến đấu đông lạnh"
+    },
+    "resumeBuffer": {
+      "de": "Updates fortsetzen",
+      "fr": "Reprendre les mises à jour",
+      "th": "อัปเดตต่อ",
+      "vi": "Tiếp tục cập nhật"
+    },
+    "bufferFrozen": {
+      "de": "gefroren",
+      "fr": "Surgelés",
+      "th": "แช่แข็ง",
+      "vi": "Đóng băng"
+    },
+    "encounterActive": {
+      "de": "Kampf aktiv",
+      "fr": "Lutte active",
+      "th": "การต่อสู้ที่แอ็กทีฟ",
+      "vi": "Đang bật"
+    },
+    "lastEncounterStored": {
+      "de": "Letzter Kampf wurde beibehalten",
+      "fr": "Dernier combat retenu",
+      "th": "การต่อสู้ครั้งสุดท้ายยังคงอยู่",
+      "vi": "Trận cuối cùng vẫn tiếp tục."
+    },
+    "combatBufferHelp": {
+      "de": "Ein Kampf endet nach 8 Sekunden ohne neuen Schaden oder Heilung. Seine letzten Aktionen bleiben, bis der nächste Kampf beginnt.",
+      "fr": "Un combat se termine après 8 secondes sans nouveaux dommages ou guérisons. Ses actions finales restent jusqu'à ce que le prochain combat commence.",
+      "th": "การต่อสู้จบลงหลังจาก 8 วินาที โดยไม่ต้องได้รับความเสียหายหรือการรักษาใหม่ การกระทําของมันยังคงอยู่จนกระทั่งการต่อสู้ครั้งต่อไปเริ่มขึ้น",
+      "vi": "Cuộc chiến kết thúc sau 8 giây mà không có thiệt hại hay hồi phục. Hành động cuối cùng của nó vẫn còn cho đến khi trận đấu tiếp theo bắt đầu."
+    },
+    "operations": {
+      "de": "Aktionen",
+      "fr": "Actions",
+      "th": "การกระทํา",
+      "vi": "Hành động"
+    },
+    "holdToTargetVisibleSource": {
+      "de": "Halten Sie sich an das Ziel des Quellplayers, während Sie auf dem Bildschirm sind",
+      "fr": "Maintenez pour cibler le lecteur source sur l'écran",
+      "th": "ยึดมั่นในเป้าหมายตัวเล่นต้นทางขณะอยู่บนหน้าจอ",
+      "vi": "Giữ mục tiêu người chơi nguồn trong khi trên màn hình"
+    },
+    "holdToTargetVisibleTarget": {
+      "de": "Halten Sie, um den Zielspieler zu zielen, während auf dem Bildschirm",
+      "fr": "Maintenez pour cibler le lecteur cible sur l'écran",
+      "th": "ยึดมั่นในเป้าหมายผู้เล่นขณะอยู่บนหน้าจอ",
+      "vi": "Giữ mục tiêu người chơi đích trong khi trên màn hình"
+    },
+    "targetSourceUnavailable": {
+      "de": "Source Player ist off-screen oder nicht mehr der gleiche geladene Akteur",
+      "fr": "Le lecteur source est hors écran ou n'est plus le même acteur chargé",
+      "th": "ผู้เล่นต้นทางคือ นอกหน้าจอหรือไม่ใช่นักแสดงที่โหลดแล้ว",
+      "vi": "Người chơi nguồn đã bị tắt màn hình hoặc không còn là một diễn viên đã nạp đạn"
+    },
+    "targetActorUnavailable": {
+      "de": "Der Player ist außerhalb des Bildschirms oder nicht mehr derselbe geladene Akteur",
+      "fr": "Le joueur est hors écran ou plus le même acteur chargé",
+      "th": "ผู้เล่นคือนอกหน้าจอหรือไม่มีนักแสดงที่โหลดเดิม",
+      "vi": "Người chơi đã ra khỏi màn hình hoặc không còn là một diễn viên đã nạp đạn"
+    },
+    "copyIncomingEvidence": {
+      "de": "Kopieren Sie diese Incoming-Hit-Beweise",
+      "fr": "Bien reçu cette preuve.",
+      "th": "สําเนาหลักฐานที่เข้ามา",
+      "vi": "Sao chép bằng chứng mới này"
+    },
+    "copyIncomingOnly": {
+      "de": "Beweiskopie steht für Schäden zur Verfügung, die Sie erhalten haben",
+      "fr": "Une copie de preuve est disponible pour les dommages reçus par vous",
+      "th": "มีสําเนาหลักฐานสําหรับความเสียหายที่ได้รับจากคุณ",
+      "vi": "Bạn có sẵn bằng chứng cho thấy bạn bị thiệt hại"
+    },
+    "copyCombatRecord": {
+      "de": "Kopiere diesen Kampfrekord",
+      "fr": "Copier ce dossier de combat",
+      "th": "คัดลอกบันทึกการต่อสู้นี้",
+      "vi": "Sao chép hồ sơ chiến đấu này"
+    },
+    "copied": {
+      "de": "kopiert",
+      "fr": "Copies",
+      "th": "คัดลอก",
+      "vi": "Sao chép"
+    },
+    "attacker": {
+      "de": "Angreifer",
+      "fr": "Attaque",
+      "th": "ตัวโจมตี",
+      "vi": "Tấn công"
+    },
+    "recipient": {
+      "de": "Empfänger",
+      "fr": "Bénéficiaire",
+      "th": "ผู้รับ",
+      "vi": "Người nhận"
+    },
+    "statuses": {
+      "de": "Status",
+      "fr": "Statuts",
+      "th": "สถานะ",
+      "vi": "Trạng thái"
+    },
+    "stateAtHit": {
+      "de": "Trefferzustand",
+      "fr": "État touché",
+      "th": "สถานะที่ถูกโจมตี",
+      "vi": "Name"
+    },
+    "stateAfterEvent": {
+      "de": "Staat nach dem Ereignis",
+      "fr": "État après événement",
+      "th": "สถานะหลังเหตุการณ์",
+      "vi": "Tình trạng sau sự kiện"
+    },
+    "ownSide": {
+      "de": "Deine Seite",
+      "fr": "Votre côté",
+      "th": "ด้านของคุณ",
+      "vi": "Bên anh"
+    },
+    "enemySide": {
+      "de": "Feindliche Seite",
+      "fr": "Côté ennemi",
+      "th": "ศัตรู",
+      "vi": "Bên địch"
+    },
+    "battlefieldGroup": {
+      "de": "Battlefield-Gruppe",
+      "fr": "Groupe des champs de bataille",
+      "th": "กลุ่มต่อสู้",
+      "vi": "Name"
+    },
+    "enemyBattlefieldGroup": {
+      "de": "Feindliche Schlachtfeldgruppe",
+      "fr": "Groupe ennemi sur le champ de bataille",
+      "th": "กลุ่มสมรภูมิข้าศึก",
+      "vi": "Đội chiến trường của địch."
+    },
+    "noCapturedStatuses": {
+      "de": "Keine Status erfasst",
+      "fr": "Aucun statut capturé",
+      "th": "ยังไม่มีการจับภาพสถานะ",
+      "vi": "Name"
+    },
+    "unresolvedStatus": {
+      "de": "Ungelöster Status",
+      "fr": "Statut non résolu",
+      "th": "สถานะที่ยังไม่ถูกแก้ไข",
+      "vi": "Trạng thái chưa được giải quyết"
+    },
+    "focus": {
+      "de": "Schwerpunkt",
+      "fr": "Objectif",
+      "th": "โฟกัส",
+      "vi": "Tiêu điểm"
+    },
+    "anomalyCandidates": {
+      "de": "Verhaltensintegritätsprüfung",
+      "fr": "Examen de l’intégrité comportementale",
+      "th": "การทบทวนความสมบูรณ์ของพฤติกรรม",
+      "vi": "Rà soát tính toàn vẹn hành vi"
+    },
+    "anomalyNotVerdict": {
+      "de": "Nur Prüfsignale; kein Betrugsurteil",
+      "fr": "Signaux à examiner uniquement ; aucun verdict de triche",
+      "th": "เป็นเพียงสัญญาณให้ตรวจสอบ ไม่ใช่คำตัดสินว่าโกง",
+      "vi": "Chỉ là tín hiệu cần rà soát, không phải kết luận gian lận"
+    },
+    "anomalyEvidenceBoundary": {
+      "de": "Nur kontinuierlich geladene Beweise werden analysiert. Wiedererscheinen, Respawnen, Lücken und einmalige Ausreißer werden abgelehnt; Pre-Input, Aktionswarteschlangen und Server-Batching können weiterhin kurze Latenzzeiten erklären.",
+      "fr": "Seules les preuves chargées en continu sont analysées. La réapparition, la réapparition, les lacunes et les aberrations ponctuelles sont rejetées; la pré-entrée, les files d'attente d'action et le batchage du serveur peuvent encore expliquer une latence courte.",
+      "th": "มี เพียง หลัก ฐาน ที่ บรรจุ อยู่ อย่าง ต่อ เนื่อง เท่า นั้น ที่ ได้ รับ การ วิเคราะห์. การปรากฏตัว, การเรียกกลับ, ช่องว่าง, และ out-offiers ถูกปฏิเสธ; pre- input, คิวการกระทํา, และการจับคู่เซิร์ฟเวอร์สามารถอธิบายความล่าช้าได้",
+      "vi": "Chỉ có bằng chứng được nạp liên tục được phân tích. Sự xuất hiện, tái tạo, khoảng cách, và một loại bên ngoài bị từ chối; tiền công, hàng đợi hành động, và chuyển đổi máy phục vụ vẫn có thể giải thích sự ngắn hạn."
+    },
+    "candidateReviewQueue": {
+      "de": "Überprüfungskandidaten",
+      "fr": "Examen des candidats",
+      "th": "ผู้สมัครทบทวน",
+      "vi": "Ứng cử viên ôn lại"
+    },
+    "candidateReviewQueueHelp": {
+      "de": "Nur Spieler, die die Veröffentlichungsschwelle erreichen, werden aufgeführt. Wählen Sie eine aus, um die nahe gelegene Karte, die Samples und die synchronisierten Ereignisse zu inspizieren.",
+      "fr": "Seuls les joueurs qui atteignent le seuil de publication sont énumérés. Sélectionnez un pour inspecter la carte à proximité, des échantillons et des événements synchronisés.",
+      "th": "มี ผู้ เล่น เท่า นั้น ที่ ประชุม กัน ตาม กําหนดการ จัด พิมพ์. เลือก คน หนึ่ง เพื่อ ตรวจ ดู แผนที่, ตัว อย่าง, และ เหตุ การณ์ ที่ ประสาน กัน.",
+      "vi": "Chỉ có người chơi gặp ngưỡng ấn phẩm mới được liệt kê. Chọn một để kiểm tra bản đồ, mẫu và sự kiện được đồng bộ hóa."
+    },
+    "backToTop": {
+      "de": "Nach oben",
+      "fr": "Retour en haut",
+      "th": "กลับไปด้านบน",
+      "vi": "Lên đầu trang"
+    },
+    "integrityReviewSummary": {
+      "de": "Prüfübersicht",
+      "fr": "Résumé de l’examen",
+      "th": "สรุปการทบทวน",
+      "vi": "Tóm tắt rà soát"
+    },
+    "integrityReviewSummaryHelp": {
+      "de": "Sehen Sie zuerst, wer eine Überprüfung benötigt und warum, und öffnen Sie dann Beweise auf Anfrage, anstatt jedes Diagramm auf einmal zu laden.",
+      "fr": "Voyez qui a besoin d'être examiné et pourquoi d'abord, puis ouvrez les preuves à la demande au lieu de charger chaque graphique à la fois.",
+      "th": "ดูว่าใครต้องการรีวิว และทําไมก่อน แล้วค่อยเปิดหลักฐานในความต้องการ แทนที่จะโหลดชาร์ตทุกอันพร้อมกัน",
+      "vi": "Xem ai cần xem xét và tại sao trước, sau đó mở bằng chứng theo yêu cầu thay vì tải lên mọi biểu đồ cùng một lúc."
+    },
+    "integrityReviewSummaryCounts": {
+      "de": "{0} Spieler · {1} Kandidatentypen · {2} unabhängige Belegereignisse",
+      "fr": "{0} joueurs · {1} types de candidats · {2} épisodes indépendants",
+      "th": "ผู้เล่น {0} คน · ผู้สมัคร {1} ประเภท · หลักฐานอิสระ {2} ช่วง",
+      "vi": "{0} người chơi · {1} loại ứng viên · {2} đợt bằng chứng độc lập"
+    },
+    "integrityReferenceLazyHelp": {
+      "de": "Match-Kandidaten und Zeitanker sind lokal. Graue Referenzen bevorzugen den manuell heruntergeladenen anonymen Snapshot.",
+      "fr": "Les candidats et les ancrages horaires sont locaux. Les références grises préfèrent l'instantané anonyme téléchargé manuellement.",
+      "th": "ตรงกับผู้สมัครและสมอเวลาเป็นท้องถิ่น การอ้างอิงสีเทา ชอบภาพที่ดาวน์โหลดมาด้วยตนเอง",
+      "vi": "Các ứng cử viên phù hợp và neo thời gian là địa phương. Tài liệu tham khảo xám thích ảnh chụp nặc danh được tải về."
+    },
+    "integrityReferenceSnapshot": {
+      "de": "Lokale vollständige Referenzkohorte",
+      "fr": "Cohorte de référence complète locale",
+      "th": "การอ้างอิงภายในเครื่อง",
+      "vi": "Toàn bộ tham chiếu cục bộ"
+    },
+    "refreshIntegrityReferenceSnapshot": {
+      "de": "Alle Updates",
+      "fr": "Tout mettre à jour",
+      "th": "ปรับปรุงทั้งหมด",
+      "vi": "Cập nhật tất cả"
+    },
+    "integrityReferenceSnapshotReady": {
+      "de": "Erzeugt {0} · Modell {1} · {2} Reihen · heute noch {3}/{4} Aktualisierungen",
+      "fr": "Généré {0} · modèle {1} · {2} séries · {3}/{4} actualisations restantes aujourd’hui",
+      "th": "สร้างเมื่อ {0} · โมเดล {1} · {2} ชุด · วันนี้อัปเดตได้อีก {3}/{4} ครั้ง",
+      "vi": "Tạo lúc {0} · mô hình {1} · {2} chuỗi · còn {3}/{4} lượt cập nhật hôm nay"
+    },
+    "integrityReferenceSnapshotMissing": {
+      "de": "Noch kein lokaler Referenz-Snapshot; Übereinstimmungsnachweise bleiben offline verfügbar.",
+      "fr": "Pas encore d'instantané de référence local; les preuves de correspondance restent disponibles hors ligne.",
+      "th": "ยังไม่มีภาพที่อ้างถึงภายในตัวที่ยังไม่ได้ทําการตรวจสอบ เนื่องจากหลักฐานที่ตรงกันยังคงทํางานอยู่",
+      "vi": "Chưa có hình ảnh tham chiếu cục bộ nào; vẫn chưa có bằng chứng khớp."
+    },
+    "integrityReferenceSnapshotUpdating": {
+      "de": "Erfrischende Referenz-Schnappschuss...",
+      "fr": "Rafraîchir l'instantané de référence...",
+      "th": "กําลังปรับปรุงภาพที่อ้างถึง...",
+      "vi": "Ảnh tham chiếu cập nhật..."
+    },
+    "integrityReferenceSnapshotInclusive": {
+      "de": "Der graue Schnappschuss ist der visuelle Kontext und kann diese Übereinstimmung enthalten; er veröffentlicht niemals Kandidaten oder Urteile.",
+      "fr": "L'instantané gris est un contexte visuel et peut inclure ce match; il ne publie jamais de candidats ou de verdicts.",
+      "th": "ภาพ ถ่าย สี เทา คือ บริบท ที่ เห็น ภาพ และ อาจ รวม ถึง ภาพ ที่ เข้า กัน ได้; ไม่ เคย พิมพ์ ผู้ สมัคร หรือ ผู้ ตัดสิน.",
+      "vi": "Ảnh chụp màu xám là ngữ cảnh thị giác và có thể bao gồm trận đấu này; nó không bao giờ công bố ứng cử viên hoặc phán quyết."
+    },
+    "referenceSnapshotAwaitingFullDownload": {
+      "de": "Warten auf den vollständigen Referenz-Snapshot; das Laden per Item ist nicht erforderlich.",
+      "fr": "En attendant l'instantané de référence complet; le chargement par élément n'est pas nécessaire.",
+      "th": "กําลังรอภาพที่อ้างถึงเต็มรูปแบบ ไม่จําเป็นต้องมีการโหลดต่อรายการ",
+      "vi": "Không cần phải đợi hình ảnh tham chiếu đầy đủ; không cần thiết mỗi lần nạp hàng."
+    },
+    "integrityDetailRefreshing": {
+      "de": "Historische Histogrammanalyse wird aktualisiert: {0} → {1}",
+      "fr": "Actualisation de l’analyse d’histogramme historique : {0} → {1}",
+      "th": "กำลังอัปเดตการวิเคราะห์ฮิสโตแกรมเดิม: {0} → {1}",
+      "vi": "Đang cập nhật phân tích biểu đồ cũ: {0} → {1}"
+    },
+    "integrityDetailRefreshingBoundary": {
+      "de": "Bis der Refresh abgeschlossen ist, wird die 30-ms-Referenz nicht auf alte grobe Bins gezwungen.",
+      "fr": "Jusqu'à ce que le rafraîchissement soit terminé, la référence de 30 ms n'est pas forcée sur les bacs secondaires.",
+      "th": "จนกว่ารีเฟรชจะเสร็จ การอ้างอิง 30 ม.ม. ไม่ได้บังคับให้ไปอยู่ในถังขยะหยาบมรดก",
+      "vi": "Cho đến khi hoàn thành việc cập nhật, tài liệu tham khảo 30 ms không bị ép buộc vào các thùng rác thô."
+    },
+    "millisecondsAxis": {
+      "de": "Zeit (ms)",
+      "fr": "Heure (ms)",
+      "th": "เวลา (นาที)",
+      "vi": "Giờ"
+    },
+    "uiTheme": {
+      "de": "Oberflächendesign",
+      "fr": "Thème de l’interface",
+      "th": "ธีมส่วนติดต่อ",
+      "vi": "Giao diện màu"
+    },
+    "uiTheme_day": {
+      "de": "Hell",
+      "fr": "Clair",
+      "th": "กลางวัน",
+      "vi": "Ban ngày"
+    },
+    "uiTheme_night": {
+      "de": "Dunkel",
+      "fr": "Sombre",
+      "th": "กลางคืน",
+      "vi": "Ban đêm"
+    },
+    "uiTheme_eye": {
+      "de": "Augenschonend",
+      "fr": "Confort visuel",
+      "th": "ถนอมสายตา",
+      "vi": "Dịu mắt"
+    },
+    "uiTheme_contrast": {
+      "de": "Hoher Kontrast",
+      "fr": "Contraste élevé",
+      "th": "คอนทราสต์สูง",
+      "vi": "Tương phản cao"
+    },
+    "inspectCandidateEvidence": {
+      "de": "Beweismaterial prüfen",
+      "fr": "Inspecter les preuves",
+      "th": "แสดงหลักฐาน",
+      "vi": "Xem xét bằng chứng"
+    },
+    "integrityCandidateFacts": {
+      "de": "{0}unabhängige Episoden · Priorität{1}· Beweise{2}",
+      "fr": "Les épisodes indépendants{0}· priorité{1}· preuve{2}",
+      "th": "{0}ตอนอิสระของคําว่า \"ความสําคัญ\"{1}\" หลักฐาน{2}",
+      "vi": "{0}độc lập tập lệnh # Ưu tiên{1}* bằng chứng{2}"
+    },
+    "evidenceAnchors": {
+      "de": "Nachweiszeiten",
+      "fr": "Temps de preuve",
+      "th": "เวลาเก็บหลักฐาน",
+      "vi": "Thời gian chứng minh"
+    },
+    "noPublishedCandidates": {
+      "de": "Kein veröffentlichter Kandidat in diesem Match",
+      "fr": "Aucun candidat publié dans ce match",
+      "th": "ไม่มีผู้สมัครที่ตีพิมพ์ในการแข่งขันนี้",
+      "vi": "Chưa có ứng cử viên được xuất bản trong trận đấu này"
+    },
+    "reviewMethodAndCoverage": {
+      "de": "Methode und Erfassungsabdeckung",
+      "fr": "Méthode et couverture de capture",
+      "th": "วิธี และ การ จับ",
+      "vi": "Name"
+    },
+    "noAnomalyCandidate": {
+      "de": "Keine Anomalie hat die Veröffentlichungsschwelle erreicht; Dies beweist nicht, dass kein Betrug stattgefunden hat.",
+      "fr": "Aucune anomalie n'a atteint le seuil de publication; cela ne prouve pas qu'il n'y a pas eu de tricherie.",
+      "th": "ไม่ มี สิ่ง ผิด ปกติ ใด ได้ รับ การ เปิด เผย; นี่ ไม่ ได้ พิสูจน์ ว่า ไม่ มี การ โกง.",
+      "vi": "Không có bất thường đáp ứng ngưỡng xuất bản; điều này không chứng minh rằng không có gian lận xảy ra."
+    },
+    "movementIntervals": {
+      "de": "Gültige Bewegungsintervalle",
+      "fr": "Intervalles de déplacement valides",
+      "th": "การเคลื่อนไหวที่ถูกต้อง",
+      "vi": "Khoảng chuyển động hợp lệ"
+    },
+    "captureGapsRejected": {
+      "de": "Abgelehnte Ladelücken",
+      "fr": "Lacunes de chargement rejetées",
+      "th": "ไม่ให้ทําการโหลดช่องว่าง",
+      "vi": "Name"
+    },
+    "exactRangeUses": {
+      "de": "Verwendung des genauen Positionsbereichs",
+      "fr": "Utilisation de la plage de localisation exacte",
+      "th": "ช่วงการจัดตําแหน่งใช้",
+      "vi": "Phạm vị xác định được dùng"
+    },
+    "gcdWindows": {
+      "de": "Gültige GCD-Fenster",
+      "fr": "Fenêtres GCD valides",
+      "th": "หน้าต่าง GCD ที่ใช้ได้",
+      "vi": "Name"
+    },
+    "mechanismCoverageTitle": {
+      "de": "Erfassung von Daten zum Mechanismus",
+      "fr": "Couverture du mécanisme",
+      "th": "หลัก ฐาน จาก การ ทํา เหมือง",
+      "vi": "Kiểm tra bằng chứng cơ khí"
+    },
+    "mechanismCoverageBoundary": {
+      "de": "Dies gibt an, welche Mechanik beobachtbar oder abgelehnt wurde. Coverage Counts sind keine Anomalie Counts und produzieren kein Betrugsurteil.",
+      "fr": "Ces états qui mécaniciens ont été observables ou rejetés. Les comptes de couverture ne sont pas des comptes d'anomalie et ne produisent pas un verdict de tricherie.",
+      "th": "รัฐนี้ซึ่งกลไกเป็นที่สังเกตหรือปฏิเสธ นับ แต่ นั้น มา ก็ ไม่ ใช่ เรื่อง ผิด ปกติ และ อย่า ตัดสิน ผิด พลาด.",
+      "vi": "Những bang mà cơ học được quan sát hoặc từ chối. Tội che đậy không phải là điều bất thường và không đưa ra phán quyết gian lận."
+    },
+    "evidenceE0": {
+      "de": "E0 nicht identifizierbar",
+      "fr": "E0 non identifiable",
+      "th": "E0 ไม่ใช่ส่วนเกิน",
+      "vi": "Không nhận diện được"
+    },
+    "evidenceE1": {
+      "de": "E1-Effektseite",
+      "fr": "Côté effet E1",
+      "th": "ลูกเล่น E1",
+      "vi": "Hiệu ứng E1-side"
+    },
+    "evidenceE2": {
+      "de": "E2 Ereigniskette",
+      "fr": "Chaîne d'événements E2",
+      "th": "อี2 เหตุการณ์ต่าง ๆ",
+      "vi": "Comment"
+    },
+    "recastCoverage": {
+      "de": "Neufassung der Gruppen",
+      "fr": "Groupes de refonte",
+      "th": "หมวดหมู่",
+      "vi": "Nhóm lại"
+    },
+    "recastCoverageSummary": {
+      "de": "Metadaten {0}; breite Nachbargelegenheiten {1}; fehlende Metadaten {2}; breite frühe Effekte {3}. Strikte Gelegenheiten {4}; strikte frühe Effekte {5}; Altkatalog-Ablehnungen {6}; Mehrfachladungs-Ablehnungen {7}. Strikte Gelegenheiten erfordern dieselbe Aktion, Abklinggruppe und bestätigte Einzelladungsdaten; beobachtbar bleiben nur Effektabstände.",
+      "fr": "Métadonnées {0} ; occasions adjacentes larges {1} ; métadonnées manquantes {2} ; effets précoces larges {3}. Occasions strictes {4} ; effets précoces stricts {5} ; rejets de l’ancien catalogue {6} ; rejets multi-charges {7}. Une occasion stricte exige la même action, le même groupe de recharge et une charge unique attestée ; seul l’intervalle des effets reste observable.",
+      "th": "ใช้ข้อมูลเมตา {0}; โอกาสต่อเนื่องแบบกว้าง {1}; ขาดข้อมูลเมตา {2}; เอฟเฟกต์ก่อนเวลาแบบกว้าง {3}; โอกาสแบบเข้มงวด {4}; เอฟเฟกต์ก่อนเวลาแบบเข้มงวด {5}; ปฏิเสธแค็ตตาล็อกเดิม {6}; ปฏิเสธหลายชาร์จ {7} โอกาสแบบเข้มงวดต้องเป็นสกิลเดียวกัน กลุ่มรีคาสต์เดียวกัน และยืนยันว่าเป็นสกิลชาร์จเดียว จึงเหลือเพียงช่วงห่างเอฟเฟกต์ที่สังเกตได้",
+      "vi": "Dữ liệu kỹ năng {0}; cơ hội liền kề rộng {1}; thiếu dữ liệu {2}; hiệu ứng sớm rộng {3}. Cơ hội nghiêm ngặt {4}; hiệu ứng sớm nghiêm ngặt {5}; loại do danh mục cũ {6}; loại do nhiều tích trữ {7}. Cơ hội nghiêm ngặt phải cùng kỹ năng, cùng nhóm hồi chiêu và đã xác nhận chỉ có một tích trữ; chỉ khoảng cách hiệu ứng còn quan sát được."
+    },
+    "castCoverage": {
+      "de": "Gusszeit",
+      "fr": "Calendrier de lancement",
+      "th": "ตั้งค่าเวลา",
+      "vi": "Ném thời gian"
+    },
+    "castCoverageSummary": {
+      "de": "Zauber-/Waffenfertigkeitseffekte {0}; Effekte mit angegebener Wirkzeit {1}; zuerst beobachtete Wirkzeiten {2}; gültiger Beginn {3}; Ablehnung wegen Sichtbarkeit in der Wirkzeit {4}; Zeitmessung nicht verfügbar {5}. Die 100-ms-Abfrage zeichnet sichtbare Zustandswechsel auf, nicht den Tastendruck.",
+      "fr": "Effets de sorts/techniques d’arme {0} ; effets avec temps d’incantation annoncé {1} ; incantations vues dès le début {2} ; débuts admissibles {3} ; rejets pour visibilité en cours d’incantation {4} ; chronométrage indisponible {5}. Le sondage de 100 ms enregistre les transitions visibles, pas l’appui sur une touche.",
+      "th": "เอฟเฟกต์เวท/เวพอนสกิล {0}; เอฟเฟกต์ที่มีเวลาร่าย {1}; เห็นตั้งแต่เริ่มร่าย {2}; เริ่มต้นที่ใช้ได้ {3}; ปฏิเสธเพราะเห็นกลางร่าย {4}; ไม่มีเวลาให้วิเคราะห์ {5} การสำรวจทุก 100 ms บันทึกการเปลี่ยนสถานะร่ายที่มองเห็น ไม่ใช่เวลาที่กดปุ่ม",
+      "vi": "Hiệu ứng phép/kỹ năng vũ khí {0}; hiệu ứng có thời gian niệm công bố {1}; quan sát từ đầu {2}; khởi đầu hợp lệ {3}; loại vì chỉ thấy giữa lúc niệm {4}; không có dữ liệu thời gian {5}. Chu kỳ 100 ms ghi chuyển trạng thái niệm nhìn thấy được, không phải thời điểm bấm phím."
+    },
+    "forcedControlCoverage": {
+      "de": "Zwangsbewegung",
+      "fr": "Mouvement forcé",
+      "th": "การเคลื่อนไหวที่บังคับให้ทํางาน",
+      "vi": "Name"
+    },
+    "forcedControlCoverageSummary": {
+      "de": "Verschiebungseffekte {0}; alte Replay-Paare {1}; alte Sichtbarkeitsablehnungen {2}; durchgehend sichtbare Ein-Sekunden-Fenster {3}; Ablehnungen kurzer Fenster {4}. Nur die Effektzuordnung wird akzeptiert; Sprünge an Ladegrenzen sind kein Bewegungsbeleg.",
+      "fr": "Effets de déplacement {0} ; paires d’ancienne capture {1} ; rejets de visibilité anciens {2} ; fenêtres d’une seconde visibles en continu {3} ; rejets de fenêtre courte {4}. Seule l’attribution à un effet est acceptée ; un saut à une limite de chargement n’est pas une preuve de déplacement.",
+      "th": "เอฟเฟกต์บังคับเคลื่อนที่ {0}; คู่ข้อมูลรีเพลย์เดิม {1}; ปฏิเสธการมองเห็นเดิม {2}; หน้าต่างหนึ่งวินาทีที่เห็นต่อเนื่อง {3}; ปฏิเสธหน้าต่างสั้น {4} ยอมรับเฉพาะการเคลื่อนที่ที่ผูกกับเอฟเฟกต์ การกระโดดตำแหน่งตรงขอบเขตโหลดไม่ใช่หลักฐานการเคลื่อนที่",
+      "vi": "Hiệu ứng cưỡng chế di chuyển {0}; cặp phát lại cũ {1}; lần loại vì tầm nhìn cũ {2}; cửa sổ một giây nhìn thấy liên tục {3}; cửa sổ ngắn bị loại {4}. Chỉ chấp nhận quy kết từ hiệu ứng; bước nhảy ở ranh giới tải không phải bằng chứng di chuyển."
+    },
+    "forcedMovementState_legacy_capture": {
+      "de": "Dieses Legacy-Match hat keine Ein-Sekunden-Trajektorie-Erfassung. Null bedeutet nicht verfügbar, nicht dass keine Verschiebung aufgetreten ist.",
+      "fr": "Ce match historique n'a pas de trajectoire d'une seconde. Zéro signifie qu'il n'est pas disponible, et non pas qu'aucun déplacement n'a eu lieu.",
+      "th": "การจับคู่มรดกครั้งนี้ ไม่มีข้อมูลเส้นทางเดิน Zero หมายถึงไม่มี, ไม่ใช่ว่าไม่มีการแทนที่",
+      "vi": "Trận đấu tài sản này không hề có một quỹ đạo nào. Zero nghĩa là không có, không có độ dời nào xảy ra."
+    },
+    "forcedMovementState_active_no_opportunity": {
+      "de": "Der Kurzfensterkollektor war aktiv; im sichtbaren Bereich wurde keine Verdrängungseffektmöglichkeit identifiziert.",
+      "fr": "Le collecteur à fenêtre courte était actif; aucune possibilité d'effet de déplacement n'a été identifiée dans la portée visible.",
+      "th": "นักสะสมแบบชอร์ตดอว์ยังทํางานอยู่ ไม่มีโอกาสที่จะเกิดการกระสับกระส่าย",
+      "vi": "Người sưu tầm gió ngắn hoạt động; không có cơ hội hiệu ứng độ dời nào được xác định trong phạm vi hiển thị."
+    },
+    "forcedMovementState_active_observed": {
+      "de": "Der Kurzfenstersammler war aktiv und konservierte mindestens eine kontinuierlich sichtbare Probe.",
+      "fr": "Le collecteur à fenêtre courte était actif et a conservé au moins un échantillon visible en permanence.",
+      "th": "นักสะสมแบบชอร์ตดอว์ เปิดใช้งาน และเก็บรักษาตัวอย่างที่มองเห็นได้อย่างน้อยที่สุดไว้",
+      "vi": "Người sưu tầm gió ngắn đã hoạt động và bảo tồn ít nhất một mẫu tiếp tục thấy được."
+    },
+    "forcedMovementState_active_all_rejected": {
+      "de": "Displacement-Effekte wurden identifiziert, aber jedes kurze Fenster wurde für Sichtbarkeit, Kontinuität oder Stichprobenzahl abgelehnt. Die Größe der Verschiebung ist nicht identifizierbar.",
+      "fr": "Les effets de déplacement ont été identifiés, mais chaque fenêtre courte a été rejetée pour la visibilité, la continuité ou le nombre d'échantillons. L'ampleur du déplacement n'est pas identifiable.",
+      "th": "มี การ ระบุ ถึง ผล กระทบ ของ การ ไม่ อยู่ อาศัย แต่ หน้าต่าง ที่ สั้น กว่า ทุก บาน ถูก ปฏิเสธ สําหรับ การ มอง เห็น, ความ ไม่ แน่นอน, หรือ การ นับ ตัว อย่าง. ความห่างไม่เท่ากัน",
+      "vi": "Các hiệu ứng thay thế đã được xác định, nhưng mỗi cửa sổ ngắn đều bị từ chối để có thể nhìn thấy, liên tục hoặc đếm mẫu. Không nhận diện được cường độ thay thế."
+    },
+    "forcedMovementState_declared_missing_events": {
+      "de": "Die Erfassung deklariert Kurzfensterunterstützung, hat aber Verdrängungsmöglichkeiten ohne Flugbahnereignisse. Dies ist ein Capture-Integrity-Problem, nicht ein Spieler zu finden.",
+      "fr": "La capture déclare le soutien de fenêtre courte, mais a des possibilités de déplacement sans événements de trajectoire. Il s'agit d'un problème de capture-intégrité, pas de trouver un joueur.",
+      "th": "การจับกุมประกาศการสนับสนุนระยะสั้น แต่มีการเปลี่ยนโอกาส โดยไม่ต้องแสดงเส้นทาง นี่เป็นประเด็นของการจับเท็จ ไม่ใช่การหาตัวผู้เล่น",
+      "vi": "Bắt giữ thông báo hỗ trợ ngắn hạn nhưng có cơ hội chuyển hướng mà không có sự kiện quỹ đạo. Đây là vấn đề bắt giữ bất hợp pháp, không phải tìm cầu thủ."
+    },
+    "anomalyType": {
+      "de": "Kandidatentyp",
+      "fr": "Type de candidat",
+      "th": "ชนิดผู้เข้าแข่งขัน",
+      "vi": "Kiểu ứng cử"
+    },
+    "occurrences": {
+      "de": "Ereignisse",
+      "fr": "Événements",
+      "th": "บันทึกการเกิดขึ้นอีก",
+      "vi": "Lời tiên đoán"
+    },
+    "riskSignal": {
+      "de": "Risikosignal",
+      "fr": "Signal de risque",
+      "th": "สัญญาณอันตราย",
+      "vi": "Tín hiệu rủi ro"
+    },
+    "independentEpisodes": {
+      "de": "Unabhängige Episoden",
+      "fr": "Épisodes indépendants",
+      "th": "ตอนอิสระ",
+      "vi": "Các tập độc lập"
+    },
+    "reviewPriority": {
+      "de": "Überprüfungspriorität",
+      "fr": "Priorité de l'examen",
+      "th": "ลําดับการทบทวน",
+      "vi": "Xem lại ưu tiên"
+    },
+    "dataCompleteness": {
+      "de": "Vollständigkeit des Nachweises",
+      "fr": "Exhaustivité des preuves",
+      "th": "หลัก ฐาน ครบ ถ้วน",
+      "vi": "Bằng chứng đầy đủ"
+    },
+    "anomalyEvidenceReplay": {
+      "de": "Replay von Kandidatenbeweisen",
+      "fr": "Reprise de la preuve du candidat",
+      "th": "หลัก ฐาน ผู้ สมัคร เล่น ใหม่",
+      "vi": "Các bằng chứng ứng cử lại"
+    },
+    "caseNotVerdict": {
+      "de": "Überprüfen sie die verteilung, den weg und den nahe gelegenen kampfkontext; ein ausreißer ist kein betrugsurteil.",
+      "fr": "Passez en revue la distribution, le chemin et le contexte de bataille voisin; un aberrant n'est pas un verdict trompeur.",
+      "th": "จง ทบทวน การ จําหน่าย จ่าย แจก, เส้น ทาง, และ บริบท ของ การ สู้ รบ ที่ อยู่ ใกล้ เคียง; หนึ่ง ที่ ไม่ ดี กว่า ไม่ ใช่ การ ตัดสิน ผิด.",
+      "vi": "Xem lại sự phân phối, con đường và bối cảnh chiến đấu gần đó; một điều ngoài lề không phải là một phán quyết gian lận."
+    },
+    "selectedCaseHelp": {
+      "de": "Klicken Sie auf eine Zeit, um die Karte und die Kampfereignisse auszurichten. Der Bernsteinkreis ist der konservative rechtliche Umschlag; die rote Linie wird beobachtet.",
+      "fr": "Cliquez sur une heure pour aligner la carte et les événements de combat. Le cercle ambre est l'enveloppe légale conservatrice; la ligne rouge est observée.",
+      "th": "คลิกเวลาเพื่อจัดแผนที่และการต่อสู้ วงกลมอําพันเป็นซองจดหมายที่อนุรักษ์นิยม เส้นสีแดงเป็นที่สังเกต",
+      "vi": "Nhấn vào một thời điểm để sắp xếp bản đồ và sự kiện chiến đấu. Vòng tròn hổ phách là phong bì pháp luật bảo thủ; đường màu đỏ được quan sát thấy."
+    },
+    "reviewedSample": {
+      "de": "Überprüfte Probe",
+      "fr": "Échantillon examiné",
+      "th": "ตัวอย่างที่ทบทวนแล้ว",
+      "vi": "Đã xem lại mẫu"
+    },
+    "anomalyHistogram": {
+      "de": "Häufigkeitsverteilung",
+      "fr": "Distribution des fréquences",
+      "th": "การกระจายความถี่",
+      "vi": "Phân phối tần số"
+    },
+    "observations": {
+      "de": "Gültige Beobachtungen",
+      "fr": "Observations valables",
+      "th": "การสังเกตที่ถูกต้อง",
+      "vi": "Quan sát hợp lệ"
+    },
+    "allObservations": {
+      "de": "Blaugrau: alle gültigen Beobachtungen",
+      "fr": "Bleu-gris: toutes les observations valables",
+      "th": "สีเขียว: ข้อสังเกตที่ถูกต้องทั้งหมด",
+      "vi": "Xanh lá cây: mọi quan sát hợp lệ"
+    },
+    "thresholdSamples": {
+      "de": "Rot: Proben außerhalb des Umschlags, unerklärt durch bekannten Status/Verschiebung",
+      "fr": "Rouge : échantillons hors enveloppe inexpliqués par un statut ou un déplacement connu",
+      "th": "สีแดง: ตัวอย่างของข้อมูลภายนอก",
+      "vi": "Đỏ:"
+    },
+    "noDistributionData": {
+      "de": "Diese ältere Erfassung hat keine vollständige Verteilung; nur veröffentlichte Beweisproben sind verfügbar.",
+      "fr": "Cette capture plus ancienne n'a pas de distribution complète; seuls des échantillons de preuves publiés sont disponibles.",
+      "th": "การ จับ กุม ที่ เก่า แก่ นี้ ไม่ มี การ จําหน่าย จ่าย แจก อย่าง เต็ม ที่ แต่ มี เพียง ตัว อย่าง หลัก ฐาน เท่า นั้น ที่ หา ได้.",
+      "vi": "Việc bắt giữ cũ này không có sự phân phối đầy đủ, chỉ có những mẫu bằng chứng được công bố."
+    },
+    "synchronizedEvents": {
+      "de": "Kampfereignisse von 5 s vorher bis 3 s danach",
+      "fr": "Combats de 5 s avant à 3 s après",
+      "th": "เหตุการณ์ที่ต่อสู้จาก 5 s ก่อนถึง 3 s หลังจาก",
+      "vi": "Chiến đấu sự kiện từ 5 s trước đến 3 s sau"
+    },
+    "movementAttribution": {
+      "de": "Zuordnung der Bewegung",
+      "fr": "Répartition des mouvements",
+      "th": "การเคลื่อนไหว",
+      "vi": "Comment"
+    },
+    "speedBuffExplained": {
+      "de": "Geschwindigkeitsstatus",
+      "fr": "État de vitesse",
+      "th": "หมุน & 90",
+      "vi": "Tốc độ"
+    },
+    "displacementExplained": {
+      "de": "Strich/erzwungene Verschiebung",
+      "fr": "déplacement forcé",
+      "th": "การแทนที่/ การบังคับ",
+      "vi": "Chuyển đổi"
+    },
+    "unexplained": {
+      "de": "unerklärt",
+      "fr": "inexpliqué",
+      "th": "ไม่ปรากฏ",
+      "vi": "Chưa giải thích"
+    },
+    "confidence": {
+      "de": "Vertrauen",
+      "fr": "Confiance",
+      "th": "ความมั่นใจ",
+      "vi": "Tự tin"
+    },
+    "movement_envelope_exceeded": {
+      "de": "Wiederholter Bewegungsumschlag-Ausreißer",
+      "fr": "Aberration d'enveloppes de mouvement répétées",
+      "th": "การเคลื่อนไหวซ้ํา- envolpe overpall",
+      "vi": "Name"
+    },
+    "action_range_outlier": {
+      "de": "Wiederholter Ausreißer des Aktionsbereichs",
+      "fr": "Action répétée plus aberrante",
+      "th": "รุ่นที่ซ้ํากัน",
+      "vi": "Hành động bị lặp lại- xa hơn"
+    },
+    "minimum_latency_purify": {
+      "de": "Wiederholte Mindestlatenz Reinigen",
+      "fr": "Pureté minimale répétée",
+      "th": "การชําระหนี้ขั้นต่ําซ้ํา",
+      "vi": "Độ trong suốt tối thiểu lặp lại"
+    },
+    "minimum_latency_tenchu": {
+      "de": "Wiederholte Mindestlatenz Tenchu",
+      "fr": "Latence minimale répétée Tenchu",
+      "th": "ทําซ้ําระดับต่ําสุด เทนจู",
+      "vi": "Độ trễ tối thiểu lặp lại"
+    },
+    "minimum_latency_zantetsuken": {
+      "de": "Wiederholte Mindestlatenz Zantetsuken",
+      "fr": "Zantetsuken à latence minimale répétée",
+      "th": "ทําซ้ําเล็กน้อยSantetsuch",
+      "vi": "Zantetsuken, tần số tối thiểu lặp lại"
+    },
+    "animation_lock_triple_weave": {
+      "de": "Wiederholter Triple-Weave / Animation-Lock-Kandidat",
+      "fr": "Candidat à triple temps répété / animation-bloc",
+      "th": "ทําซ้ําแบบ Weave / animation-lock",
+      "vi": "Ứng cử viên ba chiều / khoá hoạt hình"
+    },
+    "gcd_weave_count": {
+      "de": "Fähigkeitseffekte pro streng geschlossenem GCD-Fenster",
+      "fr": "Effets de capacité par stricte fenêtre GCD fermée",
+      "th": "ลูกเล่นการเปิดใช้ต่อหน้าต่างที่ถูกปิดด้วย GCD",
+      "vi": "Comment"
+    },
+    "ogcd_interval": {
+      "de": "Mindestabstand der Nachbarfähigkeit",
+      "fr": "Intervalle minimal de capacité adjacente",
+      "th": "ช่วงความจุชิดน้อยที่สุด",
+      "vi": "Khoảng khả năng cạnh tối thiểu"
+    },
+    "animation_lock_deficit": {
+      "de": "Frühe Lücke gegen beworbene Animationssperre",
+      "fr": "Verrouillage d'animation annoncé par rapport à l'écart précoce",
+      "th": "ช่อง ว่าง ตอน ต้น ๆ กับ การ ล็อค ภาพ ภาพ ที่ มี ภาพ เคลื่อนไหว",
+      "vi": "Name"
+    },
+    "lb_followup_gap_effect_order": {
+      "de": "Erste Wirkungslücke nach LB",
+      "fr": "Écart de premier effet après LB",
+      "th": "ช่องว่างของลูกเล่นแรกหลังจาก LB",
+      "vi": "Khoảng cách hiệu ứng đầu tiên sau vụ LB"
+    },
+    "lb_lock_deficit_effect_order": {
+      "de": "LB beworbene Sperre minus Effektlücke",
+      "fr": "LB annonce-bloc moins écart d'effet",
+      "th": "ช่องสัญญาณ LB",
+      "vi": "LB quảng cáo-lock trừ khoảng cách hiệu ứng"
+    },
+    "animationLockEvidence": {
+      "de": "Triple-Weave und LB-Effekt-Ordnungen",
+      "fr": "Formes de l'ordre des effets triple-weave et LB",
+      "th": "สี่เหลี่ยมสามชั้นและสีแอลบี",
+      "vi": "Name"
+    },
+    "animationLockCoverage": {
+      "de": "Effektreihenfolge: Dreifach-Weave {0} · LB {2} | Lokal verifizierte Anfragen: Dreifach-Weave {1} · LB {3}",
+      "fr": "Ordre des effets : triple insertion {0} · Transcendance {2} | Requêtes locales vérifiées : triple insertion {1} · Transcendance {3}",
+      "th": "รูปแบบลำดับเอฟเฟกต์: สามแทรก {0} · LB {2} | ยืนยันคำขอในเครื่อง: สามแทรก {1} · LB {3}",
+      "vi": "Dạng thứ tự hiệu ứng: chèn ba {0} · LB {2} | Yêu cầu cục bộ đã xác minh: chèn ba {1} · LB {3}"
+    },
+    "effectOrderOnlyBoundary": {
+      "de": "Dies vergleicht nur die Server-Effektpaket-Bestellung. Remote-Eingabezeiten und Client-Animationssperre sind nicht sichtbar, so dass sie keine nachträgliche Kündigung nachweisen können.",
+      "fr": "Cela compare l'ordre d'effet-paquet du serveur seulement. Les temps d'entrée à distance et le verrouillage d'animation du client ne sont pas visibles, il ne peut donc pas prouver l'annulation après diffusion.",
+      "th": "นี่เป็นเปรียบเทียบลําดับลูกเล่นของเซิร์ฟเวอร์เท่านั้น เวลานําเข้าระยะไกลและล็อคของไคลเอนต์ไม่สามารถมองเห็นได้ ดังนั้นจึงไม่สามารถพิสูจน์การยกเลิกได้",
+      "vi": "Tùy chọn này so sánh chỉ với lệnh hiệu ứng máy phục vụ. Không thể hiển thị thời gian nhập từ xa và khoá hoạt hình của máy khách, vì vậy nó không thể chứng minh sau khi hủy bỏ."
+    },
+    "tripleWeaveBoundaryHelp": {
+      "de": "Doppelweben ist normal und beschriftet niemals einen Spieler. Die Überprüfung beginnt erst beim dreifachen Weben, wenn alle drei Aktionen lokale Anforderungen und Effekte eindeutig gepaart haben.",
+      "fr": "Double tissage est normal et n'étiquete jamais un joueur. L'examen commence seulement au triple tissage lorsque les trois actions ont jumelé des demandes et des effets locaux uniques.",
+      "th": "การทอคู่เป็นเรื่องปกติ และไม่เคยระบุผู้เล่น การ ทบทวน เริ่ม ด้วย การ สาน สาม เกลียว เท่า นั้น เมื่อ การ กระทํา ทั้ง สาม อย่าง รวม กัน เป็น การ ขอ และ ผล กระทบ จาก ท้อง ถิ่น.",
+      "vi": "dệt đôi là bình thường và không bao giờ có nhãn một cầu thủ. Việc ôn lại chỉ bắt đầu với ba lần dệt, khi cả ba hành động đều có những yêu cầu và hiệu ứng riêng lẻ ở địa phương."
+    },
+    "noLbEffectOrderData": {
+      "de": "Keine identifizierbaren LB-Root und folgende Direct-Player-Effekt-Paket wurden in diesem Spiel erfasst.",
+      "fr": "Aucune racine LB identifiable et le paquet d'effet de lecteur direct suivant n'ont été capturés dans ce match.",
+      "th": "ไม่มี root ของ LB และต่อไปนี้คือแพ็กเกจลูกเล่นโดยตรงของตัวเล่นถูกบันทึกในการแข่งขันนี้",
+      "vi": "Không nhận dạng được gốc LB và sau đó gói hiệu ứng trực tiếp người chơi đã bị bắt trong trận đấu này."
+    },
+    "unresolvedJobEvidenceOmitted": {
+      "de": "Kompetenzverteilungen mit ungelösten Arbeitsplätzen ausgelassen",
+      "fr": "Répartition des compétences avec des emplois non résolus omis",
+      "th": "การกระจายของทักษะกับงานที่ยังไม่ได้แก้ไข",
+      "vi": "Bỏ qua việc phân phối tài năng với việc không được giải quyết"
+    },
+    "movementDataVersionUnavailable": {
+      "de": "Es sind nur Legacy-Bewegungshistogramme vorhanden. Ihnen fehlen vollständige mount-, legal-displacement- und patch-status-gates und werden absichtlich ausgeschlossen; erfassen sie eine neue Übereinstimmung mit dem aktuellen plugin.",
+      "fr": "Seuls les histogrammes du mouvement sont présents. Ils n'ont pas de portes de montage complète, de déplacement légal et de statut patch et sont intentionnellement exclus; capturez une nouvelle correspondance avec le plugin actuel.",
+      "th": "มี แค่ กราฟฟิค เท่า นั้น ที่ มี อยู่. พวกเขาขาดการขึ้นอย่างสมบูรณ์แบบ, การละเมิดกฎหมาย, และประตูแพทช์-status และจงใจกัน; จับตรงกับส่วนเสริมปัจจุบัน",
+      "vi": "Chỉ có biểu đồ biểu đồ di động mới có mặt. Họ thiếu các gắn kết hoàn toàn, sự thay thế hợp pháp, và các cổng vá và được cố ý loại bỏ; nắm bắt một kết quả mới với bổ sung hiện tại."
+    },
+    "movementPilotNoCohort": {
+      "de": "Dieser Patch verwendet den vorherigen Statuskatalog nur für einen lokalen Rauchtest; es werden keine Spielerausreißer oder gemeinsame Kohorte erzeugt.",
+      "fr": "Ce patch utilise le catalogue d'état précédent pour un test de fumée local seulement; aucun joueur aberrant ou cohorte partagée ne sont produits.",
+      "th": "แผ่นพับนี้ใช้แคตตาล็อกสถานะก่อนหน้านี้สําหรับการทดสอบควันในท้องถิ่นเท่านั้น ไม่มีผู้เล่นเกินหรือใช้ร่วมกันผลิต",
+      "vi": "Bảng này sử dụng danh mục trạng thái trước chỉ cho một thử nghiệm khói cục bộ; không có người chơi nào ngoài hoặc nhóm chung được sản xuất."
+    },
+    "anomalySamples": {
+      "de": "Beweise",
+      "fr": "Montrer des preuves",
+      "th": "แสดงหลักฐาน",
+      "vi": "Hiện bằng chứng"
+    },
+    "activeSpeedStatuses": {
+      "de": "Geschwindigkeitsstatus",
+      "fr": "État de vitesse",
+      "th": "สถานะความเร็ว",
+      "vi": "Tốc độ"
+    },
+    "movement_envelope_exceededSummary": {
+      "de": "Wiederholt den konservativen Bewegungsumschlag überschritten, während kontinuierlich geladen; erzwungene Bewegung und unbekannte Patch-Status erfordern immer noch eine Überprüfung.",
+      "fr": "Il a régulièrement dépassé l'enveloppe de mouvement conservatrice pendant qu'il était chargé en continu; les mouvements forcés et les statuts de patch inconnus doivent encore être revus.",
+      "th": "หลาย ครั้ง เกิน กว่า ซองจดหมาย ที่ มี การ เคลื่อน ไหว แบบ อนุรักษ์ นิยม ขณะ ที่ มี การโหลด อย่าง ต่อ เนื่อง; การ เคลื่อน ไหว ที่ บีบ บังคับ และ สถานะ แผ่น พับ ที่ ไม่ รู้ จัก ยัง ต้องการ การ ทบทวน.",
+      "vi": "Vượt quá phong bì vận động bảo thủ trong khi tiếp tục tải; bị ép buộc và không biết trạng thái vá vẫn cần xem xét."
+    },
+    "action_range_outlierSummary": {
+      "de": "Die gleiche Aktion hat wiederholt den nominalen Bereich plus eine konservative Toleranz überschritten; eine einzige Verwendung wird nie veröffentlicht.",
+      "fr": "La même action a dépassé à plusieurs reprises la plage nominale et une tolérance prudente; une seule utilisation n'est jamais publiée.",
+      "th": "การ กระทํา เดียว กัน นี้ เกิน กว่า ที่ จะ ระบุ ได้ ครั้ง แล้ว ครั้ง เล่า รวม ไป ถึง การ ยอม ทน แบบ อนุรักษ์ นิยม การ ใช้ วิธี เดียว ไม่ เคย ได้ รับ การ ตี พิมพ์ เลย.",
+      "vi": "Hành động này lặp đi lặp lại vượt quá phạm vi danh nghĩa cộng với sự khoan dung bảo thủ; một lợi ích duy nhất không bao giờ được công bố."
+    },
+    "minimum_latency_purifySummary": {
+      "de": "Wiederholte sehr kurze Paketauftragslücken bereinigen; Voreingabe, Aktionswarteschlangen und Serverbatching bleiben gültige Erklärungen.",
+      "fr": "Répété très court Purify paquets-ordre des lacunes; pré-entrée, files d'action, et batchage de serveur restent des explications valides.",
+      "th": "ทําซ้ําเล็กน้อยมาก เติมเต็มช่องว่างของแพ็คเกจ; pre- input, คิวการกระทํา, และการเรียงลําดับเซิร์ฟเวอร์ยังคงมีคําอธิบายที่ถูกต้อง",
+      "vi": "Các lỗ hổng sắp xếp gói hàng được lặp lại rất ngắn; các hàng đợi trước, hàng đợi hành động và hàng loạt máy chủ vẫn còn lời giải thích hợp lệ."
+    },
+    "minimum_latency_tenchuSummary": {
+      "de": "Wiederholte sehr kurze Tenchu-Paketauftragslücken; erwartete HP-Schwellenwerte und Aktionswarteschlangen bleiben gültige Erklärungen.",
+      "fr": "De très courtes lacunes de l'ordre des paquets Tenchu; les seuils de HP prévus et les files d'attente d'action restent valides.",
+      "th": "ทําซ้ํามากสั้น Tenju ชุดช่องว่าง; คาดว่าประตู HP และคิวการกระทํายังคงมีคําอธิบายที่ถูกต้อง",
+      "vi": "Lặp lại rất ngắn các lỗ hổng sắp xếp chu đáo; các ngưỡng HP và các hàng đợi hành động vẫn còn được giải thích hợp lệ."
+    },
+    "minimum_latency_zantetsukenSummary": {
+      "de": "Wiederholte sehr kurze Zantetsuken-Paketauftragslücken; erwartete Zustände und Aktionswarteschlangen bleiben gültige Erklärungen.",
+      "fr": "De très courtes lacunes de l'ordre des paquets de Zantetsuken; les états prévus et les files d'attente d'action restent des explications valables.",
+      "th": "ทําซ้ํามากสั้น Zantetsuchan ชุดช่องว่าง; คาดว่ารัฐและคิวการกระทํายังคงมีคําอธิบายที่ถูกต้อง",
+      "vi": "Đã lặp lại rất ngắn các khoảng cách sắp xếp gói Zantetsuken; dự đoán trạng thái và các hàng đợi hành động vẫn còn được giải thích hợp lý."
+    },
+    "animation_lock_triple_weaveSummary": {
+      "de": "Legacy-Kandidaten der Effektreihenfolge sind deaktiviert; sie können kein Eingabe-Timing oder eine Änderung der Animationssperre nachweisen.",
+      "fr": "Les candidats à l'ordre d'effets hérités sont désactivés; ils ne peuvent pas prouver le calendrier d'entrée ou la modification de verrouillage d'animation.",
+      "th": "ผู้เข้าแข่งขันลําดับลูกเล่นของเอฟเฟ็กต์ถูกปิดการใช้งาน; พวกเขาไม่สามารถพิสูจน์การจับเวลาเข้าหรือแก้ไขค่าภาพเคลื่อนไหวได้",
+      "vi": "Các ứng dụng sắp xếp hiệu ứng di truyền bị tắt; chúng không thể chứng minh thời gian nhập hay cách sửa đổi khoá hoạt hình."
+    },
+    "weaveCount": {
+      "de": "Fähigkeiten im Fenster",
+      "fr": "Capacités dans la fenêtre",
+      "th": "ความไวแสงในหน้าต่าง",
+      "vi": "Khả năng trong cửa sổ"
+    },
+    "minimumAbilityInterval": {
+      "de": "Mindestkenntnisse",
+      "fr": "Intervalle de capacité minimal",
+      "th": "ช่วงของความสามารถน้อยที่สุด",
+      "vi": "Khoảng khả năng tối thiểu"
+    },
+    "gcdWindowDuration": {
+      "de": "GCD-Fenster",
+      "fr": "Fenêtre GCD",
+      "th": "หน้าต่างแบบ GCD",
+      "vi": "Thu nhỏ cửa sổ"
+    },
+    "onlyCandidateEvents": {
+      "de": "Es werden nur Ereignisse angezeigt, an denen der Kandidat als Quelle, Ziel oder Beschwörungsbesitzer beteiligt ist.",
+      "fr": "Seuls les événements impliquant le candidat comme source, cible ou propriétaire de l'assignation sont montrés.",
+      "th": "มี การ แสดง ให้ เห็น เฉพาะ เหตุ การณ์ ที่ เกี่ยว ข้อง กับ ผู้ ที่ จะ รับ ตําแหน่ง เป็น แหล่ง กําเนิด, เป้า หมาย, หรือ ผู้ รับ เชิญ เท่า นั้น.",
+      "vi": "Chỉ có những sự kiện liên quan đến ứng cử viên là nguồn gốc, mục tiêu, hoặc người chủ triệu tập mới được hiển thị."
+    },
+    "referenceCohort": {
+      "de": "Gemeinsame CN- und internationale Referenz über alle Karten",
+      "fr": "Référence commune CN et internationale, toutes cartes confondues",
+      "th": "กลุ่มอ้างอิงรวมจาก CN และภูมิภาคสากลทุกแผนที่",
+      "vi": "Mẫu tham chiếu gộp CN và quốc tế trên mọi bản đồ"
+    },
+    "referenceCohortLoading": {
+      "de": "Laden des Server-Referenz-Histogramms...",
+      "fr": "Chargement de l'histogramme de référence du serveur...",
+      "th": "กําลังโหลดกราฟแสดงความถี่ของแม่ข่าย...",
+      "vi": "Đang nạp biểu đồ tần xuất của máy phục vụ..."
+    },
+    "referenceCohortNotLoaded": {
+      "de": "Graue Serverreferenz nicht geladen",
+      "fr": "Référence du serveur gris non chargée",
+      "th": "ไม่โหลดค่าอ้างอิงของเซิร์ฟเวอร์สีเทา",
+      "vi": "Chưa tải tham chiếu máy phục vụ màu xám"
+    },
+    "loadReferenceCohort": {
+      "de": "Belastungsreferenzkohorte",
+      "fr": "Cohorte de référence de charge",
+      "th": "โหลดโคฮาร์ทสําหรับอ้างอิง",
+      "vi": "Nạp nhóm tham chiếu"
+    },
+    "retryReferenceCohort": {
+      "de": "Versuch",
+      "fr": "Réessayer",
+      "th": "ลองใหม่",
+      "vi": "Thử lại"
+    },
+    "referenceCohortUnavailable": {
+      "de": "Referenzhistogramm nicht verfügbar",
+      "fr": "Histogramme de référence non disponible",
+      "th": "ไม่มีกราฟแสดงความถี่อ้างอิง",
+      "vi": "Không có biểu đồ tần xuất tham khảo"
+    },
+    "referenceCohortEmpty": {
+      "de": "Für diesen Filter gibt es noch keine anderen übereinstimmenden Referenzproben.",
+      "fr": "Il n'existe pas encore d'échantillons de référence pour ce filtre.",
+      "th": "ยังไม่มีตัวอย่างอ้างอิงที่ตรงกันสําหรับตัวกรองนี้",
+      "vi": "Chưa có mẫu tham chiếu nào khác tồn tại cho bộ lọc này."
+    },
+    "currentMatchDistribution": {
+      "de": "Die Spielverteilung dieses Spielers",
+      "fr": "La distribution du match de ce joueur",
+      "th": "การกระจายตัวที่ตรงกันของผู้เล่นนี้",
+      "vi": "Phân phối đối tượng khớp"
+    },
+    "playerMatches": {
+      "de": "Spielerspiele",
+      "fr": "joueurs-matches",
+      "th": "จับคู่ผู้เล่น",
+      "vi": "đấu thủ"
+    },
+    "fragilityCohortFilter": {
+      "de": "Pro-Match-Low-Survival-Kandidat (0-25)",
+      "fr": "candidat par tranche à faible survie (0-25)",
+      "th": "ตรงกันกับผู้สมัครผู้รอดชีวิตระดับต่ํา (0-25)",
+      "vi": "Ứng cử viên hàng loạt thấp (0-25)"
+    },
+    "insufficientCohort": {
+      "de": "Kleine Kohorte: nur explorativ; behandeln Sie es nicht als Urteil.",
+      "fr": "Petite cohorte : exploratoire seulement; ne la traitez pas comme un verdict.",
+      "th": "ประสานเสียงเล็ก ๆ: expactive เท่านั้น; อย่ามองว่ามันเป็นคําตัดสิน",
+      "vi": "Tiểu đoàn: Chỉ thăm dò, đừng xem đó là phán quyết."
+    },
+    "referenceHistogramLegend": {
+      "de": "Graue Balken: Referenz aus anderen Kämpfen",
+      "fr": "Barres grises : référence des autres combats",
+      "th": "แท่งสีเทา: ข้อมูลอ้างอิงจากการรบอื่น",
+      "vi": "Cột xám: mẫu tham chiếu từ các trận khác"
+    },
+    "currentHistogramLegend": {
+      "de": "Türkise Balken: alle Proben dieses Spielers in diesem Kampf",
+      "fr": "Barres cyan : tous les échantillons de ce joueur dans ce combat",
+      "th": "แท่งสีฟ้า: ตัวอย่างทั้งหมดของผู้เล่นคนนี้ในรอบนี้",
+      "vi": "Cột xanh: toàn bộ mẫu của người chơi này trong trận"
+    },
+    "cohortScopeShared": {
+      "de": "Kohorte: CN und international kombiniert über Jobs; interpretiert von beobachteten Staaten",
+      "fr": "Cohorte : CN et international combinés à des emplois; interprétés par des États observés",
+      "th": "CN และอินเตอร์เนชันแนลรวมกันในงานต่างๆ; แปลโดย รัฐที่สังเกตได้",
+      "vi": "Cohort: CN và quốc tế kết hợp với nhau qua công việc; giải thích bởi các quốc gia quan sát"
+    },
+    "cohortScopeJobAction": {
+      "de": "Kohorte: CN und international kombiniert, gleiche Aufgabe und Aktion über Karten hinweg",
+      "fr": "Cohorte : CN et international combinés, même travail et action sur les cartes",
+      "th": "CN และระหว่างประเทศรวมกัน งานและการกระทําเดียวกันข้ามแผนที่",
+      "vi": "Cohort: CN và quốc tế kết hợp, cùng công việc và hành động trên bản đồ"
+    },
+    "candidateOperationLegend": {
+      "de": "Rote Balken / Dreiecke: die überprüften Operationen und Bins dieses Spielers",
+      "fr": "Barres/triangles rouges : opérations et bacs examinés par ce joueur",
+      "th": "แท่งสีแดง/ สี่เหลี่ยม: ตัวเล่นนี้ได้ทําการทบทวนปฏิบัติการและบิน",
+      "vi": "Thanh đỏ/triangles: thao tác và thùng rác của người chơi này đã xem xét lại"
+    },
+    "integrityDistributionDashboard": {
+      "de": "Verteilung von Integritätsnachweisen",
+      "fr": "Distribution des preuves de l'intégrité",
+      "th": "หลัก ฐาน การ จําหน่าย",
+      "vi": "Việc phân phát bằng chứng trung kiên"
+    },
+    "integrityDashboardBoundary": {
+      "de": "Graue Balken sind die Referenz für andere Übereinstimmungen und Cyanbalken aggregieren förderfähige Beobachtungen in diesem Match. Nur Spieler in einem robusten Schwanz werden zur Überprüfung benannt. Dies ist ein Beweis, kein Betrugsurteil.",
+      "fr": "Les barres grises constituent la référence des autres bandes et les barres cyan sont des observations admissibles dans ce match. Seuls les joueurs dans une queue robuste sont nommés pour examen. C'est une preuve, pas une triche.",
+      "th": "แท่งสีเทาเป็นแท่งอ้างอิงอื่น ๆ และแท่งสีฟ้ารวมข้อสังเกตที่เหมาะสมในการแข่งขันนี้ มี แต่ ผู้ เล่น ใน หาง ที่ แข็ง แรง เท่า นั้น ที่ ถูก ตั้ง ชื่อ ให้ ทบทวน. นี่เป็นหลักฐาน ไม่ใช่คําตัดสินโกง",
+      "vi": "Những thanh xám là những điểm tham khảo khác nhau và các thanh xanh lông mòng tổng hợp các quan sát thích hợp trong trận đấu này. Chỉ có người chơi với cái đuôi khỏe mạnh mới được đặt tên để xem xét. Đây là bằng chứng, không phải một phán quyết gian lận."
+    },
+    "integritySectionSkills": {
+      "de": "Job-Aktionen",
+      "fr": "Actions de job",
+      "th": "สกิลประจำอาชีพ",
+      "vi": "Kỹ năng nghề"
+    },
+    "integritySectionLocks": {
+      "de": "Animationssperre / Weaving / LB",
+      "fr": "Verrou d’animation / insertion / Transcendance",
+      "th": "แอนิเมชันล็อก / การแทรกสกิล / LB",
+      "vi": "Khóa hoạt ảnh / chèn kỹ năng / LB"
+    },
+    "integritySectionMovement": {
+      "de": "Bewegung",
+      "fr": "Déplacement",
+      "th": "การเคลื่อนที่",
+      "vi": "Di chuyển"
+    },
+    "integritySectionDefense": {
+      "de": "Selbstheilung / Purify / Guard",
+      "fr": "Récupération / Purification / Garde",
+      "th": "ฟื้นฟู / ล้างสถานะ / ป้องกัน",
+      "vi": "Hồi phục / Thanh tẩy / Phòng thủ"
+    },
+    "integritySectionFinishers": {
+      "de": "Zantetsuken / Tenchu",
+      "fr": "Zantetsuken / Tenchû",
+      "th": "ซันเท็ตสึเคน / เท็นจู",
+      "vi": "Zantetsuken / Tenchu"
+    },
+    "jobSkillEvidence": {
+      "de": "Job-Aktionen: Timing und Distanz",
+      "fr": "Actions de travail: calendrier et distance",
+      "th": "การกระทํางาน: เวลาและระยะทาง",
+      "vi": "Hành động: thời gian và khoảng cách"
+    },
+    "defensiveReactionEvidence": {
+      "de": "Defensive Antwort: Recuperate, Purify, Guard",
+      "fr": "Réponse défensive: Récupérer, Purifier, Garde",
+      "th": "การตอบโต้ป้องกัน: การฟื้นฟู, การชําระ, การรักษาความปลอดภัย",
+      "vi": "Phản ứng phòng thủ: Nghỉ ngơi, thanh tẩy, canh gác"
+    },
+    "finisherReactionEvidence": {
+      "de": "Finisher Antwort: Zantetsuken und Seiton Tenchu",
+      "fr": "Réponse du finisseur : Zantetsuken et Seiton Tenchu",
+      "th": "การ ตอบ รับ ของ ผู้ สําเร็จ การ ศึกษา: ซนัน เต ซึเกะ และ ซี ตอง เท นจู",
+      "vi": "Trả lời xong: Zantetsuken và Seiton Tenchu"
+    },
+    "allPlayerMovementEvidence": {
+      "de": "Bewegungsgeschwindigkeit aller Spieler",
+      "fr": "Vitesse de déplacement de tous les joueurs",
+      "th": "ความเร็วเคลื่อนที่ของผู้เล่นทั้งหมด",
+      "vi": "Tốc độ di chuyển của toàn bộ người chơi"
+    },
+    "movement_speed": {
+      "de": "Rohe Laufgeschwindigkeit",
+      "fr": "Vitesse brute à pied",
+      "th": "ความเร็วเดินดิบ",
+      "vi": "Tốc độ đi bộ thô"
+    },
+    "movement_speed_mounted": {
+      "de": "Rohe Reitgeschwindigkeit",
+      "fr": "Vitesse brute en monture",
+      "th": "ความเร็วขณะขี่พาหนะ",
+      "vi": "Tốc độ cưỡi thú thô"
+    },
+    "movement_speed_buff_normalized": {
+      "de": "Um bekannte Buffs bereinigte Geschwindigkeit",
+      "fr": "Vitesse normalisée selon les améliorations connues",
+      "th": "ความเร็วหลังหักผลบัฟที่ทราบแล้ว",
+      "vi": "Tốc độ đã chuẩn hóa theo buff đã biết"
+    },
+    "movement_speed_active_unmounted_normalized": {
+      "de": "Aktive normalisierte Laufgeschwindigkeit",
+      "fr": "Vitesse active normalisée à pied",
+      "th": "ความเร็วเดินแบบเคลื่อนไหวหลังปรับบัฟ",
+      "vi": "Tốc độ đi bộ chủ động đã chuẩn hóa"
+    },
+    "movement_speed_active_mounted_normalized": {
+      "de": "Aktive normalisierte Reitgeschwindigkeit",
+      "fr": "Vitesse active normalisée en monture",
+      "th": "ความเร็วขณะขี่พาหนะที่ปรับค่าปัจจัยแล้ว",
+      "vi": "Tốc độ cưỡi chủ động đã chuẩn hóa"
+    },
+    "historySummaryOnly": {
+      "de": "Verlaufszusammenfassung",
+      "fr": "Résumé historique",
+      "th": "สรุปประวัติ",
+      "vi": "Tóm tắt lịch sử"
+    },
+    "historySummaryNoReplay": {
+      "de": "Dieser Alt-Datensatz zählt nur für Sieg/Niederlage, KDA und Jobstatistik; eine Wiederholung ist nicht verfügbar.",
+      "fr": "Cette ancienne donnée ne compte que pour les victoires/défaites, le KDA et les statistiques de job ; aucune rediffusion n’est disponible.",
+      "th": "ข้อมูลเก่านี้ใช้เฉพาะสถิติชนะ/แพ้ KDA และอาชีพเท่านั้น โดยไม่มีรีเพลย์",
+      "vi": "Dữ liệu cũ này chỉ dùng cho thắng/thua, KDA và nghề; không có bản phát lại."
+    },
+    "dangerResponseBoundary": {
+      "de": "Innerhalb eines kontinuierlichen Ladesegments muss HP zuerst über 35% beobachtet werden, dann bei Schäden auf 35% oder darunter. Pre-Input, Batching und unbeobachtete Schäden können die Lücke beeinflussen, so dass dies keine wörtliche letale Reaktion Maßnahme ist.",
+      "fr": "Dans un segment de charge continue, HP doit d'abord être observé au-dessus de 35 %, puis croiser jusqu'à 35 % ou moins en cas d'endommagement. Les dommages pré-input, par lots et non-observés peuvent affecter l'écart, de sorte qu'il ne s'agit pas d'une mesure de réaction létale.",
+      "th": "ภาย ใน เสี้ยว หนึ่ง ของ การ ขน ของ อย่าง ต่อ เนื่อง ต้อง มี การ สังเกต เห็น ล่วง หน้า ถึง 35%, แล้ว ข้าม ไป ที่ 35% หรือ ต่ํา กว่า นั้น. การฉีดเข้าไปล่วงหน้า, การผสม, และความเสียหายที่ปราศจากการป้องกัน อาจส่งผลกระทบต่อช่องว่างได้ ดังนั้น นี่จึงไม่ได้มีผลวัดปฏิกิริยารุนแรงถึงชีวิต",
+      "vi": "Trong vòng một đoạn nạp liên tục, HP trước tiên phải được quan sát trên 35%, sau đó vượt qua 35% hoặc thấp hơn thiệt hại. Những tổn thương chưa từng thấy có thể ảnh hưởng đến khoảng trống, nên đây không phải là biện pháp đo lường hiệu quả gây chết người."
+    },
+    "finisherResponseBoundary": {
+      "de": "Zantetsuken beginnt bei der beobachteten Kuzushi-Anwendung; Seiton Tenchu erfordert eine Beobachtung von über-50% im gleichen Ladesegment und beginnt dann bei der ersten Kreuzung auf 50% oder darunter. Ein weiterer Schaden unterhalb der Linie setzt ihn nicht zurück.",
+      "fr": "Zantetsuken commence à l'application Kuzushi observée; Seiton Tenchu nécessite une observation de plus de 50 % dans le même segment de chargement, puis commence au premier passage à 50 % ou moins. D'autres dommages en dessous de la ligne ne la réinitialisent pas.",
+      "th": "Zantetsuchan เริ่มต้นที่โปรแกรม Kuzushi ที่สังเกต; Seiton Tenju ต้องการข้อสังเกตมากกว่า 50% ในส่วนการโหลดเดียวกัน แล้วเริ่มต้นที่การข้ามครั้งแรกถึง 50% หรือด้านล่าง ความ เสีย หาย ที่ เพิ่ม ขึ้น ภาย ใต้ บรรทัด นี้ ไม่ ได้ ทํา ให้ เกิด ขึ้น ใหม่.",
+      "vi": "Zantetsuken bắt đầu quan sát ứng dụng Kuzushi; Seiton Tenchu yêu cầu quan sát trên 50% trong cùng một đoạn tải, sau đó bắt đầu từ lần đầu tiên vượt qua 50% hoặc dưới. Có thêm thiệt hại dưới đường dây không thể khởi động lại nó."
+    },
+    "movementDistributionBoundary": {
+      "de": "Trennt kontinuierlich sichtbare Bewegungen in rohe, roh montierte und bekannte Buff-normalisierte Schichten. Bestiegene, legale Verschiebung und normalisierte Schichten sind nur beschreibend und erhöhen niemals Spielerwarnungen.",
+      "fr": "Sépare les mouvements visibles en continu vers des couches brutes sur pied, montées à l'état brut et normalisées à l'aide de soufflets connus. Les couches montées, légales et normalisées ne sont que descriptives et ne soulèvent jamais d'alertes de joueurs.",
+      "th": "แยกการเคลื่อนไหวที่มองเห็นได้อย่างต่อเนื่อง เป็นพื้นที่ดิบบนฟุตดิน, ถูกติดตั้ง, และที่รู้จักกันเป็นชั้นปกติ การขึ้นม้า, การละเมิดกฎหมาย, และชั้นที่เป็นมาตรฐาน เป็นเฉพาะการตกแต่งเท่านั้น และไม่เคยเพิ่มการแจ้งเตือนผู้เล่น",
+      "vi": "Phân chia sự di chuyển thường xuyên nhìn thấy thành những phần thô trên bàn chân, phần khung sống, và những lớp bình thường. Gắn kết, thay thế hợp pháp, và những lớp bình thường chỉ được mô tả và không bao giờ tăng cảnh giác người chơi."
+    },
+    "currentMatchAllPlayers": {
+      "de": "Alle berechtigten Spieler in diesem Spiel",
+      "fr": "Tous les joueurs éligibles dans ce match",
+      "th": "ผู้เล่นทั้งหมดที่มีสิทธิ์ในการแข่งขันนี้",
+      "vi": "Tất cả các cầu thủ đủ tiêu chuẩn trong trận đấu này"
+    },
+    "eligiblePlayersInMatch": {
+      "de": "Matchmarker (jeder Punkt ist der mittlere Bin eines Spielers)",
+      "fr": "Marqueurs de correspondance (chaque point est le bac médian d'un joueur)",
+      "th": "ตรงกับเครื่องหมาย (แต่ละจุดเป็นมัธยฐานของผู้เล่น)",
+      "vi": "Nhãn khớp (mỗi chấm là thùng rác của người chơi)"
+    },
+    "integritySkillLayoutHelp": {
+      "de": "Wechseln Sie Jobs mit der Tastenzeile oben; jede Aktion zeigt angrenzend beobachtetes Timing und Effektzeitabstand an. Bins werden beibehalten, anstatt genaue Box-Plots aus Aggregaten zu erfinden.",
+      "fr": "Changer les tâches avec la ligne de bouton ci-dessus; chaque action montre le moment observé adjacent et la distance entre les effets. Les bacs sont conservés plutôt que d'inventer des parcelles de boîtes exactes à partir d'agrégats.",
+      "th": "สลับงานด้วยแถวปุ่มด้านบน; แต่ละการกระทํา แสดงเวลาที่ประชิดกัน และระยะที่มีผล ถาด ถูก เก็บ ไว้ แทน ที่ จะ ประดิษฐ์ แบบ กล่อง ที่ ถูก ต้อง ขึ้น มา จาก การ รวม กล่อง.",
+      "vi": "Chuyển công việc với hàng nút bên trên; mỗi hành động hiển thị cạnh quan sát thời gian và khoảng cách thời gian hiệu quả. Thùng được giữ lại thay vì phát minh ra các mảnh hộp chính xác từ các tập hợp."
+    },
+    "nominalSkillRange": {
+      "de": "Nennwirkungsbereich",
+      "fr": "Plage d'action nominale",
+      "th": "ช่วงการกระทําแบบไม่สิ้นสุด",
+      "vi": "Phạm vi hành động đơn vị"
+    },
+    "robustTailMarkers": {
+      "de": "Robuste Referenz-Tail-Marker (nur Navigation; Namen unten sind kopierbar)",
+      "fr": "Marqueurs de queue de référence robustes (navigation seulement; les noms ci-dessous peuvent être copiés)",
+      "th": "เครื่องหมายอ้างอิงแบบ Robust แบบหาง (ใช้แทนได้เท่านั้น; ชื่อด้านล่างนี้สามารถคัดลอกได้)",
+      "vi": "Bảng tham chiếu đuôi Robust (chỉ di chuyển; tên bên dưới có thể sao chép)"
+    },
+    "allEligiblePlayerNames": {
+      "de": "Alle berechtigten Spieler anzeigen (kopierbar)",
+      "fr": "Afficher tous les joueurs de match admissibles (copiable)",
+      "th": "แสดงตัวเล่นที่เข้ากันได้ทั้งหมด (คัดลอกได้)",
+      "vi": "Hiển thị mọi người chơi trùng khớp thích hợp (có thể sao chép)"
+    },
+    "action_interval": {
+      "de": "Abstand zwischen aufeinanderfolgenden beobachteten Ausführungen",
+      "fr": "Intervalle entre deux exécutions observées consécutives",
+      "th": "ช่วงเวลาระหว่างการใช้สกิลที่ตรวจพบต่อเนื่องกัน",
+      "vi": "Khoảng cách giữa hai lần dùng kỹ năng liên tiếp đã quan sát"
+    },
+    "strict_recast_effect_gap": {
+      "de": "Strikter Effektabstand derselben Aktion",
+      "fr": "Intervalle strict entre les effets d’une même action",
+      "th": "ช่วงห่างเอฟเฟกต์ของสกิลเดียวกันตามรีคาสต์แบบเข้มงวด",
+      "vi": "Khoảng hiệu ứng nghiêm ngặt giữa hai lần dùng cùng kỹ năng"
+    },
+    "logBinFormula": {
+      "de": "Logarithmische Klassen: Grenze bₖ = 30 ms × 2ᵏ; die letzte Klasse ist offen.",
+      "fr": "Classes logarithmiques : limite bₖ = 30 ms × 2ᵏ ; la dernière classe est ouverte.",
+      "th": "ช่วงแบบลอการิทึม: ขอบเขต bₖ = 30 ms × 2ᵏ และช่วงสุดท้ายเป็นช่วงปลายเปิด",
+      "vi": "Khoảng logarit: biên bₖ = 30 ms × 2ᵏ; khoảng cuối là khoảng mở"
+    },
+    "mechanismAnalysis": {
+      "de": "Teilnahme an Kartenmechaniken",
+      "fr": "Participation aux mécaniques de carte",
+      "th": "การมีส่วนร่วมกับกลไกแผนที่",
+      "vi": "Tham gia cơ chế bản đồ"
+    },
+    "mechanismSliceEvidence": {
+      "de": "Zeigt nur direkte Belege im aktuellen Zeitabschnitt, getrennt nach Mechanikziel zusammengefasst.",
+      "fr": "Affiche uniquement les preuves directes de la tranche actuelle, regroupées séparément par cible de mécanique.",
+      "th": "แสดงเฉพาะหลักฐานโดยตรงในช่วงเวลาปัจจุบัน โดยสรุปแยกตามเป้าหมายกลไก",
+      "vi": "Chỉ hiển thị bằng chứng trực tiếp trong lát thời gian hiện tại, tổng hợp riêng theo từng mục tiêu cơ chế"
+    },
+    "sliceHpLoss": {
+      "de": "HP-Verlust im Abschnitt",
+      "fr": "PV perdus dans la tranche",
+      "th": "HP ที่เสียในช่วงเวลา",
+      "vi": "HP mất trong lát thời gian"
+    },
+    "targetHpPercent": {
+      "de": "% der maximalen Ziel-HP",
+      "fr": "% des PV max. de la cible",
+      "th": "% HP สูงสุดของเป้าหมาย",
+      "vi": "% HP tối đa của mục tiêu"
+    },
+    "playerTotalDamage": {
+      "de": "Spielersumme",
+      "fr": "Total du joueur",
+      "th": "ความเสียหายรวมของผู้เล่น",
+      "vi": "Tổng sát thương người chơi"
+    },
+    "mechanismEvidenceBoundary": {
+      "de": "Gezeigt werden nur direkt beobachtete Mechanikobjekte, Zustandsänderungen und Aktionseffekte. Nähe gilt nicht als Eroberung; unsichtbare Kanalisierungen oder Unterbrechungen werden nicht abgeleitet.",
+      "fr": "Seuls les objets, changements d’état et effets d’action directement observés sont affichés. La proximité ne vaut pas capture ; les canalisations ou interruptions invisibles ne sont pas déduites.",
+      "th": "แสดงเฉพาะวัตถุกลไก การเปลี่ยนสถานะ และเอฟเฟกต์สกิลที่สังเกตได้โดยตรง การอยู่ใกล้ไม่ถือว่าเป็นการยึด และจะไม่อนุมานการร่ายหรือการขัดจังหวะที่มองไม่เห็น",
+      "vi": "Chỉ hiển thị vật thể cơ chế, thay đổi trạng thái và hiệu ứng kỹ năng được quan sát trực tiếp. Đứng gần không đồng nghĩa với chiếm điểm; không suy đoán quá trình chiếm hoặc ngắt bị khuất"
+    },
+    "objectivesObserved": {
+      "de": "Beobachtete Ziele",
+      "fr": "Objectifs observés",
+      "th": "เป้าหมายที่สังเกตพบ",
+      "vi": "Mục tiêu đã quan sát"
+    },
+    "mechanismActions": {
+      "de": "Mechanik-Aktionszeilen",
+      "fr": "Actions visant une mécanique",
+      "th": "รายการสกิลต่อกลไก",
+      "vi": "Dòng kỹ năng lên cơ chế"
+    },
+    "mechanismActionDetails": {
+      "de": "Zeitverlauf der Mechanik-Aktionen",
+      "fr": "Chronologie des actions de mécanique",
+      "th": "ไทม์ไลน์สกิลต่อกลไก",
+      "vi": "Dòng thời gian kỹ năng lên cơ chế"
+    },
+    "mechanismStatusDetails": {
+      "de": "Zeitverlauf der Mechanik-Buffs und -Debuffs",
+      "fr": "Chronologie des effets positifs et négatifs de la mécanique",
+      "th": "ไทม์ไลน์บัฟและดีบัฟของกลไก",
+      "vi": "Dòng thời gian buff và debuff của cơ chế"
+    },
+    "noMechanismStatusEvidence": {
+      "de": "Keine direkt auf ein Mechanikobjekt wirkende Statusänderung wurde erfasst.",
+      "fr": "Aucun changement d’état visant directement une mécanique n’a été enregistré.",
+      "th": "ไม่พบการเปลี่ยนสถานะที่มีเป้าหมายเป็นวัตถุกลไกโดยตรง",
+      "vi": "Không ghi nhận thay đổi trạng thái nào nhắm trực tiếp vào cơ chế"
+    },
+    "duration": {
+      "de": "Dauer",
+      "fr": "Durée",
+      "th": "ระยะเวลา",
+      "vi": "Thời lượng"
+    },
+    "objectiveStatusChanges": {
+      "de": "Zielstatusänderungen",
+      "fr": "Changements d’état des objectifs",
+      "th": "การเปลี่ยนสถานะเป้าหมาย",
+      "vi": "Thay đổi trạng thái mục tiêu"
+    },
+    "objectiveTimeline": {
+      "de": "Zeitverlauf der Zielzustände",
+      "fr": "Chronologie des états d’objectif",
+      "th": "ไทม์ไลน์สถานะเป้าหมาย",
+      "vi": "Dòng thời gian trạng thái mục tiêu"
+    },
+    "noObjectiveEvidence": {
+      "de": "In diesem Match wurde kein Mechanismusobjekt direkt beobachtet.",
+      "fr": "Aucun objet mécanisme n'a été observé directement dans cette correspondance.",
+      "th": "ไม่มีวัตถุกลไกถูกสังเกตโดยตรงในการแข่งขันนี้",
+      "vi": "Không có vật thể nào được quan sát trực tiếp trong trận đấu này."
+    },
+    "mechanismParticipation": {
+      "de": "Aktionen und Schaden gegen Ziele",
+      "fr": "Actions et dégâts contre les objectifs",
+      "th": "สกิลและความเสียหายต่อเป้าหมาย",
+      "vi": "Kỹ năng và sát thương lên mục tiêu"
+    },
+    "objectiveBuffs": {
+      "de": "Ziel-Buffs",
+      "fr": "Effets de l’objectif",
+      "th": "บัฟของเป้าหมาย",
+      "vi": "Buff của mục tiêu"
+    },
+    "hp": {
+      "de": "HP",
+      "fr": "PV",
+      "th": "HP",
+      "vi": "HP"
+    },
+    "captureInteractionDetails": {
+      "de": "Details zu Eroberung, Besetzung und Unterbrechung",
+      "fr": "Détails de capture, d’occupation et d’interruption",
+      "th": "รายละเอียดการยึด ครอบครอง และขัดจังหวะ",
+      "vi": "Chi tiết chiếm điểm, kiểm soát và ngắt"
+    },
+    "captureInteractionNotObserved": {
+      "de": "Diese Aufzeichnung enthält keinen direkten Beleg für den Erobernden, die Kanalisierungsdauer oder den Unterbrecher. Bestätigte Zustands- und Besitzwechsel bleiben sichtbar; nahe Spieler werden nie als Ersatz verwendet.",
+      "fr": "Cette capture ne contient aucune preuve directe de l’auteur de la capture, de la durée de canalisation ou de l’interrupteur. Les changements d’état et de propriétaire confirmés restent visibles ; les joueurs proches ne sont jamais substitués.",
+      "th": "ข้อมูลนี้ไม่มีหลักฐานโดยตรงว่าใครยึด ระยะเวลาร่าย หรือใครขัดจังหวะ จะแสดงเฉพาะการเปลี่ยนสถานะและเจ้าของที่ยืนยันแล้ว และจะไม่ใช้ผู้เล่นที่อยู่ใกล้มาแทน",
+      "vi": "Bản ghi này không có bằng chứng trực tiếp về người chiếm, thời gian niệm hoặc người ngắt. Các thay đổi trạng thái và quyền sở hữu đã xác nhận vẫn được hiển thị; không bao giờ lấy người chơi ở gần để thay thế"
+    },
+    "captureActor": {
+      "de": "Erobernder",
+      "fr": "Auteur de la capture",
+      "th": "ผู้ยึด",
+      "vi": "Người chiếm"
+    },
+    "result": {
+      "de": "Ergebnis",
+      "fr": "Résultat",
+      "th": "ผลลัพธ์",
+      "vi": "Kết quả"
+    },
+    "interrupter": {
+      "de": "Unterbrecher",
+      "fr": "Interrupteur",
+      "th": "ผู้ขัดจังหวะ",
+      "vi": "Người ngắt"
+    },
+    "notObserved": {
+      "de": "Nicht beobachtet",
+      "fr": "Non observé",
+      "th": "ไม่พบข้อมูล",
+      "vi": "Không quan sát được"
+    },
+    "noMechanismActionEvidence": {
+      "de": "Es wurde kein Aktionseffekt erfasst, der direkt auf einen Mechanismus abzielt.",
+      "fr": "Aucun effet d'action visant directement un mécanisme n'a été capturé.",
+      "th": "ไม่มีผลกระทบใดๆ ที่พุ่งเป้าไปที่กลไก",
+      "vi": "Không có hiệu quả trực tiếp nhắm vào một cơ chế bị bắt."
+    },
+    "firstSeen": {
+      "de": "Erstmals beobachtet",
+      "fr": "Première observation",
+      "th": "การสังเกตครั้งแรก",
+      "vi": "Quan sát lần đầu"
+    },
+    "lastSeen": {
+      "de": "Zuletzt beobachtet",
+      "fr": "Dernière observation",
+      "th": "แสดงครั้งสุดท้าย",
+      "vi": "Comment"
+    },
+    "shatterRespawnIntervals": {
+      "de": "Von der Eiszerstörung bis zur nächsten beobachteten Aktivierung",
+      "fr": "De la destruction de la glace à la prochaine activation observée",
+      "th": "จากน้ำแข็งถูกทำลายถึงการเกิดครั้งถัดไปที่สังเกตพบ",
+      "vi": "Từ lúc băng bị phá đến lần kích hoạt kế tiếp đã quan sát"
+    },
+    "noLaterSpawnObserved": {
+      "de": "Keine spätere Aktivierung beobachtet",
+      "fr": "Aucune activation ultérieure observée",
+      "th": "ไม่พบการเกิดครั้งถัดไป",
+      "vi": "Không quan sát thấy lần xuất hiện tiếp theo"
+    },
+    "unknown": {
+      "de": "Unbekannt",
+      "fr": "Inconnu",
+      "th": "ไม่ทราบ",
+      "vi": "Không rõ"
+    },
+    "observed_cast_completion_ratio": {
+      "de": "Sichtbares Gussfertigstellungsverhältnis",
+      "fr": "Taux d'achèvement de la coulée visible",
+      "th": "สัดส่วนการไล่ระดับสี",
+      "vi": "Tỷ lệ hoàn thành hiển thị"
+    },
+    "local_cast_completion_ratio": {
+      "de": "Lokale kontinuierliche Gussfertigstellung",
+      "fr": "Taux d'achèvement de la coulée continue locale",
+      "th": "อัตราการเติมให้สมบูรณ์ภายในเครื่อง",
+      "vi": "Tỷ lệ liên tục phân loại"
+    },
+    "local_request_lock_remaining": {
+      "de": "Animationssperre bleibt bei lokaler Anfrage in der Warteschlange",
+      "fr": "Verrouillage d'animation restant à la demande locale",
+      "th": "การล็อคแบบเคลื่อนไหวยังคงอยู่ที่การร้องขอภายในระบบที่ไม่ใช่แฟ้ม",
+      "vi": "Name"
+    },
+    "local_action_aftercast_lock_deficit": {
+      "de": "Deklarierte Aktionssperre minus nächste lokale Anfrage",
+      "fr": "Verrouillage déclaré de l’action moins la requête locale suivante",
+      "th": "แอนิเมชันล็อกที่ประกาศลบด้วยคำขอภายในเครื่องครั้งถัดไป",
+      "vi": "Khóa hoạt ảnh đã khai báo trừ yêu cầu cục bộ kế tiếp"
+    },
+    "localActionAftercastEvidence": {
+      "de": "Aktions-Nachlauf (nur starke lokale Evidenz)",
+      "fr": "Récupération d’action (preuves locales fortes uniquement)",
+      "th": "ช่วงหน่วงหลังสกิล (หลักฐานภายในเครื่องที่ชัดเจนเท่านั้น)",
+      "vi": "Độ trễ sau kỹ năng (chỉ bằng chứng cục bộ mạnh)"
+    },
+    "localActionAftercastBoundary": {
+      "de": "Vergleicht je vorheriger Aktion die vom Spiel deklarierte Sperre mit der nächsten eindeutigen, akzeptierten und nicht eingereihten lokalen Anfrage. Bei entfernten Spielern sind nur Effektpakete sichtbar; daraus lassen sich weder Eingaben noch Betrug ableiten.",
+      "fr": "Pour chaque action précédente, compare le verrouillage déclaré par le jeu à la requête locale suivante, unique, acceptée et non mise en file. Seuls les paquets d’effet sont visibles pour les joueurs distants ; ils ne permettent ni d’inférer les entrées ni de prouver une triche.",
+      "th": "เปรียบเทียบแอนิเมชันล็อกที่เกมประกาศของแต่ละสกิลก่อนหน้า กับคำขอภายในเครื่องครั้งถัดไปที่ไม่ซ้ำ สำเร็จ และไม่ได้เข้าคิว ผู้เล่นระยะไกลมีเพียงแพ็กเก็ตเอฟเฟกต์ จึงใช้อนุมานการกดหรือยืนยันการโกงไม่ได้",
+      "vi": "Với từng kỹ năng trước đó, so sánh khóa do trò chơi công bố với yêu cầu cục bộ kế tiếp duy nhất, thành công và không xếp hàng. Người chơi từ xa chỉ có gói hiệu ứng, không thể dùng để suy ra thao tác hay kết luận gian lận."
+    },
+    "local_lb_movement_onset": {
+      "de": "Erste nachweisbare Bewegungsverzögerung nach LB",
+      "fr": "Premier retard prouvable après LB",
+      "th": "การเคลื่อนตัวแบบต่อได้ทํางานช้าลงแล้ว หลังจาก LB",
+      "vi": "Dịch vụ xác thực đầu tiên bị hoãn sau LB"
+    },
+    "local_lb_aftercast_lock_deficit": {
+      "de": "LB beworben Sperre minus erste Bewegung",
+      "fr": "Verrouillage annoncé LB moins premier mouvement",
+      "th": "LB โฆษณาล็อค ลบการเคลื่อนไหวแรก",
+      "vi": "Name"
+    },
+    "local_animation_lock_bypass": {
+      "de": "Kandidat für lokale Animationssperren-Integrität",
+      "fr": "Candidat à l'intégrité d'animation-bloc local",
+      "th": "ผู้สมัครสําหรับความถูกต้องของแอนิเมชัน-ล็อค",
+      "vi": "Ứng dụng chính tả khoá hoạt hình cục bộ"
+    },
+    "local_cast_time_shortening": {
+      "de": "Kandidat für lokale Cast-Dauer-Integrität",
+      "fr": "Candidat à l'intégrité de la durée de coulée locale",
+      "th": "ผู้สมัครผู้สําเร็จการศึกษาท้องถิ่น",
+      "vi": "Ứng cử viên phát triển toàn cục"
+    },
+    "local_lb_aftercast_cancel": {
+      "de": "Lokale LB Aftercast Integrität Kandidat",
+      "fr": "Candidat local à l'intégrité après diffusion",
+      "th": "LB ภายในระบบหลังจากประกาศ ผู้สมัครผู้เที่ยงธรรม",
+      "vi": "Ứng dụng quản lý tính trung thực của LB cục bộ"
+    },
+    "forced_movement_displacement": {
+      "de": "Zielverlagerung bei Zwangsbewegung",
+      "fr": "Déplacement forcé",
+      "th": "การย้ายเป้าหมาย",
+      "vi": "Buộc độ dời đích"
+    },
+    "forcedMovementInstances": {
+      "de": "Forced-Movement Instanzen in diesem Match",
+      "fr": "instances de déplacement forcé dans ce match",
+      "th": "การบังคับย้ายตัวพิมพ์ในการแข่งขันนี้",
+      "vi": "Name"
+    },
+    "forcedMovementInstanceBoundary": {
+      "de": "Es werden nur kontinuierlich sichtbare 1-Sekunden-Zieltrajektorien nach Effekttyp 32 aufgeführt. Terrain, Kollision, Immunität und Serverkorrektur beeinflussen die Entfernung; dies ist kein Anomalieurteil.",
+      "fr": "Seules les trajectoires cibles visibles en continu après le type d'effet 32 sont énumérées. Terrain, collision, immunité et correction du serveur affectent la distance; ce n'est pas un verdict d'anomalie.",
+      "th": "รายการเป้าหมายหนึ่งวินาทีที่มองเห็นได้อย่างต่อเนื่องหลังจากลูกเล่น 32 รายการ เทอร์ริน, ชนกัน, ภูมิคุ้มกัน และแก้ไขค่าจากเซิร์ฟเวอร์ มีผลต่อระยะทาง; นี่ไม่ใช่คําตัดสินที่ผิดปกติ",
+      "vi": "Chỉ nhìn thấy liên tục một giây quay theo kiểu hiệu ứng 32 được liệt kê. Xây dựng, va chạm, miễn dịch và sửa chữa máy chủ ảnh hưởng đến khoảng cách; đây không phải là phán quyết bất thường."
+    },
+    "positionSamples": {
+      "de": "Positionsproben",
+      "fr": "échantillons de position",
+      "th": "ตัวอย่างตําแหน่ง",
+      "vi": "mẫu vị trí"
+    },
+    "danger_response_recuperate": {
+      "de": "Low-HP-Zugang zu Recuperate",
+      "fr": "Entrée faible en HP pour récupérer",
+      "th": "รายการข้อมูล HP แบบต่ํา (in อังกฤษ) เพื่อใช้ใหม่",
+      "vi": "Mục nhập thấp-HP cho việc nghỉ hưu"
+    },
+    "danger_response_purify": {
+      "de": "Low-HP-Eintritt zu Purify",
+      "fr": "Entrée faible en HP pour Purifier",
+      "th": "รายการข้อมูล HP แบบต่ําเพื่อล้างข้อมูล",
+      "vi": "Mục nhập ít HP để làm sạch"
+    },
+    "danger_response_guard": {
+      "de": "Low-HP-Zugang zu Guard",
+      "fr": "Entrée basse-HP à Guard",
+      "th": "การเข้าชมของยามต่ํา",
+      "vi": "Mục nhập ít HP để bảo vệ"
+    },
+    "mechanismIncomingActions": {
+      "de": "Mechanikeffekte auf Spieler",
+      "fr": "Effets des mécaniques sur les joueurs",
+      "th": "เอฟเฟกต์กลไกต่อผู้เล่น",
+      "vi": "Hiệu ứng cơ chế lên người chơi"
+    },
+    "mechanismIncomingEvidence": {
+      "de": "Es werden nur Aktionen und Effekte angezeigt, die im aktuellen Ausschnitt direkt von erkannten Mechanikobjekten ausgehen.",
+      "fr": "Seules les actions et les effets produits directement par des objets mécaniques identifiés dans la tranche actuelle sont affichés.",
+      "th": "แสดงเฉพาะแอ็กชันและเอฟเฟกต์ที่เกิดโดยตรงจากวัตถุกลไกที่ระบุได้ในช่วงเวลาปัจจุบัน",
+      "vi": "Chỉ hiển thị hành động và hiệu ứng do vật thể cơ chế đã nhận diện trực tiếp tạo ra trong lát thời gian hiện tại."
+    },
+    "ccMedicineKit": {
+      "de": "Medizinkoffer",
+      "fr": "Kit de soins",
+      "th": "ชุดยาฟื้นฟู",
+      "vi": "Bộ cứu thương"
+    },
+    "ccHarmoniasHealingGlyph": {
+      "de": "Heilglyphe",
+      "fr": "Glyphe de soin",
+      "th": "สัญลักษณ์ฟื้นฟู",
+      "vi": "Ấn trị liệu"
+    },
+    "ccHarmoniasHealingPulse": {
+      "de": "Heilung +{0:N0}",
+      "fr": "Soins +{0:N0}",
+      "th": "ฟื้นฟู +{0:N0}",
+      "vi": "Hồi phục +{0:N0}"
+    },
+    "ccHarmoniasAetherometer": {
+      "de": "Ätherometer",
+      "fr": "Manactivateur",
+      "th": "เครื่องวัดอีเธอร์",
+      "vi": "Máy đo aether"
+    },
+    "ccHarmoniasAetherIdle": {
+      "de": "Keine Aufladung",
+      "fr": "Pas de charge",
+      "th": "ยังไม่ชาร์จ",
+      "vi": "Chưa tích năng lượng"
+    },
+    "ccHarmoniasAetherCharging": {
+      "de": "Aufladung {0:0}%",
+      "fr": "Charge {0:0} %",
+      "th": "กำลังชาร์จ {0:0}%",
+      "vi": "Đang tích năng lượng {0:0}%"
+    },
+    "ccHarmoniasAetherAttemptObserved": {
+      "de": "Erfassung beobachtet (Prozentwert nicht verfügbar)",
+      "fr": "Détection observée (pourcentage indisponible)",
+      "th": "ตรวจพบการตรวจวัด (ไม่มีข้อมูลเปอร์เซ็นต์)",
+      "vi": "Đã quan sát việc kiểm tra (không có phần trăm)"
+    },
+    "ccHarmoniasAetherReset": {
+      "de": "Aufladung zurückgesetzt",
+      "fr": "Charge réinitialisée",
+      "th": "รีเซ็ตการชาร์จแล้ว",
+      "vi": "Đã đặt lại mức tích năng lượng"
+    },
+    "ccHarmoniasRoutesUnlocked": {
+      "de": "Ätherbrücke / Sprungglyphe freigeschaltet",
+      "fr": "Pont d'éther / glyphe de saut débloqués",
+      "th": "ปลดล็อกสะพานอีเธอร์ / สัญลักษณ์กระโดดแล้ว",
+      "vi": "Đã mở cầu aether / ấn nhảy"
+    },
+    "ccHarmoniasPositionUnobserved": {
+      "de": "Position nicht beobachtet",
+      "fr": "position non observée",
+      "th": "ยังไม่พบตำแหน่ง",
+      "vi": "chưa quan sát được vị trí"
+    },
+    "ccHarmoniasBridge": {
+      "de": "Ätherbrücke",
+      "fr": "Pont d'éther",
+      "th": "สะพานอีเธอร์",
+      "vi": "Cầu aether"
+    },
+    "ccHarmoniasJumpGlyph": {
+      "de": "Sprungglyphe",
+      "fr": "Glyphe de saut",
+      "th": "สัญลักษณ์กระโดด",
+      "vi": "Ấn nhảy"
+    },
+    "ccHarmoniasLocked": {
+      "de": "Gesperrt",
+      "fr": "Verrouillé",
+      "th": "ยังไม่ปลดล็อก",
+      "vi": "Chưa mở"
+    },
+    "ccHarmoniasUnlocked": {
+      "de": "Freigeschaltet",
+      "fr": "Débloqué",
+      "th": "ปลดล็อกแล้ว",
+      "vi": "Đã mở"
+    },
+    "ccHarmoniasCheckpoint": {
+      "de": "Taktischer Kontrollpunkt",
+      "fr": "Point de contrôle tactique",
+      "th": "จุดตรวจยุทธวิธี",
+      "vi": "Điểm kiểm soát chiến thuật"
+    },
+    "ccHarmoniasCheckpointIdle": {
+      "de": "Wird nicht eingenommen",
+      "fr": "Pas de progression",
+      "th": "ยังไม่ได้ยึด",
+      "vi": "Chưa chiếm"
+    },
+    "ccHarmoniasCheckpointClearing": {
+      "de": "Einnahme {0:0}%",
+      "fr": "Progression {0:0} %",
+      "th": "กำลังยึด {0:0}%",
+      "vi": "Đang chiếm {0:0}%"
+    },
+    "ccHarmoniasCheckpointReset": {
+      "de": "Einnahmefortschritt zurückgesetzt",
+      "fr": "Progression réinitialisée",
+      "th": "รีเซ็ตความคืบหน้าแล้ว",
+      "vi": "Đã đặt lại tiến độ chiếm"
+    },
+    "ccHarmoniasCheckpointCleared": {
+      "de": "Eingenommen",
+      "fr": "Franchi",
+      "th": "ยึดแล้ว",
+      "vi": "Đã chiếm"
+    },
+    "ccSwiftSprintZone": {
+      "de": "Supersprint-Zone",
+      "fr": "Zone de sprint accéléré",
+      "th": "เขตเร่งความเร็ว",
+      "vi": "Vùng tăng tốc"
+    },
+    "ccCloudNineBlackFeather": {
+      "de": "Schwarze Chocobo-Feder",
+      "fr": "Plume de chocobo noir",
+      "th": "ขนนกโจโคโบดำ",
+      "vi": "Lông chocobo đen"
+    },
+    "ccCloudNineTwister": {
+      "de": "Wirbelsturm",
+      "fr": "Tornade",
+      "th": "พายุหมุน",
+      "vi": "Lốc xoáy"
+    },
+    "ccCloudNineGaleSphere": {
+      "de": "Windsphäre",
+      "fr": "Sphère de vent",
+      "th": "ลูกแก้วลม",
+      "vi": "Cầu gió"
+    },
+    "ccCloudNineGaleSpherePickup": {
+      "de": "Windsphäre aufgenommen · Supersprint",
+      "fr": "Sphère de vent ramassée · Sprint accéléré",
+      "th": "เก็บลูกแก้วลม · เร่งความเร็ว",
+      "vi": "Nhặt cầu gió · Tăng tốc"
+    },
+    "ccCloudNineGaleSphereObserved": {
+      "de": "Windsphäre (Supersprint beobachtet)",
+      "fr": "Sphère de vent (sprint accéléré observé)",
+      "th": "ลูกแก้วลม (ตรวจพบการเร่งความเร็ว)",
+      "vi": "Cầu gió (đã quan sát tăng tốc)"
+    },
+    "ccObservedJumpRoute": {
+      "de": "Beobachtete Sprungglyphen-Route",
+      "fr": "Trajet de glyphe de saut observé",
+      "th": "เส้นทางแท่นกระโดดที่สังเกตได้",
+      "vi": "Lộ trình bệ nhảy quan sát được"
+    },
+    "ccCloudNineTurbulenceActive": {
+      "de": "Turbulenz aktiv",
+      "fr": "Turbulences actives",
+      "th": "กระแสลมปั่นป่วนกำลังทำงาน",
+      "vi": "Nhiễu động đang hoạt động"
+    },
+    "ccCloudNineTurbulenceCountdown": {
+      "de": "Turbulenz T-{0}s",
+      "fr": "Turbulences T-{0}s",
+      "th": "กระแสลมปั่นป่วน T-{0} วินาที",
+      "vi": "Nhiễu động T-{0} giây"
+    },
+    "ccCloudNineMechanismNotActive": {
+      "de": "Turbulenz inaktiv",
+      "fr": "Turbulences inactives",
+      "th": "กระแสลมปั่นป่วนยังไม่ทำงาน",
+      "vi": "Nhiễu động chưa hoạt động"
+    },
+    "ccCloudNineSafetyHint": {
+      "de": "Schutz verhindert den Hochschleudern; schwarze Federn ermöglichen eine sichere Landung. Fallschaden wird nur mit direktem Ereignisbeleg zugeordnet.",
+      "fr": "La Garde empêche la projection ; les plumes noires assurent un atterrissage sûr. Les dégâts de chute ne sont attribués qu’avec une preuve directe.",
+      "th": "การ์ดป้องกันการกระเด็นขึ้น และขนนกดำช่วยให้ลงพื้นอย่างปลอดภัย ระบบจะระบุความเสียหายจากการตกเมื่อมีหลักฐานจากเหตุการณ์โดยตรงเท่านั้น",
+      "vi": "Phòng thủ ngăn hất tung; lông đen giúp tiếp đất an toàn. Sát thương rơi chỉ được quy kết khi có bằng chứng sự kiện trực tiếp."
+    },
+    "ccCloudNineTwisterHit": {
+      "de": "Wirbelsturm-Treffer",
+      "fr": "Impact de tornade",
+      "th": "โดนพายุหมุน",
+      "vi": "Trúng lốc xoáy"
+    },
+    "ccBombCore": {
+      "de": "Bomberseele",
+      "fr": "Âme de bombo",
+      "th": "แก่นบอมบ์",
+      "vi": "Lõi bom"
+    },
+    "ccTrickFloor": {
+      "de": "Trickboden",
+      "fr": "Sol piégé",
+      "th": "พื้นกลไก",
+      "vi": "Sàn cơ quan"
+    },
+    "ccClockworkTatamiActive": {
+      "de": "Tatami aktiv",
+      "fr": "Tatami activé",
+      "th": "เสื่อทาทามิทำงาน",
+      "vi": "Tatami đang kích hoạt"
+    },
+    "ccClockworkOnmyojiGaze": {
+      "de": "Mechanischer Onmyoji · Blick / Minimum",
+      "fr": "Onmyoji mécanique · regard / Mini",
+      "th": "องเมียวจิจักรกล · สายตา / ย่อส่วน",
+      "vi": "Onmyoji máy · ánh nhìn / thu nhỏ"
+    },
+    "ccClockworkYojimboStrike": {
+      "de": "Mechanischer Yojimbo · starker physischer Angriff",
+      "fr": "Yojimbo mécanique · puissante attaque physique",
+      "th": "โยจิมโบจักรกล · การโจมตีกายภาพรุนแรง",
+      "vi": "Yojimbo máy · đòn vật lý mạnh"
+    },
+    "ccClockworkObservedWindow": {
+      "de": "Effekt-Beweisfenster {0:0.0}s · weitester beobachteter Treffer {1:0.0} Yalm",
+      "fr": "Fenêtre de preuve de l'effet {0:0.0}s · impact observé le plus éloigné {1:0.0} yalm",
+      "th": "ช่วงหลักฐานเอฟเฟกต์ {0:0.0} วินาที · ระยะโดนไกลสุดที่สังเกตได้ {1:0.0} yalm",
+      "vi": "Cửa sổ bằng chứng hiệu ứng {0:0.0} giây · đòn trúng xa nhất quan sát được {1:0.0} yalm"
+    },
+    "ccRedSandsGeyser": {
+      "de": "Geysir",
+      "fr": "Geyser",
+      "th": "น้ำพุร้อน",
+      "vi": "Mạch phun"
+    },
+    "ccRedSandsAntlion": {
+      "de": "Rotsand-Ameisenlöwe",
+      "fr": "Fourmilion des Sables sanglants",
+      "th": "แอนท์ไลออนแห่งเรดแซนด์ส",
+      "vi": "Kiến sư tử Red Sands"
+    },
+    "ccRedSandsSabotender": {
+      "de": "Sabotender",
+      "fr": "Pampa",
+      "th": "ซาโบเทนเดอร์",
+      "vi": "Sabotender"
+    },
+    "ccRedSandsAcutender": {
+      "de": "Barrieren-Kaktor",
+      "fr": "Pampa-barrière",
+      "th": "กระบองเพชรสร้างบาเรีย",
+      "vi": "Xương rồng lá chắn"
+    },
+    "ccRedSandsHeatWaveActive": {
+      "de": "Hitzewelle aktiv",
+      "fr": "Vague de chaleur active",
+      "th": "คลื่นความร้อนกำลังเกิดขึ้น",
+      "vi": "Đợt nóng đang diễn ra"
+    },
+    "ccRedSandsHeatWaveCountdown": {
+      "de": "Nächste beobachtete Hitzewelle in {0}s",
+      "fr": "Prochaine vague de chaleur observée dans {0}s",
+      "th": "คลื่นความร้อนที่สังเกตพบครั้งถัดไปใน {0} วินาที",
+      "vi": "Đợt nóng quan sát được tiếp theo sau {0} giây"
+    },
+    "ccRedSandsHeatWaveNotActive": {
+      "de": "Keine aktive Hitzewelle",
+      "fr": "Vague de chaleur inactive",
+      "th": "ยังไม่มีคลื่นความร้อน",
+      "vi": "Đợt nóng chưa hoạt động"
+    },
+    "ccRedSandsHeatWaveSafetyHint": {
+      "de": "Während der Hitzewelle brechen Geysire aus. Kleine weiße Kreise heilen LP und füllen den Limitrausch; das Zentrum verursacht Schaden und Rückstoß.",
+      "fr": "Les geysers jaillissent pendant la vague de chaleur. Les petits cercles blancs rendent des PV et de la Transcendance ; le centre inflige des dégâts et repousse.",
+      "th": "กีย์เซอร์จะปะทุระหว่างคลื่นความร้อน วงกลมสีขาวเล็กฟื้นฟู HP และเกจลิมิต ส่วนใจกลางสร้างความเสียหายและผลักกระเด็น",
+      "vi": "Mạch phun trào trong Đợt nóng. Vòng trắng nhỏ hồi HP và thanh giới hạn; tâm mạch phun gây sát thương và đẩy lùi."
+    },
+    "ccRedSandsNeedles": {
+      "de": "100.000 Nadeln",
+      "fr": "100 000 aiguilles",
+      "th": "เข็ม 100,000 เล่ม",
+      "vi": "100.000 Kim"
+    },
+    "ccRedSandsTherapeuticNeedles": {
+      "de": "Heilende Nadeln",
+      "fr": "Aiguilles curatives",
+      "th": "เข็มรักษา",
+      "vi": "Kim Trị liệu"
+    },
+    "ccRedSandsLandslip": {
+      "de": "Erdrutsch",
+      "fr": "Glissement de terrain",
+      "th": "ดินถล่ม",
+      "vi": "Sạt lở"
+    },
+    "ccRedSandsSandpearlShroud": {
+      "de": "Wüstenlicht",
+      "fr": "Lumière du désert",
+      "th": "แสงแห่งทะเลทราย",
+      "vi": "Ánh sáng Sa mạc"
+    },
+    "ccRedSandsGeyserHazard": {
+      "de": "Geysirzentrum",
+      "fr": "Centre du geyser",
+      "th": "ใจกลางกีย์เซอร์",
+      "vi": "Tâm mạch phun"
+    },
+    "ccKageyama": {
+      "de": "Kageyama",
+      "fr": "Kageyama",
+      "th": "คาเงยามะ",
+      "vi": "Kageyama"
+    },
+    "ccClockworkYojimbo": {
+      "de": "Mechanischer Yojimbo",
+      "fr": "Yojimbo mécanique",
+      "th": "โยจิมโบกลไก",
+      "vi": "Yojimbo máy"
+    },
+    "secureCommandSystem": {
+      "de": "Turmkreis zum Besetzen",
+      "fr": "Cercle de tour à absorber",
+      "th": "วงหอคอยสำหรับยืนรับ",
+      "vi": "Vòng tháp cần đứng nhận"
+    },
+    "secureInterceptorDrone": {
+      "de": "Abfangdrohne",
+      "fr": "Drone intercepteur",
+      "th": "โดรนสกัดกั้น",
+      "vi": "Máy bay không người lái đánh chặn"
+    },
+    "secureGoldInterceptorDrone": {
+      "de": "Goldene Abfangdrohne",
+      "fr": "Drone intercepteur doré",
+      "th": "โดรนสกัดกั้นสีทอง",
+      "vi": "Máy bay đánh chặn màu vàng"
+    },
+    "secureInterceptorNode": {
+      "de": "Abfangknoten",
+      "fr": "Nœud intercepteur",
+      "th": "โหนดสกัดกั้น",
+      "vi": "Nút đánh chặn"
+    },
+    "secureDisplacementPanel": {
+      "de": "Aufzug zur Hochplattform",
+      "fr": "Ascenseur vers la plateforme haute",
+      "th": "ลิฟต์ขึ้นแท่นสูง",
+      "vi": "Thang máy lên đài cao"
+    },
+    "secureNodeOwnership": {
+      "de": "Besitz der Punkte und sichtbare Besetzer",
+      "fr": "Contrôle des points et occupants visibles",
+      "th": "ฝ่ายที่ครองจุดและผู้เล่นที่มองเห็นในวง",
+      "vi": "Quyền sở hữu điểm và người đứng trong vòng nhìn thấy được"
+    },
+    "secureNeutralNode": {
+      "de": "Neutral",
+      "fr": "Neutre",
+      "th": "เป็นกลาง",
+      "vi": "Trung lập"
+    },
+    "secureStandingPlayers": {
+      "de": "Sichtbare Spieler im Kreis",
+      "fr": "Joueurs visibles dans le cercle",
+      "th": "ผู้เล่นที่มองเห็นในวง",
+      "vi": "Người chơi nhìn thấy trong vòng"
+    },
+    "secureTowerEvents": {
+      "de": "Turmbesetzungen und Explosionen",
+      "fr": "Absorptions et explosions de tours",
+      "th": "การยืนรับหอคอยและการระเบิด",
+      "vi": "Đứng nhận tháp và vụ nổ"
+    },
+    "secureTowerParticipants": {
+      "de": "Spieler im Turmkreis",
+      "fr": "Joueurs dans le cercle de la tour",
+      "th": "ผู้เล่นในวงหอคอย",
+      "vi": "Người chơi trong vòng tháp"
+    },
+    "secureTowerAffected": {
+      "de": "Von der Explosion getroffene Spieler",
+      "fr": "Joueurs touchés par l’explosion",
+      "th": "ผู้เล่นที่โดนระเบิด",
+      "vi": "Người chơi trúng vụ nổ"
+    },
+    "secureTowerSoaked": {
+      "de": "Turmbesetzung beobachtet",
+      "fr": "Absorption de tour observée",
+      "th": "ตรวจพบผู้ยืนรับหอคอย",
+      "vi": "Đã quan sát thấy người đứng nhận tháp"
+    },
+    "secureTowerMissCandidate": {
+      "de": "Mögliche Explosion eines unbesetzten Turms",
+      "fr": "Possible explosion d’une tour non absorbée",
+      "th": "อาจเป็นการระเบิดเพราะไม่มีผู้ยืนรับ",
+      "vi": "Có thể là vụ nổ tháp không có người đứng nhận"
+    },
+    "secureTowerUnresolved": {
+      "de": "Kein lokaler Turmeffekt erfasst; Teilnehmer nicht identifizierbar",
+      "fr": "Aucun effet local de tour capturé ; participants non identifiables",
+      "th": "ไม่พบเอฟเฟกต์รับหอในข้อมูลเฉพาะที่ จึงระบุผู้เข้าร่วมไม่ได้",
+      "vi": "Không ghi được hiệu ứng tháp cục bộ nên không thể xác định người tham gia"
+    },
+    "secureTowerEvidence": {
+      "de": "Spieler werden nur aufgeführt, wenn Explosion (erfolgreich) oder Unmitigated Explosion (verfehlt) direkt im Kampfereignis erfasst wurde. Ein globaler Karten-Countdown allein lässt Teilnehmer und Punkte je Runde unbeobachtet.",
+      "fr": "Les joueurs ne sont listés que si Explosion (tour absorbée) ou Unmitigated Explosion (tour manquée) est directement enregistré. Un simple compte à rebours global laisse les participants et les points par manche non observés.",
+      "th": "จะแสดงรายชื่อผู้เล่นเฉพาะเมื่อเหตุการณ์ต่อสู้บันทึก Explosion (รับหอสำเร็จ) หรือ Unmitigated Explosion (พลาดหอ) โดยตรงเท่านั้น หากมีเพียงเวลานับถอยหลังบนแผนที่ จะถือว่าผู้เข้าร่วมและคะแนนรายรอบยังไม่ถูกสังเกต",
+      "vi": "Chỉ liệt kê người chơi khi sự kiện chiến đấu ghi trực tiếp Explosion (đỡ tháp thành công) hoặc Unmitigated Explosion (bỏ sót). Nếu chỉ có đếm ngược trên bản đồ, người tham gia và điểm từng lượt vẫn là chưa quan sát được."
+    },
+    "secureResultPacketCategoryTotal": {
+      "de": "Ergebnispaket · Kategoriesumme",
+      "fr": "Paquet de résultats · total de catégorie",
+      "th": "แพ็กเก็ตผลการแข่งขัน · ยอดรวมหมวด",
+      "vi": "Gói kết quả · tổng theo hạng mục"
+    },
+    "secureDamageShareEstimate": {
+      "de": "Schätzung aus beobachtetem Schadensanteil (keine offizielle Rundenpunktzahl)",
+      "fr": "Estimation selon la part de dégâts observée (pas un score officiel par manche)",
+      "th": "ค่าประมาณจากสัดส่วนความเสียหายที่สังเกตได้ (ไม่ใช่คะแนนทางการรายรอบ)",
+      "vi": "Ước tính theo tỷ lệ sát thương quan sát được (không phải điểm chính thức từng lượt)"
+    },
+    "secureDamageShareFormula": {
+      "de": "≈ = beobachteter Schadensanteil × aktuelle Mechanik-Gesamtpunkte; nur Schätzung, keine offizielle Rundenwertung.",
+      "fr": "≈ = part des dégâts observés × total actuel du mécanisme ; estimation uniquement, pas une attribution officielle par manche.",
+      "th": "≈ = สัดส่วนความเสียหายที่สังเกตได้ × คะแนนรวมของกลไกปัจจุบัน เป็นเพียงค่าประมาณ ไม่ใช่คะแนนทางการรายรอบ",
+      "vi": "≈ = tỷ lệ sát thương quan sát được × tổng điểm cơ chế hiện tại; chỉ là ước tính, không phải điểm chính thức từng lượt."
+    },
+    "secureUiStateRoundScoreUnknown": {
+      "de": "Direkter Karten-UI-Status · Rundenpunkte nicht bestimmbar",
+      "fr": "État direct de l’UI de carte · score de la manche non identifiable",
+      "th": "สถานะ UI แผนที่โดยตรง · ระบุคะแนนรอบนี้ไม่ได้",
+      "vi": "Trạng thái UI bản đồ trực tiếp · không xác định được điểm lượt"
+    },
+    "secureUiRoundParticipantsScoreUnknown": {
+      "de": "Direkte Karten-UI-Runde · Teilnehmer und Punkte nicht beobachtet",
+      "fr": "Manche directe de l’UI de carte · participants et score non observés",
+      "th": "รอบจาก UI แผนที่โดยตรง · ไม่พบผู้เข้าร่วมและคะแนน",
+      "vi": "Lượt từ UI bản đồ trực tiếp · chưa quan sát được người tham gia và điểm"
+    },
+    "edge_displacement_fisher": {
+      "de": "Tendenz zum Abdrängen an Kanten",
+      "fr": "Tendance à projeter dans le vide",
+      "th": "แนวโน้มผลักศัตรูตกขอบ",
+      "vi": "Xu hướng đẩy đối thủ rơi khỏi mép"
+    },
+    "edgeDisplacementFisherEvidence": {
+      "de": "Gezählt wird nur eine erzwungene Bewegung mit durchgehend sichtbarer Fallspur und Tod desselben Ziels innerhalb von 8 Sekunden. Normale Kills am Abgrund zählen nicht.",
+      "fr": "Seule une projection forcée suivie d’une chute visible en continu et de la mort de la même cible sous 8 secondes est comptée. Les éliminations ordinaires près d’un précipice sont exclues.",
+      "th": "นับเฉพาะการบังคับเคลื่อนที่ที่ตามด้วยเส้นทางตกซึ่งมองเห็นต่อเนื่อง และเป้าหมายเดียวกันตายภายใน 8 วินาที ไม่นับการสังหารทั่วไปใกล้หน้าผา",
+      "vi": "Chỉ tính chuỗi đẩy cưỡng bức, quỹ đạo rơi nhìn thấy liên tục và cùng mục tiêu tử vong trong 8 giây. Không tính hạ gục thông thường gần vách."
+    },
+    "ccClockworkOnmyoji": {
+      "de": "Mechanischer Onmyoji",
+      "fr": "Onmyoji mécanique",
+      "th": "องเมียวจิกลไก",
+      "vi": "Onmyoji máy"
+    },
+    "ccHalfDayCalendar": {
+      "de": "Crystalline-Conflict-Halbtageskalender",
+      "fr": "Calendrier demi-journée de Crystalline Conflict",
+      "th": "ปฏิทินครึ่งวัน Crystalline Conflict",
+      "vi": "Lịch nửa ngày Crystalline Conflict"
+    },
+    "ccHalfDayCalendarHelp": {
+      "de": "Ortszeit · 12 Stunden waagerecht / 3 Tage senkrecht · kein eingebettetes Scrollen · {0}",
+      "fr": "Heure locale · 12 heures en colonnes / 3 jours en lignes · aucun défilement imbriqué · {0}",
+      "th": "เวลาท้องถิ่น · แนวนอน 12 ชั่วโมง / แนวตั้ง 3 วัน · ไม่มีแถบเลื่อนซ้อน · {0}",
+      "vi": "Giờ địa phương · 12 giờ theo chiều ngang / 3 ngày theo chiều dọc · không cuộn lồng nhau · {0}"
+    },
+    "ccPreviousDays": {
+      "de": "Einen Tag zurück",
+      "fr": "Reculer d’un jour",
+      "th": "ย้อนกลับหนึ่งวัน",
+      "vi": "Lùi một ngày"
+    },
+    "ccNextDays": {
+      "de": "Einen Tag vor",
+      "fr": "Avancer d’un jour",
+      "th": "ถัดไปหนึ่งวัน",
+      "vi": "Tiến một ngày"
+    },
+    "ccFirstHalf": {
+      "de": "Erste Hälfte 00–12",
+      "fr": "Première moitié 00–12",
+      "th": "ครึ่งวันแรก 00–12",
+      "vi": "Nửa đầu ngày 00–12"
+    },
+    "ccSecondHalf": {
+      "de": "Zweite Hälfte 12–24",
+      "fr": "Seconde moitié 12–24",
+      "th": "ครึ่งวันหลัง 12–24",
+      "vi": "Nửa cuối ngày 12–24"
+    },
+    "yesterday": {
+      "de": "Gestern",
+      "fr": "Hier",
+      "th": "เมื่อวาน",
+      "vi": "Hôm qua"
+    },
+    "tomorrow": {
+      "de": "Morgen",
+      "fr": "Demain",
+      "th": "พรุ่งนี้",
+      "vi": "Ngày mai"
+    },
+    "ccRosterIncomplete": {
+      "de": "Die alte Ergebnisliste ist unvollständig: Nur {0}/10 Spieler wurden gespeichert; nicht als vollständige Aufstellung behandeln.",
+      "fr": "L’ancienne liste de résultats est incomplète : seuls {0}/10 joueurs ont été enregistrés ; ne pas la considérer comme la composition complète.",
+      "th": "รายชื่อผลการแข่งเก่าไม่ครบ: บันทึกเพียง {0}/10 คน ห้ามถือว่าเป็นรายชื่อผู้เล่นทั้งหมด",
+      "vi": "Danh sách kết quả cũ không đầy đủ: chỉ lưu {0}/10 người; không được xem là đội hình đầy đủ."
+    },
+    "objectivePointSuffix": {
+      "de": "-Knoten",
+      "fr": " point",
+      "th": " จุด",
+      "vi": " điểm"
+    },
+    "unresolvedObjective": {
+      "de": "Nicht aufgelöstes Ziel",
+      "fr": "Objectif non identifié",
+      "th": "เป้าหมายกลไกที่ยังไม่ระบุ",
+      "vi": "Mục tiêu cơ chế chưa nhận diện"
+    },
+    "demiBahamut": {
+      "de": "Demi-Bahamut",
+      "fr": "Demi-Bahamut",
+      "th": "เดมีบาฮามุท",
+      "vi": "Demi-Bahamut"
+    }
+  },
+  "reviewedKeys": [
+    "action_interval",
+    "allPlayerMovementEvidence",
+    "animationLockCoverage",
+    "anomalyCandidates",
+    "anomalyNotVerdict",
+    "captureActor",
+    "captureInteractionDetails",
+    "captureInteractionNotObserved",
+    "castCoverageSummary",
+    "ccBombCore",
+    "ccClockworkOnmyoji",
+    "ccClockworkOnmyojiGaze",
+    "ccClockworkObservedWindow",
+    "ccClockworkTatamiActive",
+    "ccClockworkYojimbo",
+    "ccClockworkYojimboStrike",
+    "ccFirstHalf",
+    "ccHalfDayCalendar",
+    "ccHalfDayCalendarHelp",
+    "ccKageyama",
+    "ccHarmoniasHealingGlyph",
+    "ccHarmoniasHealingPulse",
+    "ccHarmoniasAetherometer",
+    "ccHarmoniasAetherIdle",
+    "ccHarmoniasAetherCharging",
+    "ccHarmoniasAetherAttemptObserved",
+    "ccHarmoniasAetherReset",
+    "ccHarmoniasRoutesUnlocked",
+    "ccHarmoniasPositionUnobserved",
+    "ccHarmoniasBridge",
+    "ccHarmoniasJumpGlyph",
+    "ccHarmoniasLocked",
+    "ccHarmoniasUnlocked",
+    "ccHarmoniasCheckpoint",
+    "ccHarmoniasCheckpointIdle",
+    "ccHarmoniasCheckpointClearing",
+    "ccHarmoniasCheckpointReset",
+    "ccHarmoniasCheckpointCleared",
+    "ccMedicineKit",
+    "ccSwiftSprintZone",
+    "ccCheckpointLegend",
+    "ccCloudNineBlackFeather",
+    "ccCloudNineTwister",
+    "ccCloudNineGaleSphere",
+    "ccCloudNineGaleSpherePickup",
+    "ccCloudNineGaleSphereObserved",
+    "ccObservedJumpRoute",
+    "ccCloudNineTurbulenceActive",
+    "ccCloudNineTurbulenceCountdown",
+    "ccCloudNineMechanismNotActive",
+    "ccCloudNineSafetyHint",
+    "ccCloudNineTwisterHit",
+    "ccNextDays",
+    "ccPreviousDays",
+    "ccRosterIncomplete",
+    "ccSecondHalf",
+    "ccTrickFloor",
+    "ccRedSandsGeyser",
+    "ccRedSandsAntlion",
+    "ccRedSandsSabotender",
+    "ccRedSandsAcutender",
+    "ccRedSandsHeatWaveActive",
+    "ccRedSandsHeatWaveCountdown",
+    "ccRedSandsHeatWaveNotActive",
+    "ccRedSandsHeatWaveSafetyHint",
+    "ccRedSandsNeedles",
+    "ccRedSandsTherapeuticNeedles",
+    "ccRedSandsLandslip",
+    "ccRedSandsSandpearlShroud",
+    "ccRedSandsGeyserHazard",
+    "secureCommandSystem",
+    "secureDisplacementPanel",
+    "secureGoldInterceptorDrone",
+    "secureInterceptorDrone",
+    "secureInterceptorNode",
+    "secureNeutralNode",
+    "secureNodeOwnership",
+    "secureStandingPlayers",
+    "secureTowerAffected",
+    "secureTowerEvents",
+    "secureTowerEvidence",
+    "secureResultPacketCategoryTotal",
+    "secureDamageShareEstimate",
+    "secureDamageShareFormula",
+    "secureUiStateRoundScoreUnknown",
+    "secureUiRoundParticipantsScoreUnknown",
+    "secureTowerMissCandidate",
+    "secureTowerParticipants",
+    "secureTowerSoaked",
+    "secureTowerUnresolved",
+    "change",
+    "currentHistogramLegend",
+    "demiBahamut",
+    "duration",
+    "edge_displacement_fisher",
+    "edgeDisplacementFisherEvidence",
+    "evidenceCount",
+    "forcedControlCoverageSummary",
+    "hp",
+    "importComplete",
+    "integrityDetailRefreshing",
+    "integrityReferenceSnapshotReady",
+    "integrityReviewSummary",
+    "integrityReviewSummaryCounts",
+    "integritySectionDefense",
+    "integritySectionFinishers",
+    "integritySectionLocks",
+    "integritySectionMovement",
+    "integritySectionSkills",
+    "interrupter",
+    "language",
+    "localActionAftercastBoundary",
+    "localActionAftercastEvidence",
+    "local_action_aftercast_lock_deficit",
+    "logBinFormula",
+    "mapControls",
+    "mapZoom",
+    "mechanismActionDetails",
+    "mechanismActions",
+    "mechanismAnalysis",
+    "mechanismEvidenceBoundary",
+    "mechanismIncomingActions",
+    "mechanismIncomingEvidence",
+    "mechanismParticipation",
+    "mechanismStatusDetails",
+    "movement_speed",
+    "movement_speed_buff_normalized",
+    "movement_speed_mounted",
+    "noLaterSpawnObserved",
+    "noMechanismStatusEvidence",
+    "notObserved",
+    "objectiveBuffs",
+    "objectivePointSuffix",
+    "objectiveStatusChanges",
+    "objectiveTimeline",
+    "objectivesObserved",
+    "rankedHistoryCount",
+    "recastCoverageSummary",
+    "referenceCohort",
+    "referenceHistogramLegend",
+    "result",
+    "sharedBurstBuckets",
+    "shatterRespawnIntervals",
+    "source",
+    "strict_recast_effect_gap",
+    "tabMatches",
+    "tabSettings",
+    "tabStatus",
+    "tagline",
+    "tomorrow",
+    "uiTheme",
+    "uiTheme_contrast",
+    "uiTheme_day",
+    "uiTheme_eye",
+    "uiTheme_night",
+    "unknown",
+    "unresolvedObjective",
+    "waiting",
+    "yesterday"
+  ]
+}
