@@ -213,7 +213,7 @@ internal static class LocalMatchAnalyzer
             player.HpRestored, player.Occupations, LocalImpact(player))).ToArray();
         return new LocalMatchAnalysis(Schema, result.MatchUid, startedAtUtc, result.ObservedAtUtc,
             result.DutyId, result.TerritoryId, result.MatchLengthSeconds, realm, localPlayerName,
-            capturePath, "local_only", null, null, null, result.Teams, players, null, null, null, null,
+            capturePath, "waiting_upload", null, null, null, result.Teams, players, null, null, null, null,
             "本地复盘只显示本局直接记录；Logs 百分位与跨局行为倾向需要上传后由服务器计算。"
         );
     }
@@ -229,7 +229,7 @@ internal static class LocalMatchAnalyzer
         return new LocalMatchAnalysis(CrystallineSchema, result.MatchUid, startedAtUtc,
             result.ObservedAtUtc, result.DutyId, result.TerritoryId,
             result.MatchLengthSeconds, realm, localPlayerName, capturePath,
-            "local_only", null, null, null, result.Teams, players, null, null,
+            "waiting_upload", null, null, null, result.Teams, players, null, null,
             null, null,
             "本地水晶冲突复盘使用结算包与本局直接事件；跨局 Logs 需要上传后按水晶冲突独立总体计算，行为倾向在样本不足时保持空白。"
         );
@@ -345,7 +345,7 @@ internal sealed class MatchRepository
             var current = matches[index];
             var merged = current with
             {
-                UploadState = "complete",
+                UploadState = "ready",
                 UploadError = null,
                 RemoteAnalysisUrl = response.AnalysisUrl,
                 MatchLogs = response.MatchLogs,
@@ -367,6 +367,24 @@ internal sealed class MatchRepository
             var index = matches.FindIndex(x => x.MatchUid == matchUid);
             if (index < 0) return;
             var updated = matches[index] with { UploadState = state, UploadError = error };
+            matches[index] = updated;
+            RefreshSnapshot();
+            Persist(updated);
+        }
+    }
+
+    public void SetRemoteUploadState(string matchUid, string remoteMatchUid, string state)
+    {
+        lock (gate)
+        {
+            var index = matches.FindIndex(x => x.MatchUid == matchUid);
+            if (index < 0) return;
+            var updated = matches[index] with
+            {
+                UploadState = state,
+                UploadError = null,
+                RemoteMatchUid = remoteMatchUid
+            };
             matches[index] = updated;
             RefreshSnapshot();
             Persist(updated);

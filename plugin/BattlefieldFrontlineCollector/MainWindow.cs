@@ -20,10 +20,17 @@ namespace BattlefieldFrontlineCollector;
 internal sealed record CollectorUiState(bool Capturing, string MatchUid, long ElapsedMs,
     string OutputPath, int VisibleActors, int DroppedEvents, string LocalPlayerName,
     uint LocalPlayerEntityId, ushort LocalPlayerWorldId, byte LocalPlayerBattalion, uint DutyId,
+    uint TerritoryId,
     LiveScoreProjection Score);
 
 internal sealed class MainWindow : Window
 {
+    // Frontline and Crystalline Conflict are two data modes of the same local
+    // match browser. Shared constants prevent visual drift between the pages.
+    private const float LocalMatchListWidth = 370f;
+    private const float LocalMatchCardHeight = 86f;
+    private const float LocalMatchCardSecondaryScale = .78f;
+
     private readonly Configuration configuration;
     private readonly MatchRepository repository;
     private readonly UploadService uploads;
@@ -57,6 +64,9 @@ internal sealed class MainWindow : Window
     private int crystallineCalendarHalfStartHour = DateTime.Now.Hour < 12 ? 0 : 12;
     private byte historyJobFilter;
     private uint historyDutyFilter;
+    private byte crystallineHistoryJobFilter;
+    private string crystallineHistoryMapFilter = string.Empty;
+    private string crystallineHistoryAccountFilter = string.Empty;
     private bool selectFrontlineTab;
     private bool selectCrystallineTab;
     private bool selectRivalWingsTab;
@@ -113,6 +123,18 @@ internal sealed class MainWindow : Window
 
     public override void PreDraw() => BattlefieldUiTheme.Push(configuration.UiTheme);
     public override void PostDraw() => BattlefieldUiTheme.Pop();
+
+    /// <summary>
+    /// Selects the local browser that owns a completed match. Input is the
+    /// authoritative duty ID captured with that result; output is a one-shot
+    /// ImGui tab selection request. The previous browsing tab is irrelevant.
+    /// </summary>
+    public void SelectModeForDuty(uint dutyId)
+    {
+        selectFrontlineTab = GameLayout.IsFrontlineDuty(dutyId);
+        selectCrystallineTab = GameLayout.IsCrystallineDuty(dutyId);
+        selectRivalWingsTab = false;
+    }
 
     public override void Draw()
     {
@@ -535,21 +557,8 @@ internal sealed class MainWindow : Window
             var current = accumulator.GetValueOrDefault(date);
             accumulator[date] = (current.Matches + 1, current.Wins + (won ? 1 : 0), current.Decided + 1);
         }
-        var local = state();
-        if (!string.IsNullOrWhiteSpace(local.LocalPlayerName) && local.LocalPlayerWorldId != 0)
-        {
-            foreach (var match in crystallineMatchHistory.Snapshot(local.LocalPlayerName,
-                         local.LocalPlayerWorldId))
-            {
-                var date = TimeZoneInfo.ConvertTimeFromUtc(
-                    DateTime.SpecifyKind(match.EndedAtUtc, DateTimeKind.Utc), zone).Date;
-                var current = accumulator.GetValueOrDefault(date);
-                var outcome = match.EffectiveOutcome;
-                accumulator[date] = (current.Matches + 1,
-                    current.Wins + (outcome == "win" ? 1 : 0),
-                    current.Decided + (outcome is "win" or "loss" ? 1 : 0));
-            }
-        }
+        // The Frontline month is deliberately Frontline-only. Crystalline
+        // Conflict results are rendered below their own half-day schedule.
         return accumulator.ToDictionary(x => x.Key,
             x => new CalendarStats(x.Value.Matches, x.Value.Wins, x.Value.Decided));
     }
@@ -841,8 +850,7 @@ internal sealed class MainWindow : Window
 
     private void DrawCrystallineTodayStats(DateTime localDate, TimeZoneInfo zone)
     {
-        var player = state();
-        var rows = crystallineMatchHistory.Snapshot(player.LocalPlayerName, player.LocalPlayerWorldId)
+        var rows = crystallineMatchHistory.Snapshot()
             .Where(value => TimeZoneInfo.ConvertTimeFromUtc(
                 DateTime.SpecifyKind(value.EndedAtUtc, DateTimeKind.Utc), zone).Date == localDate)
             .OrderByDescending(value => value.EndedAtUtc).ToArray();
@@ -880,54 +888,60 @@ internal sealed class MainWindow : Window
 
     private void DrawCrystallineMatches()
     {
-        ImGui.BeginChild("crystalline-matches-scroll", Vector2.Zero, false);
-        ImGui.TextColored(BattlefieldUiTheme.Accent(configuration.UiTheme), T("tabCrystallineMatches"));
-        ImGui.SameLine(); ImGui.TextDisabled(T("crystallineRecordsHelp"));
+        if (ImGui.Button($"{T("openFolder")}##cc-cache")) OpenFolder(CaptureDirectory("crystalline-conflict"));
         ImGui.SameLine();
-        if (ImGui.SmallButton($"{T("openFolder")}##cc-cache")) OpenFolder(CaptureDirectory("crystalline-conflict"));
+        if (ImGui.Button($"{T("openImportFolder")}##cc-import")) OpenFolder(ImportDirectory("crystalline-conflict"));
         ImGui.SameLine();
-        if (ImGui.SmallButton($"{T("openImportFolder")}##cc-import")) OpenFolder(ImportDirectory("crystalline-conflict"));
-        ImGui.SameLine();
-        if (!importRunning && ImGui.SmallButton($"{T("importCaptures")}##cc-scan"))
+        if (importRunning) ImGui.TextDisabled(T("importRunning"));
+        else if (ImGui.Button($"{T("importCaptures")}##cc-scan"))
             StartImport(ImportDirectory("crystalline-conflict"));
+        if (!string.IsNullOrWhiteSpace(importStatus))
+            ImGui.TextDisabled(importStatus);
+        ImGui.Separator();
         DrawCrystallineResultRecords();
-        ImGui.EndChild();
     }
 
     private void DrawCrystallineResultRecords()
     {
-        var local = state();
-        var history = crystallineMatchHistory.Snapshot(local.LocalPlayerName, local.LocalPlayerWorldId)
+        var history = crystallineMatchHistory.Snapshot()
             .OrderByDescending(value => value.EndedAtUtc).ToArray();
-        ImGui.Spacing();
-        ImGui.TextColored(BattlefieldUiTheme.Accent(configuration.UiTheme), T("crystallineLocalResults"));
-        ImGui.SameLine(); ImGui.TextDisabled(T("ccResultEvidence"));
         if (history.Length == 0)
         {
             ImGui.TextDisabled(T("ccNoMatchData"));
             return;
         }
-        selectedCrystallineResult ??= history[0];
-        if (!history.Contains(selectedCrystallineResult)) selectedCrystallineResult = history[0];
-        var columns = ImGui.GetContentRegionAvail().X >= 820 ? 2 : 1;
-        if (ImGui.BeginTable("cc-result-browser", columns,
-                ImGuiTableFlags.SizingStretchProp | ImGuiTableFlags.BordersInnerV |
-                ImGuiTableFlags.Resizable))
+        if (selectedCrystallineResult != null && !history.Contains(selectedCrystallineResult))
+            selectedCrystallineResult = null;
+
+        ImGui.BeginChild("cc-match-list", new Vector2(LocalMatchListWidth, 0), true);
+        ImGui.TextDisabled($"{T("crystallineLocalResults")}  {history.Length}");
+        ImGui.Separator();
+        if (ImGui.Selectable($"{T("logsTimeHistory")}##cc-history-overview",
+                selectedCrystallineResult == null, ImGuiSelectableFlags.None,
+                new Vector2(0, 34)))
+            selectedCrystallineResult = null;
+        ImGui.Separator();
+        foreach (var match in history)
+            DrawCrystallineResultCard(match);
+        ImGui.EndChild();
+        ImGui.SameLine();
+
+        ImGui.BeginChild("cc-match-detail", Vector2.Zero, true);
+        if (selectedCrystallineResult == null)
+            DrawCrystallineLogsHistory(history);
+        else
         {
-            ImGui.TableSetupColumn("matches", ImGuiTableColumnFlags.WidthFixed,
-                columns == 2 ? Math.Clamp(ImGui.GetContentRegionAvail().X * .28f, 270, 390) : 0);
-            if (columns == 2) ImGui.TableSetupColumn("scoreboard", ImGuiTableColumnFlags.WidthStretch);
-            ImGui.TableNextColumn();
-            foreach (var match in history)
+            if (ImGui.Button($"← {T("logsTimeHistory")}##cc-back-to-history"))
             {
-                DrawCrystallineResultCard(match);
-                ImGui.Spacing();
+                selectedCrystallineResult = null;
+                ImGui.EndChild();
+                return;
             }
-            if (columns == 1) { ImGui.TableNextRow(); ImGui.TableNextColumn(); }
-            else ImGui.TableNextColumn();
-            if (selectedCrystallineResult != null) DrawCrystallineResultDetail(selectedCrystallineResult);
-            ImGui.EndTable();
+            ImGui.SameLine(); ImGui.TextDisabled(T("matchDetailModeHint"));
+            ImGui.Separator();
+            DrawCrystallineResultDetail(selectedCrystallineResult);
         }
+        ImGui.EndChild();
     }
 
     private void DrawCrystallineResultCard(CrystallineMatchRecord match)
@@ -939,10 +953,14 @@ internal sealed class MainWindow : Window
         ImGui.PushStyleColor(ImGuiCol.Border, active
             ? BattlefieldUiTheme.Accent(configuration.UiTheme)
             : BattlefieldUiTheme.Border(configuration.UiTheme));
-        ImGui.BeginChild($"cc-result-{match.EndedAtUtc.Ticks}-{match.MapKey}", new Vector2(0, 112), true,
+        ImGui.BeginChild($"cc-result-{match.EndedAtUtc.Ticks}-{match.MapKey}",
+            new Vector2(0, LocalMatchCardHeight), true,
             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
-        ImGui.TextDisabled(match.EndedAtUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm"));
-        ImGui.TextUnformatted(CrystallineMapName(match.MapKey));
+        ImGui.TextUnformatted($"{match.EndedAtUtc.ToLocalTime():yyyy-MM-dd HH:mm} · " +
+            CrystallineMapName(match.MapKey));
+        ImGui.SetWindowFontScale(LocalMatchCardSecondaryScale);
+        ImGui.TextDisabled($"{match.PlayerName}@{WorldName(match.WorldId)}");
+        ImGui.SameLine();
         DrawJobIcon(match.ClassJobId, 18); ImGui.SameLine(0, 5);
         DrawCrystallineOutcome(match);
         ImGui.SameLine(); ImGui.TextDisabled(T(match.MatchType == "ranked" ? "ccRanked" : "ccPractice"));
@@ -953,15 +971,208 @@ internal sealed class MainWindow : Window
             ? $"KDA {kda.Kills}/{kda.Deaths}/{kda.Assists}  ·  {T("historySummaryOnly")}"
             : $"KDA {kda.Kills}/{kda.Deaths}/{kda.Assists}  ·  " +
               $"{T("crystalTime")} {local.TimeOnCrystalSeconds}s");
+        ImGui.SameLine();
         var analysis = repository.Snapshot().FirstOrDefault(value =>
             value.Schema == LocalMatchAnalyzer.CrystallineSchema && value.MatchUid == match.MatchUid);
         var overallLogs = analysis?.MatchLogs ?? match.OverallLogs;
         if (overallLogs is double logs)
             ImGui.TextColored(LogsColor(logs), $"Logs {logs:0.0}");
         else ImGui.TextDisabled($"Logs — · {T("ccScorePending")}");
+        ImGui.SetWindowFontScale(1f);
         ImGui.EndChild(); ImGui.PopStyleColor(2);
         if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             selectedCrystallineResult = match;
+        ImGui.Spacing();
+    }
+
+    private string CrystallineAccountKey(CrystallineMatchRecord match) =>
+        $"{match.PlayerName}@{match.WorldId}";
+
+    private double? CrystallineOverallLogs(CrystallineMatchRecord match)
+    {
+        var analysis = repository.Snapshot().FirstOrDefault(value =>
+            value.Schema == LocalMatchAnalyzer.CrystallineSchema && value.MatchUid == match.MatchUid);
+        return analysis?.MatchLogs ?? match.OverallLogs;
+    }
+
+    /// <summary>
+    /// Local CC history uses the same time-by-personal-Logs navigation model as
+    /// Frontline. The plot reads every account stored on this computer, while
+    /// its account filter keeps identities explicit and never depends on a
+    /// currently logged-in Dalamud LocalPlayer.
+    /// </summary>
+    private void DrawCrystallineLogsHistory(IReadOnlyList<CrystallineMatchRecord> history)
+    {
+        ImGui.TextUnformatted(T("logsTimeHistory"));
+        ImGui.SameLine(); ImGui.TextDisabled(T("logsTimeHistoryHelp"));
+
+        var accounts = history.Select(CrystallineAccountKey).Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(value => value, StringComparer.OrdinalIgnoreCase).ToArray();
+        if (crystallineHistoryAccountFilter.Length > 0 &&
+            !accounts.Contains(crystallineHistoryAccountFilter, StringComparer.OrdinalIgnoreCase))
+            crystallineHistoryAccountFilter = string.Empty;
+        ImGui.SetNextItemWidth(230);
+        var accountPreview = crystallineHistoryAccountFilter.Length == 0
+            ? T("allLocalAccounts")
+            : history.Where(value => string.Equals(CrystallineAccountKey(value),
+                    crystallineHistoryAccountFilter, StringComparison.OrdinalIgnoreCase))
+                .Select(value => $"{value.PlayerName}@{WorldName(value.WorldId)}")
+                .FirstOrDefault() ?? crystallineHistoryAccountFilter;
+        if (ImGui.BeginCombo(T("accountFilter") + "##cc-history-account", accountPreview))
+        {
+            if (ImGui.Selectable(T("allLocalAccounts"), crystallineHistoryAccountFilter.Length == 0))
+                crystallineHistoryAccountFilter = string.Empty;
+            foreach (var account in accounts)
+            {
+                var row = history.First(value => string.Equals(CrystallineAccountKey(value), account,
+                    StringComparison.OrdinalIgnoreCase));
+                var label = $"{row.PlayerName}@{WorldName(row.WorldId)}";
+                if (ImGui.Selectable(label, string.Equals(crystallineHistoryAccountFilter, account,
+                        StringComparison.OrdinalIgnoreCase)))
+                    crystallineHistoryAccountFilter = account;
+            }
+            ImGui.EndCombo();
+        }
+
+        var jobIds = history.Where(value => crystallineHistoryAccountFilter.Length == 0 ||
+                string.Equals(CrystallineAccountKey(value), crystallineHistoryAccountFilter,
+                    StringComparison.OrdinalIgnoreCase))
+            .Select(value => value.ClassJobId).Where(value => value != 0)
+            .Distinct().OrderBy(JobSortKey).ToArray();
+        if (crystallineHistoryJobFilter != 0 && !jobIds.Contains(crystallineHistoryJobFilter))
+            crystallineHistoryJobFilter = 0;
+        ImGui.SameLine(); ImGui.SetNextItemWidth(180);
+        if (ImGui.BeginCombo(T("jobFilter") + "##cc-history-job",
+                crystallineHistoryJobFilter == 0 ? T("allJobs") : JobName(crystallineHistoryJobFilter)))
+        {
+            if (ImGui.Selectable(T("allJobs"), crystallineHistoryJobFilter == 0))
+                crystallineHistoryJobFilter = 0;
+            foreach (var jobId in jobIds)
+                if (ImGui.Selectable(JobName(jobId), crystallineHistoryJobFilter == jobId))
+                    crystallineHistoryJobFilter = jobId;
+            ImGui.EndCombo();
+        }
+
+        var mapKeys = history.Select(value => value.MapKey).Where(value => value.Length > 0)
+            .Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(value => CrystallineMapName(value))
+            .ToArray();
+        if (crystallineHistoryMapFilter.Length > 0 &&
+            !mapKeys.Contains(crystallineHistoryMapFilter, StringComparer.OrdinalIgnoreCase))
+            crystallineHistoryMapFilter = string.Empty;
+        ImGui.SameLine(); ImGui.SetNextItemWidth(210);
+        if (ImGui.BeginCombo(T("mapFilter") + "##cc-history-map",
+                crystallineHistoryMapFilter.Length == 0
+                    ? T("allMaps") : CrystallineMapName(crystallineHistoryMapFilter)))
+        {
+            if (ImGui.Selectable(T("allMaps"), crystallineHistoryMapFilter.Length == 0))
+                crystallineHistoryMapFilter = string.Empty;
+            foreach (var mapKey in mapKeys)
+                if (ImGui.Selectable(CrystallineMapName(mapKey),
+                        string.Equals(crystallineHistoryMapFilter, mapKey,
+                            StringComparison.OrdinalIgnoreCase)))
+                    crystallineHistoryMapFilter = mapKey;
+            ImGui.EndCombo();
+        }
+
+        var ranked = history.Where(value =>
+                (crystallineHistoryAccountFilter.Length == 0 ||
+                 string.Equals(CrystallineAccountKey(value), crystallineHistoryAccountFilter,
+                     StringComparison.OrdinalIgnoreCase)) &&
+                (crystallineHistoryJobFilter == 0 || value.ClassJobId == crystallineHistoryJobFilter) &&
+                (crystallineHistoryMapFilter.Length == 0 ||
+                 string.Equals(value.MapKey, crystallineHistoryMapFilter,
+                     StringComparison.OrdinalIgnoreCase)))
+            .Select(value => (Match: value, Logs: CrystallineOverallLogs(value)))
+            .Where(value => value.Logs != null).OrderBy(value => value.Match.EndedAtUtc).ToArray();
+        ImGui.SameLine();
+        ImGui.TextDisabled(string.Format(T("rankedHistoryCount"), ranked.Length,
+            history.Count));
+
+        var size = new Vector2(Math.Max(360, ImGui.GetContentRegionAvail().X), 190);
+        var origin = ImGui.GetCursorScreenPos();
+        ImGui.InvisibleButton("cc-logs-time-plot", size);
+        var draw = ImGui.GetWindowDrawList();
+        var background = ImGui.ColorConvertFloat4ToU32(
+            BattlefieldUiTheme.ChartBackground(configuration.UiTheme));
+        var border = ImGui.ColorConvertFloat4ToU32(BattlefieldUiTheme.Border(configuration.UiTheme));
+        var grid = ImGui.ColorConvertFloat4ToU32(BattlefieldUiTheme.Grid(configuration.UiTheme));
+        var muted = ImGui.ColorConvertFloat4ToU32(new Vector4(.58f, .63f, .68f, 1f));
+        draw.AddRectFilled(origin, origin + size, background, 2);
+        draw.AddRect(origin, origin + size, border, 2);
+        const float left = 36, right = 10, top = 10, bottom = 25;
+        var chartMin = origin + new Vector2(left, top);
+        var chartMax = origin + size - new Vector2(right, bottom);
+        foreach (var tick in new[] { 0, 25, 50, 75, 100 })
+        {
+            var y = chartMax.Y - (chartMax.Y - chartMin.Y) * tick / 100f;
+            draw.AddLine(new Vector2(chartMin.X, y), new Vector2(chartMax.X, y), grid);
+            draw.AddText(new Vector2(origin.X + 5, y - 7), muted, tick.ToString());
+        }
+        if (ranked.Length == 0)
+        {
+            var message = T("noRankedHistory");
+            draw.AddText(origin + (size - ImGui.CalcTextSize(message)) / 2, muted, message);
+            return;
+        }
+
+        var first = ranked[0].Match.EndedAtUtc;
+        var last = ranked[^1].Match.EndedAtUtc;
+        var span = Math.Max(1, (last - first).TotalSeconds);
+        Vector2 Point((CrystallineMatchRecord Match, double? Logs) value)
+        {
+            var xRatio = ranked.Length == 1 ? .5 :
+                (value.Match.EndedAtUtc - first).TotalSeconds / span;
+            var yRatio = Math.Clamp(value.Logs!.Value / 100d, 0, 1);
+            return new Vector2(chartMin.X + (float)xRatio * (chartMax.X - chartMin.X),
+                chartMax.Y - (float)yRatio * (chartMax.Y - chartMin.Y));
+        }
+        foreach (var accountRows in ranked.GroupBy(value => CrystallineAccountKey(value.Match)))
+        {
+            var previous = (Vector2?)null;
+            foreach (var row in accountRows)
+            {
+                var point = Point(row);
+                if (previous != null) draw.AddLine(previous.Value, point, grid, 1.25f);
+                previous = point;
+            }
+        }
+
+        (CrystallineMatchRecord Match, double? Logs)? hovered = null;
+        var mouse = ImGui.GetMousePos();
+        var bestDistance = 9f;
+        foreach (var row in ranked)
+        {
+            var point = Point(row);
+            var chosen = selectedCrystallineResult == row.Match;
+            if (chosen) draw.AddCircle(point, 7.5f,
+                ImGui.ColorConvertFloat4ToU32(new Vector4(.92f, .95f, 1f, .95f)), 20, 2f);
+            draw.AddCircleFilled(point, chosen ? 5.5f : 4.5f,
+                ImGui.ColorConvertFloat4ToU32(LogsColor(row.Logs!.Value)), 20);
+            var distance = Vector2.Distance(mouse, point);
+            if (ImGui.IsItemHovered() && distance < bestDistance)
+            {
+                bestDistance = distance;
+                hovered = row;
+            }
+        }
+        draw.AddText(new Vector2(chartMin.X, chartMax.Y + 6), muted,
+            first.ToLocalTime().ToString("yyyy-MM-dd"));
+        var lastLabel = last.ToLocalTime().ToString("yyyy-MM-dd");
+        draw.AddText(new Vector2(chartMax.X - ImGui.CalcTextSize(lastLabel).X,
+            chartMax.Y + 6), muted, lastLabel);
+
+        if (hovered != null)
+        {
+            var row = hovered.Value;
+            var kda = row.Match.LocalKda;
+            ImGui.SetTooltip($"{row.Match.EndedAtUtc.ToLocalTime():yyyy-MM-dd HH:mm} 路 " +
+                $"{CrystallineMapName(row.Match.MapKey)}\n" +
+                $"{row.Match.PlayerName}@{WorldName(row.Match.WorldId)} 路 " +
+                $"{JobName(row.Match.ClassJobId)} 路 Logs {row.Logs:0.0} 路 " +
+                $"KDA {kda.Kills}/{kda.Deaths}/{kda.Assists}");
+            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                selectedCrystallineResult = row.Match;
+        }
     }
 
     private void DrawCrystallineResultDetail(CrystallineMatchRecord match)
@@ -1004,21 +1215,21 @@ internal sealed class MainWindow : Window
             value.Schema == LocalMatchAnalyzer.CrystallineSchema && value.MatchUid == match.MatchUid);
         if (analysis != null)
         {
-            DrawUploadProgress(analysis.MatchUid);
-            ImGui.TextColored(UploadColor(analysis.UploadState),
-                $"● {UploadLabel(analysis.UploadState)}");
-            if (analysis.UploadState == "failed" && !string.IsNullOrWhiteSpace(analysis.UploadError))
+            DrawTransferJourney(analysis);
+            if (NormalizeTransferState(analysis.UploadState) == "action_required" &&
+                !string.IsNullOrWhiteSpace(analysis.UploadError))
                 ImGui.TextColored(new Vector4(1f, .55f, .4f, 1f),
                     $"{T("uploadError")}：{UploadErrorText(analysis.UploadError)}");
-            if (analysis.UploadState is "local_only" or "failed")
+            if (NormalizeTransferState(analysis.UploadState) is "waiting_upload" or "action_required")
             {
-                if (ImGui.Button(analysis.UploadState == "failed" ? T("retry") : T("uploadRank")))
+                if (DrawManualUploadButton(
+                        NormalizeTransferState(analysis.UploadState) == "action_required" ? T("retry") : T("uploadRank"),
+                        $"cc-{analysis.MatchUid}"))
                 {
-                    configuration.AutoUpload = true; saveConfiguration();
                     uploads.Enqueue(analysis.MatchUid, analysis.CapturePath, analysis.Realm);
                 }
             }
-            if (analysis.UploadState == "complete")
+            if (NormalizeTransferState(analysis.UploadState) == "ready")
             {
                 var detailButton = !string.IsNullOrWhiteSpace(analysis.DetailError)
                     ? T("retry")
@@ -1433,9 +1644,7 @@ internal sealed class MainWindow : Window
 
     private void DrawCrystallineMapStats()
     {
-        var player = state();
-        var history = crystallineMatchHistory.Snapshot(player.LocalPlayerName,
-            player.LocalPlayerWorldId);
+        var history = crystallineMatchHistory.Snapshot();
         ImGui.TextColored(BattlefieldUiTheme.Accent(configuration.UiTheme), T("ccMapPerformance"));
         ImGui.SameLine(); ImGui.TextDisabled(T("ccResultEvidence"));
         ImGui.TextWrapped(T("ccWinRateRule"));
@@ -1583,7 +1792,7 @@ internal sealed class MainWindow : Window
         var matches = repository.Snapshot().Where(value =>
             value.Schema == LocalMatchAnalyzer.Schema).ToArray();
         var history = matches.Select(ToHistoryRow).ToArray();
-        ImGui.BeginChild("match-list", new Vector2(370, 0), true);
+        ImGui.BeginChild("match-list", new Vector2(LocalMatchListWidth, 0), true);
         ImGui.TextDisabled($"{T("localMatches")}  {matches.Length}"); ImGui.Separator();
         if (ImGui.Selectable($"{T("logsTimeHistory")}##history-overview", selected == null,
                 ImGuiSelectableFlags.None, new Vector2(0, 34)))
@@ -1651,10 +1860,11 @@ internal sealed class MainWindow : Window
         ImGui.PushStyleColor(ImGuiCol.Border, active
             ? BattlefieldUiTheme.Accent(configuration.UiTheme)
             : BattlefieldUiTheme.Border(configuration.UiTheme));
-        ImGui.BeginChild($"match-card-{match.MatchUid}", new Vector2(0, 86), true,
+        ImGui.BeginChild($"match-card-{match.MatchUid}",
+            new Vector2(0, LocalMatchCardHeight), true,
             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
         ImGui.TextUnformatted(title);
-        ImGui.SetWindowFontScale(.78f);
+        ImGui.SetWindowFontScale(LocalMatchCardSecondaryScale);
         var displayedUid = match.RemoteMatchUid ?? match.MatchUid;
         ImGui.TextDisabled($"#{displayedUid[..Math.Min(16, displayedUid.Length)]}");
         ImGui.SameLine();
@@ -1836,14 +2046,16 @@ internal sealed class MainWindow : Window
         if (match.MatchLogs is double logs) ImGui.TextColored(LogsColor(logs), $"Logs {logs:0.0}");
         else ImGui.TextDisabled(T("noLogs"));
         ImGui.TextWrapped(T("evidence"));
-        DrawUploadProgress(match.MatchUid);
-        if (match.UploadState == "failed" && !string.IsNullOrWhiteSpace(match.UploadError))
+        DrawTransferJourney(match);
+        if (NormalizeTransferState(match.UploadState) == "action_required" &&
+            !string.IsNullOrWhiteSpace(match.UploadError))
             ImGui.TextColored(new Vector4(1f, .55f, .4f, 1f), $"{T("uploadError")}：{UploadErrorText(match.UploadError)}");
-        if (match.UploadState is "local_only" or "failed")
+        if (NormalizeTransferState(match.UploadState) is "waiting_upload" or "action_required")
         {
-            if (ImGui.Button(match.UploadState == "failed" ? T("retry") : T("uploadRank")))
+            if (DrawManualUploadButton(
+                    NormalizeTransferState(match.UploadState) == "action_required" ? T("retry") : T("uploadRank"),
+                    $"fl-{match.MatchUid}"))
             {
-                configuration.AutoUpload = true; saveConfiguration();
                 uploads.Enqueue(match.MatchUid, match.CapturePath,
                     string.IsNullOrWhiteSpace(match.Realm) ? configuration.Realm : match.Realm);
             }
@@ -1853,7 +2065,7 @@ internal sealed class MainWindow : Window
             ImGui.SameLine();
             if (ImGui.Button(T("openWeb"))) Process.Start(new ProcessStartInfo(match.RemoteAnalysisUrl) { UseShellExecute = true });
         }
-        if (match.UploadState == "complete")
+        if (NormalizeTransferState(match.UploadState) == "ready")
         {
             if (!string.IsNullOrWhiteSpace(match.RemoteAnalysisUrl)) ImGui.SameLine();
             if (ImGui.Button(match.Detail == null ? T("requestDetail") : T("refreshDetail")))
@@ -2067,9 +2279,6 @@ internal sealed class MainWindow : Window
     private static bool IsVisibleBehaviorTendency(BehaviorTendency value) =>
         value.Key is not ("fragility" or "navigation" or "positioning" or "survival");
 
-    private static bool IsNegativeBehaviorIndicator(BehaviorTendency value) =>
-        value.Key is "fragility" or "navigation";
-
     private static void DrawLogs(double? value)
     {
         if (value is double logs) ImGui.TextColored(LogsColor(logs), logs.ToString("0.0"));
@@ -2188,6 +2397,13 @@ internal sealed class MainWindow : Window
         ImGui.TextDisabled(T("uploadHelp"));
         var open = configuration.OpenAfterMatch;
         if (ImGui.Checkbox(T("openAfter"), ref open)) { configuration.OpenAfterMatch = open; saveConfiguration(); }
+        var autoOpenLiveSlice = configuration.AutoOpenLiveSliceOnMatchStart;
+        if (ImGui.Checkbox(T("autoOpenLiveSlice"), ref autoOpenLiveSlice))
+        {
+            configuration.AutoOpenLiveSliceOnMatchStart = autoOpenLiveSlice;
+            saveConfiguration();
+        }
+        ImGui.TextDisabled(T("autoOpenLiveSliceHelp"));
         var server = configuration.ServerBaseUrl;
         ImGui.SetNextItemWidth(-1);
         if (ImGui.InputTextWithHint("##server", T("serverHint"), ref server, 512)) { configuration.ServerBaseUrl = server; saveConfiguration(); }
@@ -2307,16 +2523,79 @@ internal sealed class MainWindow : Window
         return true;
     }
 
-    private static Vector4 UploadColor(string state) => state switch
+    private static string NormalizeTransferState(string state)
+        => MatchTransferContract.Normalize(state);
+
+    private static Vector4 UploadColor(string state) => NormalizeTransferState(state) switch
     {
-        "complete" => new Vector4(.25f, .85f, .62f, 1),
+        "ready" => new Vector4(.25f, .85f, .62f, 1),
         "uploading" => new Vector4(.35f, .7f, 1f, 1),
+        "received" => new Vector4(.42f, .76f, .9f, 1),
         "processing" => new Vector4(.48f, .62f, 1f, 1),
-        "failed" => new Vector4(1f, .42f, .35f, 1),
+        "action_required" => new Vector4(1f, .42f, .35f, 1),
         _ => new Vector4(.64f, .68f, .73f, 1)
     };
-    private string UploadLabel(string state) => state switch
-    { "complete" => T("ranked"), "uploading" or "processing" => T("uploading"), "failed" => T("failed"), _ => T("local") };
+    private string UploadLabel(string state) => NormalizeTransferState(state) switch
+    {
+        "waiting_upload" => T("transferWaitingUpload"),
+        "uploading" => T("transferUploading"),
+        "received" => T("transferReceived"),
+        "processing" => T("transferProcessing"),
+        "ready" => T("transferReady"),
+        "action_required" => T("transferActionRequired"),
+        _ => T("transferActionRequired")
+    };
+
+    private void DrawTransferJourney(LocalMatchAnalysis match)
+    {
+        var state = NormalizeTransferState(match.UploadState);
+        var stages = new[] { "waiting_upload", "uploading", "received", "processing", "ready" };
+        var currentIndex = Array.IndexOf(stages, state);
+        for (var index = 0; index < stages.Length; index++)
+        {
+            if (index > 0)
+            {
+                ImGui.SameLine(0, 5);
+                ImGui.TextDisabled("›");
+                ImGui.SameLine(0, 5);
+            }
+            var stage = stages[index];
+            var color = index <= currentIndex
+                ? UploadColor(index == currentIndex ? state : "ready")
+                : new Vector4(.45f, .48f, .52f, .72f);
+            ImGui.TextColored(color, UploadLabel(stage));
+        }
+        if (state == "action_required")
+        {
+            ImGui.SameLine(0, 8);
+            ImGui.TextColored(UploadColor(state), $"● {UploadLabel(state)}");
+        }
+        DrawUploadProgress(match.MatchUid);
+        DrawDetailProgress(match.MatchUid);
+    }
+
+    private bool DrawManualUploadButton(string label, string id)
+    {
+        var now = DateTime.UtcNow;
+        var remaining = ManualUploadCooldown.Remaining(
+            configuration.ManualUploadCooldownUntilUtc, now);
+        var blocked = remaining > TimeSpan.Zero;
+        ImGui.BeginDisabled(blocked);
+        var clicked = ImGui.Button($"{label}##manual-upload-{id}");
+        ImGui.EndDisabled();
+        if (blocked)
+        {
+            var seconds = Math.Max(1, (int)Math.Ceiling(remaining.TotalSeconds));
+            ImGui.SameLine();
+            ImGui.TextDisabled(string.Format(T("manualUploadCooldown"),
+                seconds / 60, seconds % 60));
+        }
+        if (!clicked || blocked) return false;
+        configuration.ManualUploadCooldownUntilUtc = ManualUploadCooldown.Acquire(now);
+        saveConfiguration();
+        return true;
+    }
+
     private void DrawUploadProgress(string matchUid)
     {
         if (!uploads.TryGetUploadProgress(matchUid, out var progress)) return;
@@ -2324,9 +2603,10 @@ internal sealed class MainWindow : Window
         {
             "compressing" => T("uploadCompressing"),
             "uploading" => T("uploadSending"),
+            "received" => T("transferReceived"),
             "processing" => T("uploadProcessing"),
-            "complete" => T("uploadComplete"),
-            "failed" => T("uploadFailedStage"),
+            "ready" or "complete" => T("uploadComplete"),
+            "action_required" or "failed" => T("uploadFailedStage"),
             _ => progress.Stage
         };
         var transferred = progress.CompletedBytes / 1048576d;
@@ -2338,9 +2618,40 @@ internal sealed class MainWindow : Window
         var throughput = progress.BytesPerSecond > 0
             ? $" · {speed:0.00} MiB/s"
             : string.Empty;
-        ImGui.TextColored(UploadColor(progress.Stage == "complete" ? "complete" :
-            progress.Stage == "failed" ? "failed" : "uploading"),
+        ImGui.TextColored(UploadColor(progress.Stage),
             $"{label} · {transferred:0.00}/{total:0.00} MiB{chunks}{throughput} · {progress.Elapsed.TotalSeconds:0.0}s");
+        if (progress.TotalBytes > 0 && progress.Stage == "uploading")
+            ImGui.ProgressBar((float)Math.Clamp(
+                progress.CompletedBytes / (double)progress.TotalBytes, 0, 1),
+                new Vector2(Math.Min(420, ImGui.GetContentRegionAvail().X), 5), string.Empty);
+    }
+
+    private void DrawDetailProgress(string matchUid)
+    {
+        if (!uploads.TryGetDetailProgress(matchUid, out var progress)) return;
+        var label = progress.Stage switch
+        {
+            "detail_waiting" => T("detailWaiting"),
+            "detail_connecting" => T("detailConnecting"),
+            "detail_downloading" => T("detailDownloading"),
+            "detail_decoding" => T("detailDecoding"),
+            "detail_complete" => T("detailComplete"),
+            "detail_failed" => T("detailFailed"),
+            _ => progress.Stage
+        };
+        var total = progress.TotalBytes;
+        var ratio = total > 0
+            ? Math.Clamp(progress.CompletedBytes / (double)total, 0, 1)
+            : progress.Stage == "detail_complete" ? 1d : 0d;
+        var sizeText = total > 0
+            ? $" · {progress.CompletedBytes / 1048576d:0.00}/{total / 1048576d:0.00} MiB"
+            : string.Empty;
+        ImGui.TextColored(progress.Stage == "detail_failed"
+                ? UploadColor("action_required") : UploadColor("received"),
+            $"{label}{sizeText}");
+        if (progress.Stage == "detail_downloading" && total > 0)
+            ImGui.ProgressBar((float)ratio,
+                new Vector2(Math.Min(420, ImGui.GetContentRegionAvail().X), 5), string.Empty);
     }
     private static Vector4 LogsColor(double value) => value >= 99 ? new Vector4(1f, .78f, .2f, 1)
         : value >= 95 ? new Vector4(1f, .35f, .78f, 1) : value >= 75 ? new Vector4(1f, .55f, .2f, 1)
@@ -2377,6 +2688,7 @@ internal sealed class MainWindow : Window
         "invalid_token" => T("invalidToken"),
         "network_error" => T("networkError"),
         "analysis_timeout" => T("analysisTimeout"),
+        "server_action_required" => T("transferActionRequired"),
         _ => error
     };
 

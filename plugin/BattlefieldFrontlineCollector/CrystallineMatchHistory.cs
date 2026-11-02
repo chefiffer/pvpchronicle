@@ -131,6 +131,18 @@ internal sealed class CrystallineMatchHistory
                 .OrderBy(value => value.EndedAtUtc).ToArray();
     }
 
+    /// <summary>
+    /// Return every result stored on this computer. Local history remains
+    /// available at the title/login screen where Dalamud has no LocalPlayer,
+    /// and records from different game accounts are kept distinguishable by
+    /// PlayerName + WorldId instead of being hidden by the login state.
+    /// </summary>
+    public IReadOnlyList<CrystallineMatchRecord> Snapshot()
+    {
+        lock (gate)
+            return matches.OrderBy(value => value.EndedAtUtc).ToArray();
+    }
+
     public void Observe(CrystallineMatchRecord value)
     {
         if (string.IsNullOrWhiteSpace(value.PlayerName) || value.WorldId == 0 ||

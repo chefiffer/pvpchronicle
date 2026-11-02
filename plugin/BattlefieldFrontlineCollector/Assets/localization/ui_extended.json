@@ -2,6 +2,30 @@
   "schema": "battlefield-ui-localization/v2",
   "source": "Offline full-coverage draft with a checked-in human-reviewed terminology layer",
   "translations": {
+    "recordingCrystalline": {
+      "de": "Crystalline Conflict wird aufgezeichnet",
+      "fr": "Enregistrement de Crystalline Conflict",
+      "th": "กำลังบันทึก Crystalline Conflict",
+      "vi": "Đang ghi lại Crystalline Conflict"
+    },
+    "autoOpenLiveSlice": {
+      "de": "Live-Ausschnitt beim Start jeder neuen Partie öffnen",
+      "fr": "Ouvrir la tranche de combat en direct au début de chaque partie",
+      "th": "เปิดภาพตัดการต่อสู้สดเมื่อเริ่มแต่ละแมตช์ใหม่",
+      "vi": "Mở lát cắt chiến đấu trực tiếp khi mỗi trận mới bắt đầu"
+    },
+    "autoOpenLiveSliceHelp": {
+      "de": "Steuert nur das automatische Öffnen des Fensters; die lokale Aufzeichnung läuft immer weiter.",
+      "fr": "Contrôle uniquement l’ouverture automatique de la fenêtre ; la capture locale continue toujours.",
+      "th": "ควบคุมเฉพาะการเปิดหน้าต่างอัตโนมัติ การบันทึกในเครื่องจะทำงานต่อเสมอ",
+      "vi": "Chỉ điều khiển việc tự động mở cửa sổ; ghi dữ liệu cục bộ luôn tiếp tục."
+    },
+    "liveObserverBoundaryCrystalline": {
+      "de": "Crystalline Conflict hat nur Astra und Umbra; die Live-Seite stammt aus dem direkten lokalen Teamfeld",
+      "fr": "Crystalline Conflict ne comporte qu’Astra et Umbra ; le camp en direct provient du champ d’équipe local direct",
+      "th": "Crystalline Conflict มีเพียงทีม Astra และ Umbra ฝ่ายแบบสดมาจากช่องทีมโดยตรงในเครื่อง",
+      "vi": "Crystalline Conflict chỉ có Astra và Umbra; phe trực tiếp lấy từ trường đội cục bộ trực tiếp"
+    },
     "liveObservedKda": {
       "de": "Beobachtetes K/D/A dieser Partie",
       "fr": "K/D/A observé de la partie",
@@ -782,6 +806,18 @@
       "th": "ตัวกรองจะมีผลกับกราฟเท่านั้น ดัชนีที่เข้าคู่กันยังคงสมบูรณ์",
       "vi": "Bộ lọc chỉ tác động đến đồ thị; chỉ mục khớp còn lại hoàn tất"
     },
+    "accountFilter": {
+      "de": "Lokaler Charakter",
+      "fr": "Personnage local",
+      "th": "ตัวละครในเครื่อง",
+      "vi": "Nhân vật cục bộ"
+    },
+    "allLocalAccounts": {
+      "de": "Alle lokalen Charaktere",
+      "fr": "Tous les personnages locaux",
+      "th": "ตัวละครทั้งหมดในเครื่อง",
+      "vi": "Tất cả nhân vật cục bộ"
+    },
     "jobFilter": {
       "de": "Arbeit",
       "fr": "Emploi",
@@ -931,6 +967,12 @@
       "fr": "Pas encore de registre de base de données",
       "th": "ยังไม่มีปูมบันทึกฐานข้อมูล",
       "vi": "Chưa có bản ghi cơ sở dữ liệu"
+    },
+    "manualUploadCooldown": {
+      "de": "Manueller Upload wartet {0}:{1:00}",
+      "fr": "Attente avant téléversement manuel {0}:{1:00}",
+      "th": "รออัปโหลดด้วยตนเอง {0}:{1:00}",
+      "vi": "Chờ tải lên thủ công {0}:{1:00}"
     },
     "retry": {
       "de": "Upload wiederholen",
@@ -1382,6 +1424,42 @@
       "th": "กําลังอัปโหลด",
       "vi": "Tải lên"
     },
+    "transferWaitingUpload": {
+      "de": "Wartet auf Upload",
+      "fr": "En attente d’envoi",
+      "th": "กำลังรออัปโหลด",
+      "vi": "Đang chờ tải lên"
+    },
+    "transferUploading": {
+      "de": "Wird hochgeladen",
+      "fr": "Envoi en cours",
+      "th": "กำลังอัปโหลด",
+      "vi": "Đang tải lên"
+    },
+    "transferReceived": {
+      "de": "Sicher empfangen",
+      "fr": "Reçu en sécurité",
+      "th": "เซิร์ฟเวอร์รับข้อมูลอย่างปลอดภัยแล้ว",
+      "vi": "Máy chủ đã nhận an toàn"
+    },
+    "transferProcessing": {
+      "de": "Wird analysiert",
+      "fr": "Analyse en cours",
+      "th": "กำลังวิเคราะห์",
+      "vi": "Đang phân tích"
+    },
+    "transferReady": {
+      "de": "Anzeigebereit",
+      "fr": "Prêt à consulter",
+      "th": "พร้อมดู",
+      "vi": "Sẵn sàng xem"
+    },
+    "transferActionRequired": {
+      "de": "Aktion erforderlich",
+      "fr": "Intervention requise",
+      "th": "ต้องดำเนินการ",
+      "vi": "Cần xử lý"
+    },
     "uploadCompressing": {
       "de": "Verdichten",
       "fr": "Compression",
@@ -1465,6 +1543,42 @@
       "fr": "L'analyse détaillée a échoué",
       "th": "การวิเคราะห์รายละเอียดล้มเหลว",
       "vi": "Việc phân tích chi tiết thất bại"
+    },
+    "detailWaiting": {
+      "de": "Detail-Download wartet",
+      "fr": "Téléchargement détaillé en attente",
+      "th": "กำลังรอดาวน์โหลดรายละเอียด",
+      "vi": "Đang chờ tải chi tiết"
+    },
+    "detailConnecting": {
+      "de": "Detail-Download wird vorbereitet",
+      "fr": "Préparation du téléchargement détaillé",
+      "th": "กำลังเตรียมดาวน์โหลดรายละเอียด",
+      "vi": "Đang chuẩn bị tải chi tiết"
+    },
+    "detailDownloading": {
+      "de": "Details werden heruntergeladen",
+      "fr": "Téléchargement des détails",
+      "th": "กำลังดาวน์โหลดรายละเอียด",
+      "vi": "Đang tải chi tiết"
+    },
+    "detailDecoding": {
+      "de": "Details werden lokal vorbereitet",
+      "fr": "Préparation locale des détails",
+      "th": "กำลังเตรียมรายละเอียดในเครื่อง",
+      "vi": "Đang chuẩn bị chi tiết cục bộ"
+    },
+    "detailComplete": {
+      "de": "Details lokal gespeichert",
+      "fr": "Détails enregistrés localement",
+      "th": "บันทึกรายละเอียดในเครื่องแล้ว",
+      "vi": "Đã lưu chi tiết trên máy"
+    },
+    "detailFailed": {
+      "de": "Detail-Download muss wiederholt werden",
+      "fr": "Le téléchargement détaillé doit être réessayé",
+      "th": "ต้องลองดาวน์โหลดรายละเอียดอีกครั้ง",
+      "vi": "Cần thử tải chi tiết lại"
     },
     "detailAnalysis": {
       "de": "Detaillierte Match-Analyse",
@@ -4154,6 +4268,60 @@
       "th": "ผู้เล่นที่มองเห็นในวง",
       "vi": "Người chơi nhìn thấy trong vòng"
     },
+    "worqorNodeOccupancy": {
+      "de": "Worqor-Punktbesitz und Spieler in der Nähe",
+      "fr": "Contrôle des points de Worqor et joueurs à proximité",
+      "th": "ฝ่ายที่ครองจุดวอร์คอร์และผู้เล่นใกล้จุด",
+      "vi": "Quyền kiểm soát điểm Worqor và người chơi ở gần"
+    },
+    "worqorObservedPlayers": {
+      "de": "Lokal beobachtete Spieler in der Nähe (Kandidaten)",
+      "fr": "Joueurs proches observés localement (candidats)",
+      "th": "ผู้เล่นใกล้จุดที่เครื่องตรวจพบ (ผู้เข้าข่าย)",
+      "vi": "Người chơi gần điểm được quan sát cục bộ (ứng viên)"
+    },
+    "worqorNoVisiblePlayers": {
+      "de": "Besitz bestätigt; Spieler in der Nähe außerhalb der lokalen Sichtweite",
+      "fr": "Contrôle confirmé ; joueurs proches hors de la visibilité locale",
+      "th": "ยืนยันฝ่ายครองแล้ว ผู้เล่นใกล้จุดอยู่นอกระยะที่เครื่องมองเห็น",
+      "vi": "Đã xác nhận quyền kiểm soát; người chơi gần điểm ngoài tầm quan sát cục bộ"
+    },
+    "worqorOccupancyEvidence": {
+      "de": "Der Besitz stammt aus der globalen Kartenanimation. Nur lokal sichtbare Spieler nahe dem Punkt werden gelistet; die Leuchtfarbe identifiziert weder entfernte Spieler noch einen bestimmten Unterbrecher.",
+      "fr": "Le contrôle provient de l’animation de la carte globale. Seuls les joueurs visibles localement près du point sont listés ; la couleur ne permet pas d’identifier un joueur distant ni l’auteur précis d’une interruption.",
+      "th": "ฝ่ายที่ครองมาจากภาพเคลื่อนไหวบนแผนที่รวม รายชื่อจะแสดงเฉพาะผู้เล่นที่เครื่องมองเห็นใกล้จุด สีของแสงไม่สามารถระบุผู้เล่นที่อยู่ไกลหรือผู้ขัดขวางโดยเฉพาะได้",
+      "vi": "Quyền kiểm soát lấy từ hoạt ảnh bản đồ toàn cục. Chỉ liệt kê người chơi nhìn thấy cục bộ gần điểm; màu phát sáng không thể xác định người chơi ở xa hay người ngắt điểm cụ thể."
+    },
+    "worqorSnowWarning": {
+      "de": "Schneewetter beginnt in {0} s",
+      "fr": "Le temps neigeux commence dans {0} s",
+      "th": "สภาพอากาศหิมะจะเริ่มใน {0} วินาที",
+      "vi": "Thời tiết tuyết bắt đầu sau {0} giây"
+    },
+    "worqorAuroraWarning": {
+      "de": "Aurora beginnt in {0} s",
+      "fr": "L’aurore commence dans {0} s",
+      "th": "ออโรราจะเริ่มใน {0} วินาที",
+      "vi": "Cực quang bắt đầu sau {0} giây"
+    },
+    "worqorSnowActive": {
+      "de": "Schneewetter aktiv · Flächen von Frostiger Segen werden angezeigt",
+      "fr": "Temps neigeux actif · zones de Bénédiction des neiges affichées",
+      "th": "สภาพอากาศหิมะกำลังเกิด · แสดงพื้นที่พรแห่งหิมะ",
+      "vi": "Thời tiết tuyết đang diễn ra · đã hiển thị vùng Phúc lành Tuyết"
+    },
+    "worqorAuroraActive": {
+      "de": "Aurora aktiv · Limitrausch aller Spieler lädt schneller",
+      "fr": "Aurore active · les jauges de transcendance de tous se chargent plus vite",
+      "th": "ออโรรากำลังเกิด · เกจลิมิตของทุกคนสะสมเร็วขึ้น",
+      "vi": "Cực quang đang diễn ra · thanh giới hạn của mọi người tích nhanh hơn"
+    },
+    "worqorSnowSpirit": {
+      "de": "Schneegeist",
+      "fr": "Esprit des neiges",
+      "th": "ภูตหิมะ",
+      "vi": "Tinh linh tuyết"
+    },
     "secureTowerEvents": {
       "de": "Turmbesetzungen und Explosionen",
       "fr": "Absorptions et explosions de tours",
@@ -4383,6 +4551,11 @@
     "ccRedSandsHeatWaveCountdown",
     "ccRedSandsHeatWaveNotActive",
     "ccRedSandsHeatWaveSafetyHint",
+    "worqorSnowWarning",
+    "worqorAuroraWarning",
+    "worqorSnowActive",
+    "worqorAuroraActive",
+    "worqorSnowSpirit",
     "ccRedSandsNeedles",
     "ccRedSandsTherapeuticNeedles",
     "ccRedSandsLandslip",

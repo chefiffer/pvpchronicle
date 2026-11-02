@@ -97,12 +97,7 @@ internal sealed class MatchDetailWindow : Window
     private Vector4 Cyan => BattlefieldUiTheme.Accent(configuration.UiTheme);
     private Vector4 TextColor => BattlefieldUiTheme.Text(configuration.UiTheme);
     private Vector4 Muted => BattlefieldUiTheme.Muted(configuration.UiTheme);
-    private static readonly Vector4[] TeamColors =
-    [
-        new(.92f, .28f, .32f, 1f),
-        new(.94f, .76f, .25f, 1f),
-        new(.27f, .62f, .96f, 1f)
-    ];
+    private static readonly Vector4[] TeamColors = FrontlineTeamPalette.Colors;
 
     public MatchDetailWindow(Configuration configuration, MatchRepository repository, UploadService uploads,
         IDataManager dataManager,
@@ -148,7 +143,7 @@ internal sealed class MatchDetailWindow : Window
         // honestly on the current 30 ms anonymous reference. Refresh the selected match
         // once from its already uploaded raw package instead of silently hiding gray bars
         // or inventing precision by splitting old coarse bins.
-        if (match.UploadState == "complete" &&
+        if (match.UploadState is "ready" or "complete" &&
             match.Detail?.AnomalyModel != UploadService.CurrentAnomalyModel)
             uploads.EnqueueDetails(match.MatchUid, match.RemoteMatchUid ?? match.MatchUid,
                 string.IsNullOrWhiteSpace(match.Realm) ? configuration.Realm : match.Realm);
@@ -341,13 +336,17 @@ internal sealed class MatchDetailWindow : Window
         const long windowMs = 5_000;
         var endMs = (long)selectedMs;
         var startMs = Math.Max(0, endMs - windowMs);
-        var timeline = detail.ObjectiveTimeline ?? [];
+        var timeline = (detail.ObjectiveTimeline ?? [])
+            .Where(row => !SealRockObjectiveCatalog.IsCompleteSnapshot(row)).ToArray();
         var discovery = detail.ObjectiveDiscovery ?? [];
         var objectiveIds = timeline.Select(row => row.ObjectId)
             .Concat(discovery.Select(row => row.ObjectId)).Where(id => id != 0).ToHashSet();
-        var allObjectiveActions = (detail.Actions ?? [])
+        var actions = detail.Actions ?? [];
+        if (match.DutyId == ShatterObjectiveCatalog.DutyId)
+            objectiveIds.UnionWith(ShatterObjectiveCatalog.DirectlyAttackedObjectIds(actions));
+        var allObjectiveActions = actions
             .Where(row => objectiveIds.Contains(row.TargetEntityId) && row.Damage > 0).ToArray();
-        var mechanismSourceActions = (detail.Actions ?? [])
+        var mechanismSourceActions = actions
             .Where(row => objectiveIds.Contains(row.SourceEntityId) &&
                           row.ElapsedMs > startMs && row.ElapsedMs <= endMs &&
                           !(match.DutyId == 127 &&
@@ -376,6 +375,8 @@ internal sealed class MatchDetailWindow : Window
             DrawSecureNodeSnapshot(detail, endMs);
             DrawSecureTowerEvents(detail, startMs, endMs);
         }
+        if (match.DutyId == WorqorObjectiveCatalog.DutyId)
+            DrawWorqorNodeSnapshot(match, detail, endMs);
         if (targetIds.Length == 0 && mechanismSourceActions.Length == 0 &&
             !hasRedSandsEnvironmentStatus)
         {
@@ -392,7 +393,10 @@ internal sealed class MatchDetailWindow : Window
             var targetName = targetActions.Select(row => row.TargetName)
                 .LastOrDefault(name => !string.IsNullOrWhiteSpace(name));
             if (string.IsNullOrWhiteSpace(targetName)) targetName = lastTimeline?.Label;
-            if (string.IsNullOrWhiteSpace(targetName) || IsRawObjectiveIdentifier(targetName))
+            if (match.DutyId == ShatterObjectiveCatalog.DutyId)
+                targetName = ObjectiveInstanceDisplayName(match.DutyId, detail,
+                    targetId, targetName ?? string.Empty, endMs);
+            else if (string.IsNullOrWhiteSpace(targetName) || IsRawObjectiveIdentifier(targetName))
                 targetName = T("unresolvedObjective");
             else targetName = ObjectiveInstanceDisplayName(match.DutyId, detail,
                 targetId, targetName, endMs);
@@ -781,7 +785,8 @@ internal sealed class MatchDetailWindow : Window
         // UI ownership markers establish a transition but do not reveal the
         // points granted by that one transition (Secure also awards points over
         // time). Keep every transition visible with blank score cells.
-        var timeline = detail.ObjectiveTimeline ?? [];
+        var timeline = (detail.ObjectiveTimeline ?? [])
+            .Where(row => !SealRockObjectiveCatalog.IsCompleteSnapshot(row)).ToArray();
         foreach (var node in SecureObjectiveCatalog.Nodes)
         {
             int? previousOwner = null;
@@ -902,6 +907,219 @@ internal sealed class MatchDetailWindow : Window
         ImGui.EndTable();
     }
 
+    private void DrawWorqorNodeSnapshot(LocalMatchAnalysis match, DetailedAnalysis detail, long endMs)
+    {
+        var frame = detail.MovementTimeline
+            .Where(row => row.ElapsedMs <= endMs && endMs - row.ElapsedMs <= 2_500)
+            .OrderByDescending(row => row.ElapsedMs).FirstOrDefault();
+        var activeStates = (detail.ObjectiveTimeline ?? [])
+            .Where(row => row.ElapsedMs <= endMs)
+            .GroupBy(row => row.ObjectId)
+            .Select(group => group.OrderByDescending(row => row.ElapsedMs).First())
+            .Where(row => !string.Equals(row.State, "inactive", StringComparison.OrdinalIgnoreCase) &&
+                          !(row.State ?? string.Empty).Contains("unload", StringComparison.OrdinalIgnoreCase) &&
+                          WorqorObjectiveCatalog.IsObjectiveState(row.State))
+            .GroupBy(row => ((int)Math.Round(row.X / 3d), (int)Math.Round(row.Z / 3d)))
+            .Select(group =>
+            {
+                var state = group.OrderByDescending(row => row.OwnerTeam.HasValue ||
+                        WorqorObjectiveCatalog.OwnerFromState(row.State).HasValue)
+                    .ThenByDescending(row => row.ElapsedMs).First();
+                var owner = group.OrderByDescending(row => row.ElapsedMs)
+                    .Select(row => row.OwnerTeam ?? WorqorObjectiveCatalog.OwnerFromState(row.State))
+                    .FirstOrDefault(value => value.HasValue);
+                var neutral = group.Any(row => WorqorObjectiveCatalog.IsNeutralState(row.State));
+                return (State: state, Owner: owner, Neutral: neutral);
+            })
+            .OrderBy(row => row.State.Label, StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+
+        ImGui.Spacing();
+        ImGui.TextColored(Cyan, T("worqorNodeOccupancy"));
+        ImGui.TextWrapped(T("worqorOccupancyEvidence"));
+        if (activeStates.Length == 0)
+        {
+            ImGui.TextDisabled(T("notObserved"));
+            return;
+        }
+        if (!ImGui.BeginTable("worqor-node-snapshot", 3,
+                ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersInnerH |
+                ImGuiTableFlags.Resizable | ImGuiTableFlags.SizingStretchProp)) return;
+        ImGui.TableSetupColumn(T("mechanismObject"), ImGuiTableColumnFlags.WidthStretch, 1.0f);
+        ImGui.TableSetupColumn(T("state"), ImGuiTableColumnFlags.WidthFixed, 118);
+        ImGui.TableSetupColumn(T("worqorObservedPlayers"), ImGuiTableColumnFlags.WidthStretch, 2.2f);
+        ImGui.TableHeadersRow();
+        foreach (var row in activeStates)
+        {
+            var standing = (frame?.Actors ?? []).Where(actor =>
+                    WorqorObjectiveCatalog.IsWithinObservedOccupantArea(
+                        row.State.X, row.State.Y, row.State.Z, actor.X, actor.Y, actor.Z))
+                .OrderBy(actor => actor.Team).ThenBy(actor => actor.Name).ToArray();
+            var labelLine = WorqorObjectiveCatalog.ShortPointCode(row.State.Label);
+            if (string.IsNullOrWhiteSpace(labelLine)) labelLine = T("unresolvedObjective");
+
+            ImGui.TableNextRow();
+            ImGui.TableNextColumn();
+            ImGui.TextUnformatted(labelLine);
+            ImGui.TableNextColumn();
+            if (row.Owner is byte team && team < 3)
+            {
+                ImGui.TextColored(MapTeamColor(match, team), TeamName(team));
+            }
+            else if (row.Neutral)
+            {
+                ImGui.TextColored(Muted, T("secureNeutralNode"));
+            }
+            else
+                ImGui.TextDisabled(T("notObserved"));
+            var fieldCount = WorqorObjectiveCatalog.FieldCount(row.State.Label, row.State.State);
+            if (WorqorObjectiveCatalog.PerFieldOwnershipEnabled && fieldCount > 0)
+            {
+                var breakdown = WorqorFieldBreakdownAt(detail, row.State, endMs, fieldCount);
+                DrawWorqorFieldFractions(match, breakdown);
+            }
+            ImGui.TableNextColumn();
+            if (standing.Length == 0)
+                ImGui.TextDisabled(T("worqorNoVisiblePlayers"));
+            else
+                DrawCopyableText(string.Join(" · ", standing.Select(actor =>
+                    $"{actor.Name}@{WorldName(actor.WorldId)}")), TextColor);
+        }
+        ImGui.EndTable();
+    }
+
+    private static WorqorObjectiveCatalog.FieldOwnershipBreakdown WorqorFieldBreakdownAt(
+        DetailedAnalysis detail, ObjectiveStateEvent point, long endMs, int fieldCount)
+    {
+        var learnedTimelineOwners = LearnWorqorTimelineOwners(detail, endMs);
+        var samples = (detail.ObjectiveTimeline ?? [])
+            .Where(row => row.ElapsedMs <= endMs &&
+                          WorqorObjectiveCatalog.IsFieldState(row.Label, row.EvidenceScope))
+            .GroupBy(row => row.ObjectId)
+            .Select(group => group.OrderByDescending(row => row.ElapsedMs).First())
+            .Where(row => WorqorObjectiveCatalog.IsCurrentFieldState(row.EvidenceScope) &&
+                          WorqorObjectiveCatalog.IsFieldObservedState(row.State) &&
+                          Math.Abs(row.Y - point.Y) <= 10d)
+            .Select(row => new
+            {
+                Row = row,
+                Owner = row.OwnerTeam ??
+                    (WorqorObjectiveCatalog.TryGetSharedTimelineState(row.State, out var timeline) &&
+                     learnedTimelineOwners.TryGetValue(timeline, out var learnedOwner)
+                        ? learnedOwner : (byte?)null),
+                Distance2 = Math.Pow(row.X - point.X, 2) + Math.Pow(row.Z - point.Z, 2)
+            })
+            .Where(value => value.Owner.HasValue && value.Distance2 <= 26d * 26d)
+            .OrderBy(value => value.Distance2)
+            .Select(value => new WorqorObjectiveCatalog.FieldOwnershipSample(
+                value.Row.X, value.Row.Z, value.Owner!.Value))
+            .ToArray();
+        return WorqorObjectiveCatalog.CountObservedFieldSamples(fieldCount, samples);
+    }
+
+    /// <summary>
+    /// Learns the meaning of persistent shared-timeline states only from two
+    /// or more independent strategic points whose whole-point state is direct
+    /// map-UI evidence. Countdown points prove neutral; fully controlled icons
+    /// prove one faction. A state seen with conflicting owners is rejected.
+    /// This lets the replay decode mixed sub-fields without hard-coding an
+    /// unverified animation number.
+    /// </summary>
+    private static IReadOnlyDictionary<ushort, byte> LearnWorqorTimelineOwners(
+        DetailedAnalysis detail, long endMs)
+    {
+        var timeline = (detail.ObjectiveTimeline ?? [])
+            .Where(row => row.ElapsedMs <= endMs).ToArray();
+        var points = timeline.Where(row =>
+                string.Equals(row.EvidenceScope, "client_global_event_map_marker_v2",
+                    StringComparison.Ordinal) &&
+                WorqorObjectiveCatalog.FieldCount(row.Label, row.State) > 0)
+            .ToArray();
+        var evidence = new Dictionary<ushort, Dictionary<byte, HashSet<uint>>>();
+        foreach (var field in timeline.Where(row =>
+                     WorqorObjectiveCatalog.IsCurrentFieldState(row.EvidenceScope) &&
+                     WorqorObjectiveCatalog.IsFieldObservedState(row.State)))
+        {
+            if (!WorqorObjectiveCatalog.TryGetSharedTimelineState(field.State, out var state))
+                continue;
+            var point = points.Where(row => row.ElapsedMs <= field.ElapsedMs + 1_500 &&
+                                            row.ElapsedMs >= field.ElapsedMs - 5_000 &&
+                                            Math.Abs(row.Y - field.Y) <= 10d)
+                .GroupBy(row => row.ObjectId)
+                .Select(group => group.OrderByDescending(row => row.ElapsedMs).First())
+                .Select(row => new
+                {
+                    Row = row,
+                    Distance2 = Math.Pow(row.X - field.X, 2) + Math.Pow(row.Z - field.Z, 2)
+                })
+                .Where(value => value.Distance2 <= 26d * 26d)
+                .OrderBy(value => value.Distance2)
+                .Select(value => value.Row).FirstOrDefault();
+            if (point == null) continue;
+            byte? expectedOwner = WorqorObjectiveCatalog.OwnerFromState(point.State);
+            if (!expectedOwner.HasValue && point.RemainingSeconds is > 0 &&
+                WorqorObjectiveCatalog.TryGetMapIcon(point.State, out var icon) &&
+                WorqorObjectiveCatalog.IsCountdownIcon(icon))
+                expectedOwner = WorqorObjectiveCatalog.NeutralFieldOwner;
+            if (!expectedOwner.HasValue) continue;
+            if (!evidence.TryGetValue(state, out var byOwner))
+                evidence[state] = byOwner = new Dictionary<byte, HashSet<uint>>();
+            if (!byOwner.TryGetValue(expectedOwner.Value, out var pointIds))
+                byOwner[expectedOwner.Value] = pointIds = [];
+            pointIds.Add(point.ObjectId);
+        }
+
+        return evidence.Where(pair => pair.Value.Count == 1 &&
+                                      pair.Value.Single().Value.Count >= 2)
+            .ToDictionary(pair => pair.Key, pair => pair.Value.Single().Key);
+    }
+
+    private void DrawWorqorFieldFractions(LocalMatchAnalysis match,
+        WorqorObjectiveCatalog.FieldOwnershipBreakdown breakdown)
+    {
+        ImGui.SameLine(0, 9);
+        var first = true;
+        void Part(int count, Vector4 color)
+        {
+            if (count <= 0) return;
+            if (!first) ImGui.SameLine(0, 7);
+            ImGui.TextColored(color, $"{count}/{breakdown.Total}");
+            first = false;
+        }
+        Part(breakdown.Maelstrom, MapTeamColor(match, 0));
+        Part(breakdown.Adders, MapTeamColor(match, 1));
+        Part(breakdown.Flames, MapTeamColor(match, 2));
+        Part(breakdown.Neutral, Muted);
+        if (breakdown.Unknown > 0)
+        {
+            if (!first) ImGui.SameLine(0, 7);
+            ImGui.TextDisabled($"?{breakdown.Unknown}/{breakdown.Total}");
+        }
+    }
+
+    private void DrawWorqorFieldFractionsOnMap(ImDrawListPtr draw, LocalMatchAnalysis match,
+        DetailedAnalysis detail, ObjectiveStateEvent point, long now, int fieldCount, Vector2 at)
+    {
+        var breakdown = WorqorFieldBreakdownAt(detail, point, now, fieldCount);
+        var cursor = at;
+        void Part(int count, Vector4 color)
+        {
+            if (count <= 0) return;
+            var text = $"{count}/{breakdown.Total}";
+            draw.AddText(cursor, ImGui.ColorConvertFloat4ToU32(color), text);
+            cursor.X += ImGui.CalcTextSize(text).X + 6;
+        }
+        Part(breakdown.Maelstrom, MapTeamColor(match, 0));
+        Part(breakdown.Adders, MapTeamColor(match, 1));
+        Part(breakdown.Flames, MapTeamColor(match, 2));
+        Part(breakdown.Neutral, Muted);
+        if (breakdown.Unknown > 0)
+        {
+            var text = $"?{breakdown.Unknown}/{breakdown.Total}";
+            draw.AddText(cursor, ImGui.ColorConvertFloat4ToU32(Muted), text);
+        }
+    }
+
     private void DrawSecureTowerEvents(DetailedAnalysis detail, long startMs, long endMs)
     {
         // The global marker proves the round, while action 42940 (Explosion)
@@ -983,6 +1201,37 @@ internal sealed class MatchDetailWindow : Window
     private string ObjectiveInstanceDisplayName(uint dutyId, DetailedAnalysis detail,
         uint objectId, string fallback, long endMs)
     {
+        if (dutyId == ShatterObjectiveCatalog.DutyId)
+        {
+            var shatterObserved = (detail.ObjectiveTimeline ?? [])
+                .Where(row => row.ObjectId == objectId && row.ElapsedMs <= endMs)
+                .OrderByDescending(row => row.ElapsedMs).FirstOrDefault();
+            var directAttack = ShatterObjectiveCatalog.NearestNamedAttack(
+                detail.Actions, objectId, endMs);
+            var identityLabel = ShatterObjectiveCatalog.IsIceLabel(fallback)
+                ? fallback
+                : directAttack?.TargetName ?? fallback;
+            var code = shatterObserved != null
+                ? ShatterObjectiveCatalog.DisplayCode(identityLabel,
+                    shatterObserved.X, shatterObserved.Z)
+                : directAttack?.TargetX is double targetX && directAttack.TargetZ is double targetZ
+                    ? ShatterObjectiveCatalog.DisplayCode(identityLabel, targetX, targetZ)
+                    : ShatterObjectiveCatalog.ShortPointCode(identityLabel);
+            return code.Length > 0 ? code : string.IsNullOrWhiteSpace(identityLabel) ||
+                IsRawObjectiveIdentifier(identityLabel)
+                    ? T("unresolvedObjective")
+                    : ObjectiveDisplayName(dutyId, identityLabel);
+        }
+        if (dutyId == WorqorObjectiveCatalog.DutyId)
+        {
+            var compact = WorqorObjectiveCatalog.ShortPointCode(fallback);
+            return string.IsNullOrWhiteSpace(compact) ? T("unresolvedObjective") : compact;
+        }
+        if (dutyId == OnsalObjectiveCatalog.DutyId)
+        {
+            var compact = OnsalObjectiveCatalog.ShortPointCode(fallback);
+            return string.IsNullOrWhiteSpace(compact) ? T("unresolvedObjective") : compact;
+        }
         if (currentMatchIsCrystalline)
         {
             var observedCc = (detail.ObjectiveDiscovery ?? [])
@@ -1046,11 +1295,15 @@ internal sealed class MatchDetailWindow : Window
 
     private void DrawMechanismAnalysisLegacy(LocalMatchAnalysis match, DetailedAnalysis detail)
     {
-        var timeline = detail.ObjectiveTimeline ?? [];
+        var timeline = (detail.ObjectiveTimeline ?? [])
+            .Where(row => !SealRockObjectiveCatalog.IsCompleteSnapshot(row)).ToList();
         var discovery = detail.ObjectiveDiscovery ?? [];
         var objectiveIds = timeline.Select(row => row.ObjectId)
             .Concat(discovery.Select(row => row.ObjectId)).Where(id => id != 0).ToHashSet();
-        var objectiveActions = (detail.Actions ?? [])
+        var actions = detail.Actions ?? [];
+        if (match.DutyId == ShatterObjectiveCatalog.DutyId)
+            objectiveIds.UnionWith(ShatterObjectiveCatalog.DirectlyAttackedObjectIds(actions));
+        var objectiveActions = actions
             .Where(row => objectiveIds.Contains(row.TargetEntityId) && row.Damage > 0).ToArray();
         var objectiveStatuses = (detail.StatusTimeline ?? [])
             .Where(row => objectiveIds.Contains(row.TargetEntityId)).ToArray();
@@ -1077,8 +1330,14 @@ internal sealed class MatchDetailWindow : Window
             ImGui.TableSetupScrollFreeze(0, 1); ImGui.TableHeadersRow();
             foreach (var row in timeline.OrderBy(value => value.ElapsedMs))
             {
-                ImGui.TableNextRow(); Cell(Clock(row.ElapsedMs)); Cell(row.Label);
-                Cell(row.State); Cell(row.OwnerTeam is byte team && team < 3 ? TeamName(team) : T("unknown"));
+                var rowOwner = match.DutyId == SealRockObjectiveCatalog.DutyId
+                    ? SealRockObjectiveCatalog.OwnerFromState(row.State) ?? row.OwnerTeam
+                    : match.DutyId == OnsalObjectiveCatalog.DutyId
+                        ? OnsalObjectiveCatalog.OwnerFromState(row.State) ?? row.OwnerTeam
+                        : row.OwnerTeam;
+                ImGui.TableNextRow(); Cell(Clock(row.ElapsedMs));
+                Cell(ObjectiveDisplayName(match.DutyId, row.Label));
+                Cell(row.State); Cell(rowOwner is byte team && team < 3 ? TeamName(team) : T("unknown"));
                 Cell($"{row.X:0.0}, {row.Z:0.0}");
                 var statusCount = objectiveStatuses.Count(value => value.TargetEntityId == row.ObjectId &&
                     Math.Abs(value.ElapsedMs - row.ElapsedMs) <= 10_000);
@@ -1110,7 +1369,9 @@ internal sealed class MatchDetailWindow : Window
                 ImGui.TableNextColumn(); DrawJobIcon(row.Key.SourceJobId);
                 ImGui.TableNextColumn(); ImGui.TextColored(row.Key.SourceTeam < 3 ? TeamColors[row.Key.SourceTeam] : Muted,
                     row.Key.SourceTeam < 3 ? TeamName(row.Key.SourceTeam) : T("unknown"));
-                Cell(row.Key.TargetName); Cell(row.Damage.ToString("N0")); Cell(row.Count.ToString("N0"));
+                Cell(ObjectiveInstanceDisplayName(match.DutyId, detail, row.Key.TargetEntityId,
+                    row.Key.TargetName, row.Last));
+                Cell(row.Damage.ToString("N0")); Cell(row.Count.ToString("N0"));
                 ImGui.TableNextColumn();
                 var buffIds = objectiveStatuses.Where(value => value.TargetEntityId == row.Key.TargetEntityId &&
                         value.Change != "remove" && value.ElapsedMs >= row.First - 5_000 &&
@@ -1149,7 +1410,9 @@ internal sealed class MatchDetailWindow : Window
                     row.SourceTeam < 3 ? TeamName(row.SourceTeam) : T("unknown"));
                 ImGui.TableNextColumn(); DrawActionGlyph(row.ActionId, 20); ImGui.SameLine(0, 5);
                 ImGui.TextUnformatted(ActionName(row.ActionId, row.ActionName));
-                Cell(row.TargetName); Cell(row.Damage.ToString("N0"));
+                Cell(ObjectiveInstanceDisplayName(match.DutyId, detail, row.TargetEntityId,
+                    row.TargetName, row.ElapsedMs));
+                Cell(row.Damage.ToString("N0"));
                 ImGui.TableNextColumn();
                 DrawHpShieldBar(row.TargetCurrentHp, row.TargetMaxHp, 0, new Vector2(136, 16));
             }
@@ -1177,7 +1440,9 @@ internal sealed class MatchDetailWindow : Window
                 ImGui.TableNextColumn();
                 if (source == null) ImGui.TextDisabled(T("unknown"));
                 else DrawCopyableText($"{source.Name}@{WorldName(source.WorldId)}", TextColor);
-                Cell(objectiveLookup.GetValueOrDefault(row.TargetEntityId, $"#{row.TargetEntityId:X8}"));
+                Cell(ObjectiveInstanceDisplayName(match.DutyId, detail, row.TargetEntityId,
+                    objectiveLookup.GetValueOrDefault(row.TargetEntityId, $"#{row.TargetEntityId:X8}"),
+                    row.ElapsedMs));
                 Cell($"{row.DurationSeconds:0.0} s");
             }
             ImGui.EndTable();
@@ -1202,7 +1467,8 @@ internal sealed class MatchDetailWindow : Window
             ImGui.TableSetupScrollFreeze(0, 1); ImGui.TableHeadersRow();
             foreach (var row in interactions)
             {
-                ImGui.TableNextRow(); Cell(Clock(row.ElapsedMs)); Cell(row.Label);
+                ImGui.TableNextRow(); Cell(Clock(row.ElapsedMs));
+                Cell(ObjectiveDisplayName(match.DutyId, row.Label));
                 ImGui.TableNextColumn();
                 if (string.IsNullOrWhiteSpace(row.ActorName)) ImGui.TextDisabled(T("notObserved"));
                 else
@@ -1610,9 +1876,7 @@ internal sealed class MatchDetailWindow : Window
         // FFXIV map-space conversion: the map sheet supplies its scale and world offsets.
         Vector2 Point(double x, double z)
         {
-            var scale = mapFactor / 100f;
-            var uv = new Vector2(((float)x + mapOffsetX) * scale / 2048f + .5f,
-                ((float)z + mapOffsetY) * scale / 2048f + .5f);
+            var uv = MapCoordinateProjection.WorldToUv(x, z, mapFactor, mapOffsetX, mapOffsetY);
             return origin + new Vector2((uv.X - uvMin.X) / spanX * size.X,
                 (uv.Y - uvMin.Y) / spanY * size.Y);
         }
@@ -1626,6 +1890,8 @@ internal sealed class MatchDetailWindow : Window
         }
         var now = (long)selectedMs;
         DrawCrystallineCrystalTrail(draw, detail, now, Point);
+        if (match.DutyId == WorqorWeatherMechanics.DutyId)
+            DrawWorqorWeatherTelegraphs(draw, detail, now, Point);
         if (match.Schema == LocalMatchAnalyzer.CrystallineSchema)
         {
             DrawObservedCrystallineSpeedZones(draw, match, detail, now, Point);
@@ -1754,9 +2020,26 @@ internal sealed class MatchDetailWindow : Window
         }
         var objectiveAtTime = (detail.ObjectiveTimeline ?? [])
             .Concat(redecodedCrystalline)
+            .Where(x => !SealRockObjectiveCatalog.IsCompleteSnapshot(x))
             .Where(x => x.ElapsedMs <= now)
+            // Old Onsal packages stored the rank layer and a generic faction
+            // overlay under the same marker ID. Remove unrelated layers before
+            // selecting the latest row; keep the point's inactive row so its
+            // lifetime still ends at the observed UI unload.
+            .Where(x => match.DutyId != OnsalObjectiveCatalog.DutyId ||
+                        FrontlineSpawnCatalog.TryGetTeam(x.State, out _) ||
+                        OnsalObjectiveCatalog.IsReplayRow(x.Label, x.State, x.EvidenceScope))
             .GroupBy(x => x.ObjectId)
-            .Select(x => x.OrderByDescending(y => y.ElapsedMs).First())
+            .Select(x => x.OrderByDescending(y => y.ElapsedMs)
+                // Some map-UI layers publish an active replacement and hide
+                // the old layer in the same sampling tick. Prefer the visible
+                // row only for that exact tie; a later inactive row still
+                // removes a genuinely depleted/despawned objective.
+                .ThenByDescending(y => !string.Equals(y.State, "inactive",
+                    StringComparison.OrdinalIgnoreCase) &&
+                    !(y.State ?? string.Empty).Contains("destroy", StringComparison.OrdinalIgnoreCase) &&
+                    !(y.State ?? string.Empty).Contains("unload", StringComparison.OrdinalIgnoreCase))
+                .First())
             // Catalogue v4 briefly promoted every Cloud Nine BaseId 9020,
             // including an empty-name central object loaded before the actual
             // Turbulence event. Old cached objective_state rows are accepted
@@ -1770,9 +2053,30 @@ internal sealed class MatchDetailWindow : Window
             .Where(x => !string.Equals(x.State, "inactive", StringComparison.OrdinalIgnoreCase) &&
                         !(x.State ?? string.Empty).Contains("destroy", StringComparison.OrdinalIgnoreCase) &&
                         !(x.State ?? string.Empty).Contains("unload", StringComparison.OrdinalIgnoreCase))
+            // Older CC packages preserved only icon:639xx. Decode the verified
+            // map icon from State so replay and live use the same semantic
+            // label and glyph without rewriting the archived source package.
+            .Select(x => GameLayout.IsCrystallineDuty(match.DutyId) &&
+                         CrystallineMapMarkerCatalog.TryGetIcon(x.State, out var ccMapIcon)
+                ? x with
+                {
+                    Label = CrystallineMapMarkerCatalog.Label(ccMapIcon),
+                    EvidenceScope = CrystallineMapMarkerCatalog.EvidenceScope
+                }
+                : x)
             .ToArray();
         var objectiveMetadata = objectiveAtTime.Where(x => IsObjectiveMetadataLabel(x.Label)).ToArray();
-        var objectiveRowsRaw = objectiveAtTime
+        // Seal Rock is reduced from the complete global map-UI history before
+        // any rendering decision. The observer-bounded object stream is never
+        // an input, and a temporary icon-layer unload above the terminal 2%
+        // boundary retains the last good point instead of deleting it.
+        var sealRockReduced = match.DutyId == SealRockObjectiveCatalog.DutyId
+            ? SealRockGlobalObjectiveReducer.ReduceAt(detail.ObjectiveTimeline ?? [], now)
+                .Select(state => state.ToObjectiveStateEvent()).ToArray()
+            : [];
+        var objectiveRowsRaw = (match.DutyId == SealRockObjectiveCatalog.DutyId
+                ? sealRockReduced
+                : objectiveAtTime)
             // A raw map icon/data ID is discovery evidence, not a decoded tactical objective.
             // Do not turn it into a large anonymous circle on the replay map.
             // Secure is the one bounded exception: the client EventMarker is
@@ -1780,11 +2084,45 @@ internal sealed class MatchDetailWindow : Window
             // data label remains drawable when the encoded icon proves the
             // mechanism type. Fixed nodes are rendered from the catalogue below.
             .Where(x => (!IsRawObjectiveIdentifier(x.Label) ||
-                         match.DutyId == 127 && SecureObjectiveCatalog.IsTransientMechanicState(x.State)) &&
+                         match.DutyId == 127 && SecureObjectiveCatalog.IsTransientMechanicState(x.State) ||
+                         match.DutyId == ShatterObjectiveCatalog.DutyId &&
+                         string.Equals(x.EvidenceScope, ShatterObjectiveCatalog.GlobalMapEvidenceScope,
+                             StringComparison.Ordinal)) &&
                         !IsObjectiveMetadataLabel(x.Label) && !IsCrystallineProgressGauge(x) &&
                         !(match.DutyId == 127 && (SecureObjectiveCatalog.IsFixedNodeId(x.ObjectId) ||
                           SecureObjectiveCatalog.TryGetMapIcon(x.State, out var secureMapIcon) &&
                           SecureObjectiveCatalog.IsOccupationIcon(secureMapIcon))))
+            // Older Worqor details contain every AgentMap EventMarker. Keep
+            // only the strategic-point icons verified by the versioned
+            // catalogue, so player/ground-effect icons never become nodes.
+            .Where(x => match.DutyId != WorqorObjectiveCatalog.DutyId ||
+                        WorqorObjectiveCatalog.IsObjectiveState(x.State))
+            // Old Onsal details also contain spawn, player and generic map
+            // markers. Keep only the rank/owner/countdown icon families that
+            // the client uses for Ovoos.
+            .Where(x => match.DutyId != OnsalObjectiveCatalog.DutyId ||
+                        OnsalObjectiveCatalog.IsObjectiveState(x.State))
+            // Seal Rock has two observations at the same coordinates: the
+            // authoritative global map-UI marker and a nearby loaded 3D event
+            // object. The latter can remain loaded after a node deactivates and
+            // carries neither rank nor remaining-data percentage. It must never
+            // replace the map-UI state in a replay.
+            .Where(x => match.DutyId != SealRockObjectiveCatalog.DutyId ||
+                        SealRockObjectiveCatalog.IsDirectMapEvidence(x.EvidenceScope))
+            // Older Shatter captures admitted moving player/alliance map icons
+            // when they passed near an ice anchor. A global-scope row is not
+            // enough: its encoded icon must belong to the verified ice UI
+            // family. Observer-bounded exact ice targets remain valid.
+            .Where(x => match.DutyId != ShatterObjectiveCatalog.DutyId ||
+                        (string.Equals(x.EvidenceScope,
+                             ShatterObjectiveCatalog.GlobalMapEvidenceScope,
+                             StringComparison.Ordinal)
+                            ? ShatterObjectiveCatalog.ShouldDisplayMapState(x.State,
+                                x.RemainingSeconds, x.ProgressPercent, x.DisplayText, x.Label)
+                            : ShatterObjectiveCatalog.IsIceLabel(x.Label)))
+            // Spawn crests have their own shared layer; never let their raw
+            // icon IDs fall through as anonymous mechanism circles.
+            .Where(x => !FrontlineSpawnCatalog.TryGetTeam(x.State, out _))
             .Where(x => !ClockworkCastletownMechanics.IsTerritory(match.TerritoryId) ||
                         ClockworkCastletownMechanics.UseGenericMapGlyph(x.Label))
             // Red Sands monsters/geysers can remain loaded in the archive long
@@ -1806,25 +2144,88 @@ internal sealed class MatchDetailWindow : Window
         // object. Merge those evidence rows spatially before drawing it.
         var objectiveRows = objectiveRowsRaw
             .GroupBy(row => ((int)Math.Round(row.X / 3d), (int)Math.Round(row.Z / 3d)))
-            .Select(group => new
+            .Select(group =>
             {
-                Event = group.OrderByDescending(row =>
+                var sealRock = match.DutyId == SealRockObjectiveCatalog.DutyId;
+                var neutral = sealRock
+                    ? group.Any(row => SealRockObjectiveCatalog.IsNeutralState(row.State, row.Label))
+                    : group.Any(row => (row.State ?? string.Empty).Contains("icon=60575",
+                          StringComparison.OrdinalIgnoreCase)) ||
+                      match.DutyId == OnsalObjectiveCatalog.DutyId &&
+                      group.Any(row => OnsalObjectiveCatalog.IsNeutralState(row.State)) ||
+                      match.DutyId == WorqorObjectiveCatalog.DutyId &&
+                      group.Any(row => WorqorObjectiveCatalog.IsNeutralState(row.State));
+                byte? owner;
+                if (sealRock && neutral)
+                {
+                    // Recapture is a real two-step state transition: the old
+                    // faction first becomes neutral, then a later UI marker
+                    // assigns the new faction. Never carry an old owner across
+                    // the directly observed neutral frame.
+                    owner = null;
+                }
+                else
+                {
+                    owner = group.OrderByDescending(row => sealRock &&
+                            SealRockObjectiveCatalog.OwnerFromState(row.State).HasValue)
+                        .ThenByDescending(row => row.ElapsedMs)
+                        .Select(row => sealRock
+                            ? SealRockObjectiveCatalog.OwnerFromState(row.State) ?? row.OwnerTeam
+                            : row.OwnerTeam ??
+                              (match.DutyId == OnsalObjectiveCatalog.DutyId
+                                  ? OnsalObjectiveCatalog.OwnerFromState(row.State) : null) ??
+                              (match.DutyId == WorqorObjectiveCatalog.DutyId
+                                  ? WorqorObjectiveCatalog.OwnerFromState(row.State) : null))
+                        .FirstOrDefault(value => value.HasValue);
+                }
+                var selected = group.OrderByDescending(row => sealRock &&
+                            SealRockObjectiveCatalog.RankFromEvidence(row.Label, row.State) != '\0')
+                    .ThenByDescending(row =>
                         (row.Label ?? string.Empty).Contains("Rank ", StringComparison.OrdinalIgnoreCase))
+                    .ThenByDescending(row => match.DutyId == OnsalObjectiveCatalog.DutyId &&
+                        OnsalObjectiveCatalog.RankFromEvidence(row.Label, row.State) != '\0')
                     .ThenByDescending(row => row.ProgressPercent.HasValue)
-                    .ThenByDescending(row => row.OwnerTeam.HasValue)
-                    .ThenByDescending(row => row.ElapsedMs).First(),
-                Owner = group.Where(row => row.OwnerTeam.HasValue)
-                    .OrderByDescending(row => row.ElapsedMs).Select(row => row.OwnerTeam).FirstOrDefault(),
-                Neutral = group.Any(row => (row.State ?? string.Empty).Contains("icon=60575",
-                    StringComparison.OrdinalIgnoreCase)),
-                Progress = group.Where(row => row.ProgressPercent.HasValue)
-                    .OrderByDescending(row => row.ElapsedMs).Select(row => row.ProgressPercent).FirstOrDefault()
+                    .ThenByDescending(row => row.OwnerTeam.HasValue ||
+                        match.DutyId == OnsalObjectiveCatalog.DutyId &&
+                        OnsalObjectiveCatalog.OwnerFromState(row.State).HasValue ||
+                        match.DutyId == WorqorObjectiveCatalog.DutyId &&
+                        WorqorObjectiveCatalog.OwnerFromState(row.State).HasValue)
+                    .ThenByDescending(row => row.ElapsedMs).First();
+                return new
+                {
+                    Event = selected,
+                    Owner = owner,
+                    Neutral = neutral,
+                    Progress = group.Where(row => row.ProgressPercent.HasValue)
+                        .OrderByDescending(row => row.ElapsedMs)
+                        .Select(row => row.ProgressPercent).FirstOrDefault()
+                };
             }).ToArray();
         var objectiveActorFrame = detail.MovementTimeline
             .Where(frame => frame.ElapsedMs <= now && now - frame.ElapsedMs <= 1_500)
             .OrderByDescending(frame => frame.ElapsedMs).FirstOrDefault();
         if (match.DutyId == 127)
             DrawSecureFixedNodes(draw, match, objectiveAtTime, objectiveActorFrame, Point);
+        var localFrontlineTeam = ResolveLocalTeam(match);
+        // A Frontline home base is static for the whole match. Some older
+        // captures first observed AgentMap late, so use the earliest verified
+        // row from the complete match and display it from replay time zero.
+        foreach (var spawn in (detail.ObjectiveTimeline ?? [])
+                     .Select(row => new
+                     {
+                         Row = row,
+                         Team = FrontlineSpawnCatalog.TryGetTeam(row.State, out var team)
+                             ? (byte?)team : null
+                     })
+                     .Where(item => item.Team.HasValue)
+                     .GroupBy(item => item.Team!.Value)
+                     .Select(group => group.OrderBy(item => item.Row.ElapsedMs).First()))
+        {
+            var point = Point(spawn.Row.X, spawn.Row.Z);
+            var color = MapTeamColor(match, spawn.Team!.Value);
+            ObjectiveMapGlyphRenderer.DrawSpawnLabel(draw, point, TeamName(spawn.Team.Value),
+                color, localFrontlineTeam == spawn.Team.Value);
+        }
         foreach (var rendered in objectiveRows)
         {
             var objective = rendered.Event;
@@ -1842,11 +2243,27 @@ internal sealed class MatchDetailWindow : Window
             if (ClockworkCastletownMechanics.IsTerritory(match.TerritoryId) &&
                 !ClockworkCastletownMechanics.HasMeaningfulHealth(objective.Label))
             { currentHp = 0; maxHp = 0; }
-            DrawObjectiveGlyph(draw, point, match.DutyId, objective.Label ?? string.Empty, maxHp, color,
-                (objective.State ?? string.Empty).Contains("captur", StringComparison.OrdinalIgnoreCase));
+            if (match.DutyId == WorqorObjectiveCatalog.DutyId)
+            {
+                // Worqor's field cluster is represented by one compact halo;
+                // the rank polygon is drawn immediately afterwards.
+                draw.AddCircleFilled(point, 10f,
+                    ImGui.ColorConvertFloat4ToU32(color with { W = rendered.Owner.HasValue ? .46f : .18f }), 24);
+            }
+            ObjectiveMapGlyphRenderer.Draw(draw, point, match.DutyId,
+                objective.Label ?? string.Empty, maxHp, color,
+                (objective.State ?? string.Empty).Contains("captur", StringComparison.OrdinalIgnoreCase),
+                objective.State ?? string.Empty);
             var objectiveName = ObjectiveInstanceDisplayName(match.DutyId, detail,
                 objective.ObjectId, objective.Label ?? string.Empty, now);
             draw.AddText(point + new Vector2(15, -9), ImGui.ColorConvertFloat4ToU32(TextColor), objectiveName);
+            if (match.DutyId == WorqorObjectiveCatalog.DutyId)
+            {
+                var fieldCount = WorqorObjectiveCatalog.FieldCount(objective.Label, objective.State);
+                if (WorqorObjectiveCatalog.PerFieldOwnershipEnabled && fieldCount > 0)
+                    DrawWorqorFieldFractionsOnMap(draw, match, detail, objective, now,
+                        fieldCount, point + new Vector2(15, 8));
+            }
             var nearbyMetadata = objectiveMetadata
                 .Where(row => Math.Abs(row.X - objective.X) <= 3 && Math.Abs(row.Z - objective.Z) <= 3)
                 .OrderByDescending(row => row.ElapsedMs).FirstOrDefault();
@@ -1855,39 +2272,74 @@ internal sealed class MatchDetailWindow : Window
                 DrawCloudNineCheckpointPie(draw, match, detail, now, point);
             // Tactical crystal has no HP. Only a percentage decoded from the
             // PvP map UI is allowed to describe push/checkpoint progress.
-            var displayedPercent = rendered.Progress ?? nearbyMetadata?.ProgressPercent ??
-                ObjectivePercentFromLabel(objective.Label ?? string.Empty) ??
-                ObjectivePercentFromLabel(nearbyMetadata?.Label ?? string.Empty) ??
-                (!isCrystal && maxHp > 0 ? Math.Clamp(100d * currentHp / maxHp, 0, 100) : null);
+            var mapUiPercent = rendered.Progress ?? nearbyMetadata?.ProgressPercent ??
+                               ObjectivePercentFromLabel(objective.Label ?? string.Empty) ??
+                               ObjectivePercentFromLabel(nearbyMetadata?.Label ?? string.Empty);
+            var displayedPercent = match.DutyId == ShatterObjectiveCatalog.DutyId
+                ? ShatterObjectiveCatalog.ResolveDisplayedHealthPercent(currentHp, maxHp, mapUiPercent)
+                : mapUiPercent ??
+                  (!isCrystal && maxHp > 0 ? Math.Clamp(100d * currentHp / maxHp, 0, 100) : null);
             var displayedCountdown = objective.RemainingSeconds;
             if (match.DutyId == 127 && !displayedCountdown.HasValue)
                 displayedCountdown = SecureObjectiveCatalog.ParseDisplayedCountdownSeconds(
                                          objective.DisplayText ?? string.Empty) ??
                                      SecureObjectiveCatalog.ParseDisplayedCountdownSeconds(
                                          objective.Label ?? string.Empty);
-            if (displayedPercent.HasValue)
+            if (match.DutyId == WorqorObjectiveCatalog.DutyId && !displayedCountdown.HasValue)
+                displayedCountdown = WorqorObjectiveCatalog.ParseDisplayedCountdownSeconds(
+                                         objective.DisplayText ?? string.Empty) ??
+                                     WorqorObjectiveCatalog.ParseDisplayedCountdownSeconds(
+                                         objective.Label ?? string.Empty);
+            if (match.DutyId == OnsalObjectiveCatalog.DutyId && !displayedCountdown.HasValue)
+                displayedCountdown = OnsalObjectiveCatalog.ParseDisplayedCountdownSeconds(
+                                         objective.DisplayText ?? string.Empty) ??
+                                     OnsalObjectiveCatalog.ParseDisplayedCountdownSeconds(
+                                         objective.Label ?? string.Empty);
+            if (match.DutyId == ShatterObjectiveCatalog.DutyId && !displayedCountdown.HasValue)
+                displayedCountdown = ShatterObjectiveCatalog.ParseDisplayedCountdownSeconds(
+                                         objective.DisplayText ?? string.Empty) ??
+                                     ShatterObjectiveCatalog.ParseDisplayedCountdownSeconds(
+                                         objective.Label ?? string.Empty);
+            if (displayedPercent.HasValue && match.DutyId == SealRockObjectiveCatalog.DutyId)
+            {
+                DrawObjectivePercentText(draw, point + new Vector2(0, 14), displayedPercent.Value, color);
+            }
+            else if (displayedPercent.HasValue)
             {
                 DrawObjectiveProgressBar(draw, point + new Vector2(-18, 14), displayedPercent.Value, color);
             }
             else if (displayedCountdown.HasValue)
             {
-                var countdown = $"T-{displayedCountdown.Value}s";
-                var countdownSize = ImGui.CalcTextSize(countdown);
-                var countdownAt = point + new Vector2(-countdownSize.X / 2, 13);
-                draw.AddRectFilled(countdownAt - new Vector2(2, 1),
-                    countdownAt + countdownSize + new Vector2(2, 1),
-                    ImGui.ColorConvertFloat4ToU32(BattlefieldUiTheme.ChartBackground(configuration.UiTheme) with { W = .82f }), 2);
-                draw.AddText(countdownAt, ImGui.ColorConvertFloat4ToU32(TextColor), countdown);
+                if (match.DutyId == OnsalObjectiveCatalog.DutyId)
+                    DrawObjectiveCountdownBar(draw, point + new Vector2(-18, 14),
+                        displayedCountdown.Value, color);
+                else
+                {
+                    var countdown = $"T-{displayedCountdown.Value}s";
+                    var countdownSize = ImGui.CalcTextSize(countdown);
+                    var countdownAt = point + new Vector2(-countdownSize.X / 2, 13);
+                    draw.AddRectFilled(countdownAt - new Vector2(2, 1),
+                        countdownAt + countdownSize + new Vector2(2, 1),
+                        ImGui.ColorConvertFloat4ToU32(BattlefieldUiTheme.ChartBackground(configuration.UiTheme) with { W = .82f }), 2);
+                    draw.AddText(countdownAt, ImGui.ColorConvertFloat4ToU32(TextColor), countdown);
+                }
             }
-            if (match.DutyId == 127 && objectiveActorFrame?.Actors is { Count: > 0 } visibleActors &&
-                IsSecureOccupationPoint(objective.Label ?? string.Empty))
+            var observedOccupantRadius = match.DutyId == 127 &&
+                                         IsSecureOccupationPoint(objective.Label ?? string.Empty)
+                ? 12d
+                : match.DutyId == WorqorObjectiveCatalog.DutyId &&
+                  WorqorObjectiveCatalog.IsObjectiveState(objective.State)
+                    ? WorqorObjectiveCatalog.ObservedOccupantRadiusYalms : 0d;
+            if (observedOccupantRadius > 0 &&
+                objectiveActorFrame?.Actors is { Count: > 0 } visibleActors)
             {
                 // This is deliberately an observer-bounded list: global map UI
                 // establishes the node and ownership, while only loaded player
                 // coordinates can establish who was visibly standing nearby.
                 var standing = visibleActors.Where(actor =>
                         Math.Abs(actor.Y - objective.Y) <= 7 &&
-                        Math.Pow(actor.X - objective.X, 2) + Math.Pow(actor.Z - objective.Z, 2) <= 12 * 12)
+                        Math.Pow(actor.X - objective.X, 2) + Math.Pow(actor.Z - objective.Z, 2) <=
+                        observedOccupantRadius * observedOccupantRadius)
                     .OrderBy(actor => actor.Team).ThenBy(actor => actor.Name).ToArray();
                 if (standing.Length > 0)
                 {
@@ -1928,7 +2380,8 @@ internal sealed class MatchDetailWindow : Window
                 var color = SecureObjectiveCatalog.IsGoldDrone(mechanism.BaseId, mechanism.Name)
                     ? new Vector4(1f, .78f, .20f, 1f)
                     : new Vector4(.38f, .82f, 1f, 1f);
-                DrawObjectiveGlyph(draw, point, match.DutyId, mechanism.Name ?? string.Empty,
+                ObjectiveMapGlyphRenderer.Draw(draw, point, match.DutyId,
+                    mechanism.Name ?? string.Empty,
                     mechanism.MaxHp, color, false);
                 var display = ObjectiveInstanceDisplayName(match.DutyId, detail,
                     mechanism.ObjectId, mechanism.Name ?? string.Empty, now);
@@ -1969,7 +2422,7 @@ internal sealed class MatchDetailWindow : Window
                     ? new Vector4(.22f, .86f, .42f, 1f)
                     : new Vector4(.96f, .67f, .24f, 1f);
                 var meaningfulHp = resolvedMechanism.HasMeaningfulHp ? mechanism.MaxHp : 0;
-                DrawObjectiveGlyph(draw, point, match.DutyId, resolvedMechanism.Label,
+                ObjectiveMapGlyphRenderer.Draw(draw, point, match.DutyId, resolvedMechanism.Label,
                     meaningfulHp, color, false);
                 var display = ObjectiveInstanceDisplayName(match.DutyId, detail,
                     mechanism.ObjectId, mechanism.Name ?? string.Empty, now);
@@ -2099,6 +2552,29 @@ internal sealed class MatchDetailWindow : Window
             draw.AddText(origin + new Vector2(12, 49), ImGui.ColorConvertFloat4ToU32(Muted),
                 T("ccRedSandsHeatWaveSafetyHint"));
         }
+        else if (match.DutyId == WorqorWeatherMechanics.DutyId)
+        {
+            var weather = (detail.ObjectiveTimeline ?? [])
+                .Where(WorqorWeatherMechanics.IsWeatherObjective)
+                .Where(row => row.ElapsedMs <= now)
+                .OrderByDescending(row => row.ElapsedMs).FirstOrDefault();
+            if (weather != null)
+            {
+                var key = WorqorWeatherMechanics.TextKey(weather.State);
+                if (!string.IsNullOrEmpty(key))
+                {
+                    var remaining = weather.RemainingSeconds is int observed
+                        ? Math.Max(0, observed - (int)((now - weather.ElapsedMs) / 1000))
+                        : (int?)null;
+                    var text = WorqorWeatherMechanics.IsWarningState(weather.State) &&
+                               remaining is int seconds
+                        ? string.Format(CultureInfo.InvariantCulture, T(key), seconds)
+                        : T(key);
+                    draw.AddText(origin + new Vector2(12, 32),
+                        ImGui.ColorConvertFloat4ToU32(new Vector4(.30f, .88f, 1f, 1f)), text);
+                }
+            }
+        }
         else if (objectiveRows.Length == 0)
             draw.AddText(origin + new Vector2(12, 32), ImGui.ColorConvertFloat4ToU32(Muted),
                 T("noObjectiveEvents"));
@@ -2136,29 +2612,10 @@ internal sealed class MatchDetailWindow : Window
                 : new Vector4(.56f, .60f, .62f, .92f);
             var at = point(node.X, node.Z);
 
-            // Home nodes use a faction-coloured diamond as the compact spawn
-            // emblem; route nodes use a smaller ring. The adjacent text is the
-            // same unique two-character code used by the mechanism table,
-            // never "P-"/"Secure node" or a repeated faction label.
-            var packed = ImGui.ColorConvertFloat4ToU32(color);
             var labelColor = node.HomeTeam is byte homeTeam
                 ? MapTeamColor(match, homeTeam) : color;
-            var labelPacked = ImGui.ColorConvertFloat4ToU32(labelColor);
-            if (node.HomeTeam.HasValue)
-            {
-                draw.AddQuadFilled(at + new Vector2(0, -7), at + new Vector2(7, 0),
-                    at + new Vector2(0, 7), at + new Vector2(-7, 0), labelPacked);
-                draw.AddQuad(at + new Vector2(0, -8), at + new Vector2(8, 0),
-                    at + new Vector2(0, 8), at + new Vector2(-8, 0),
-                    packed, 2f);
-            }
-            else
-            {
-                draw.AddCircleFilled(at, 5.5f,
-                    ImGui.ColorConvertFloat4ToU32(color with { W = .32f }));
-                draw.AddCircle(at, 6.5f, packed, 20, 2f);
-            }
-            draw.AddText(at + new Vector2(10, -8), labelPacked, SecureNodeDisplayName(node));
+            ObjectiveMapGlyphRenderer.DrawSecureNode(draw, at, SecureNodeDisplayName(node),
+                node.HomeTeam.HasValue, color, labelColor);
 
             var standing = (actorFrame?.Actors ?? []).Where(actor =>
                     Math.Abs(actor.Y - node.Y) <= 7 &&
@@ -2462,26 +2919,46 @@ internal sealed class MatchDetailWindow : Window
         .Select(group => group.OrderByDescending(row => row.ElapsedMs).First())
         .Any(row => row.Loaded);
 
-    private static long CloudNineActiveWaveStart(DetailedAnalysis detail, long elapsedMs)
-    {
-        var starts = (detail.ObjectiveDiscovery ?? [])
-            .Where(IsCloudNineTurbulenceObservation)
-            .Where(row => row.ElapsedMs <= elapsedMs)
-            .GroupBy(row => row.ObjectId)
-            .Where(group => group.OrderByDescending(row => row.ElapsedMs).First().Loaded)
-            .Select(group =>
-            {
-                var rows = group.OrderBy(row => row.ElapsedMs).ToArray();
-                var lastInactive = Array.FindLastIndex(rows, row => !row.Loaded);
-                return rows.Skip(lastInactive + 1).Where(row => row.Loaded)
-                    .Select(row => row.ElapsedMs).DefaultIfEmpty(elapsedMs).Min();
-            }).ToArray();
-        return starts.Length == 0 ? elapsedMs : starts.Min();
-    }
-
     private static bool IsCloudNineTurbulenceObservation(ObjectiveObjectObservation row) =>
         CrystallineMechanismCatalog.IsVerifiedCloudNineTurbulence(
             row.TerritoryId, row.BaseId, row.Name);
+
+    /// <summary>
+    /// Draws only directly observed Blessed Blast casts during snow weather.
+    /// The action-effect timestamp is the cast completion; the 5.6-second cast
+    /// window and reviewed 10-yalm world radius come from the current Action
+    /// row. Duplicate per-target effect rows are collapsed to one source cast.
+    /// </summary>
+    private static void DrawWorqorWeatherTelegraphs(ImDrawListPtr draw,
+        DetailedAnalysis detail, long now, Func<double, double, Vector2> point)
+    {
+        var casts = (detail.Actions ?? [])
+            .Where(row => row.ActionId == WorqorWeatherMechanics.BlessedBlastActionId &&
+                          row.SourceX.HasValue && row.SourceZ.HasValue &&
+                          now >= row.ElapsedMs - WorqorWeatherMechanics.BlessedBlastCastMs &&
+                          now <= row.ElapsedMs + 1_200)
+            .GroupBy(row => (row.ElapsedMs, row.SourceEntityId,
+                X: Math.Round(row.SourceX!.Value, 2), Z: Math.Round(row.SourceZ!.Value, 2)))
+            .Select(group => group.First());
+        foreach (var cast in casts)
+        {
+            var center = point(cast.SourceX!.Value, cast.SourceZ!.Value);
+            var beforeImpact = now < cast.ElapsedMs;
+            var fill = ImGui.ColorConvertFloat4ToU32(new Vector4(.40f, .91f, 1f,
+                beforeImpact ? .13f : .23f));
+            var edge = ImGui.ColorConvertFloat4ToU32(new Vector4(.52f, .96f, 1f, .94f));
+            var circle = WorqorWeatherMechanics.BuildWorldCircle(
+                    cast.SourceX.Value, cast.SourceZ.Value)
+                .Select(value => point(value.X, value.Z)).ToArray();
+            for (var index = 0; index < circle.Length; index++)
+            {
+                var next = (index + 1) % circle.Length;
+                draw.AddTriangleFilled(center, circle[index], circle[next], fill);
+                draw.AddLine(circle[index], circle[next], edge, beforeImpact ? 1.8f : 2.4f);
+            }
+            draw.AddCircleFilled(center, 3f, edge, 12);
+        }
+    }
 
     private void DrawCrystallineMechanismTelegraphs(ImDrawListPtr draw, LocalMatchAnalysis match,
         DetailedAnalysis detail, long now, Func<double, double, Vector2> point)
@@ -2902,9 +3379,19 @@ internal sealed class MatchDetailWindow : Window
     {
         label ??= string.Empty;
         var normalized = label.Trim();
+        if (dutyId == SealRockObjectiveCatalog.DutyId)
+            return SealRockObjectiveCatalog.ShortPointCode(normalized);
+        if (dutyId == OnsalObjectiveCatalog.DutyId)
+            return OnsalObjectiveCatalog.ShortPointCode(normalized);
+        if (dutyId == ShatterObjectiveCatalog.DutyId)
+        {
+            var shatterCode = ShatterObjectiveCatalog.ShortPointCode(normalized);
+            if (shatterCode.Length > 0) return shatterCode;
+        }
         var ccKey = normalized switch
         {
             "cc_tactical_crystal" => "ccTacticalCrystal",
+            "cc_tactical_checkpoint" => "ccHarmoniasCheckpoint",
             "cc_medicine_kit" => "ccMedicineKit",
             "cc_swift_sprint_zone" => "ccSwiftSprintZone",
             "cc_cloudnine_black_feather" => "ccCloudNineBlackFeather",
@@ -3004,20 +3491,18 @@ internal sealed class MatchDetailWindow : Window
             var value = trimmed[5..].TrimStart();
             if (value.Length > 0 && value[0] is 'S' or 'A' or 'B') return value[0];
         }
+        // CN/TW/JP clients commonly place the rank before the localized
+        // suffix, for example "A级", "A級" or "Aランク".
+        foreach (var rank in new[] { 'S', 'A', 'B' })
+            if (label.Contains($"{rank}\u7EA7", StringComparison.OrdinalIgnoreCase) ||
+                label.Contains($"{rank}\u7D1A", StringComparison.OrdinalIgnoreCase) ||
+                label.Contains($"{rank}ランク", StringComparison.OrdinalIgnoreCase))
+                return rank;
         for (var i = 0; i < label.Length; i++)
             if ((label[i] is 'S' or 'A' or 'B') &&
                 (i == 0 || !char.IsLetter(label[i - 1])) &&
                 (i + 1 == label.Length || !char.IsLetter(label[i + 1]))) return label[i];
         return '\0';
-    }
-
-    private static string ObjectiveOrdinal(string label)
-    {
-        var rank = ObjectiveRank(label);
-        if (rank == '\0') return string.Empty;
-        var start = label.LastIndexOf(rank);
-        var digits = new string(label.Skip(start + 1).TakeWhile(char.IsDigit).ToArray());
-        return digits;
     }
 
     private static void DrawRegularPolygon(ImDrawListPtr draw, Vector2 center, float radius, int sides,
@@ -3031,8 +3516,19 @@ internal sealed class MatchDetailWindow : Window
         }
     }
 
+    private static void DrawRegularPolygonFilled(ImDrawListPtr draw, Vector2 center, float radius, int sides,
+        uint color, float rotation = -MathF.PI / 2)
+    {
+        for (var i = 0; i < sides; i++)
+        {
+            var from = center + Polar(radius, rotation + i * MathF.Tau / sides);
+            var to = center + Polar(radius, rotation + (i + 1) * MathF.Tau / sides);
+            draw.AddTriangleFilled(center, from, to, color);
+        }
+    }
+
     private static void DrawObjectiveGlyph(ImDrawListPtr draw, Vector2 point, uint dutyId, string label,
-        uint maxHp, Vector4 color, bool capturing)
+        uint maxHp, Vector4 color, bool capturing, string state = "")
     {
         if (label.Equals("cc_medicine_kit", StringComparison.OrdinalIgnoreCase))
         {
@@ -3079,12 +3575,35 @@ internal sealed class MatchDetailWindow : Window
             return;
         }
         var packed = ImGui.ColorConvertFloat4ToU32(color);
-        var rank = ObjectiveRank(label);
+        var rank = dutyId == SealRockObjectiveCatalog.DutyId
+            ? SealRockObjectiveCatalog.RankFromEvidence(label, state)
+            : dutyId == OnsalObjectiveCatalog.DutyId
+                ? OnsalObjectiveCatalog.RankFromEvidence(label, state)
+                : ObjectiveRank(label);
         var sides = dutyId is 130 or 701 or 1080
-            ? rank switch { 'S' => 5, 'A' => 4, 'B' => 3, _ => 0 }
+            ? dutyId == SealRockObjectiveCatalog.DutyId
+                ? SealRockObjectiveCatalog.PolygonSides(rank)
+                : rank switch { 'S' => 5, 'A' => 4, 'B' => 3, _ => 0 }
             : 0;
-        if (sides > 0) DrawRegularPolygon(draw, point, 11, sides, packed, 3f,
-            sides == 4 ? MathF.PI / 4 : -MathF.PI / 2);
+        if (sides > 0)
+        {
+            var rotation = sides == 4 ? MathF.PI / 4 : -MathF.PI / 2;
+            if (dutyId is SealRockObjectiveCatalog.DutyId or OnsalObjectiveCatalog.DutyId)
+            {
+                DrawRegularPolygonFilled(draw, point, 11, sides,
+                    // Shared compact Frontline visual language: translucent
+                    // faction fill plus same-colour outline, without a dark halo.
+                    ImGui.ColorConvertFloat4ToU32(color with { W = .46f }), rotation);
+            }
+            DrawRegularPolygon(draw, point, 11, sides, packed, 3f, rotation);
+        }
+        else if (dutyId is SealRockObjectiveCatalog.DutyId or OnsalObjectiveCatalog.DutyId)
+        {
+            // A circular Seal Rock or Onsal node is always a decoding bug. If the UI
+            // rank is genuinely unavailable, omit the glyph instead of lying
+            // about its geometry; the compact code/percentage may remain.
+            return;
+        }
         else
         {
             // Shatter objectives remain circular, but their visual size reflects the
@@ -3101,6 +3620,11 @@ internal sealed class MatchDetailWindow : Window
 
     private static float IceObjectiveRadius(string label, uint maxHp)
     {
+        var code = ShatterObjectiveCatalog.ShortPointCode(label);
+        if (code.Length == 0) code = ShatterObjectiveCatalog.CompactPointCode(label);
+        if (code.StartsWith('A')) return 15f;
+        if (code is "B13" or "B14" or "B15") return 11f;
+        if (code.StartsWith('B')) return 7f;
         if (label.Contains("large", StringComparison.OrdinalIgnoreCase) ||
             label.Contains("\u5927\u51b0", StringComparison.OrdinalIgnoreCase) ||
             label.Contains("\u5927\u578b", StringComparison.OrdinalIgnoreCase)) return 15f;
@@ -3123,6 +3647,31 @@ internal sealed class MatchDetailWindow : Window
         draw.AddText(at + new Vector2(width + 3, -6), ImGui.ColorConvertFloat4ToU32(TextColor), text);
     }
 
+    private void DrawObjectiveCountdownBar(ImDrawListPtr draw, Vector2 at, int remainingSeconds,
+        Vector4 color)
+    {
+        const float width = 36, height = 5;
+        var background = ImGui.ColorConvertFloat4ToU32(
+            BattlefieldUiTheme.ChartBackground(configuration.UiTheme));
+        draw.AddRectFilled(at, at + new Vector2(width, height), background, 2);
+        draw.AddRectFilled(at, at + new Vector2(width *
+                (float)(OnsalObjectiveCatalog.CountdownPercent(remainingSeconds) / 100d), height),
+            ImGui.ColorConvertFloat4ToU32(color), 2);
+        var text = $"T-{Math.Clamp(remainingSeconds, 0, OnsalObjectiveCatalog.SpawnCountdownSeconds)}s";
+        draw.AddText(at + new Vector2(width + 3, -6),
+            ImGui.ColorConvertFloat4ToU32(TextColor), text);
+    }
+
+    private void DrawObjectivePercentText(ImDrawListPtr draw, Vector2 center, double percent, Vector4 color)
+    {
+        var text = $"{percent:0}%";
+        var size = ImGui.CalcTextSize(text);
+        var at = center - new Vector2(size.X / 2, 0);
+        draw.AddRectFilled(at - new Vector2(3, 1), at + size + new Vector2(3, 1),
+            ImGui.ColorConvertFloat4ToU32(BattlefieldUiTheme.ChartBackground(configuration.UiTheme) with { W = .82f }), 2);
+        draw.AddText(at, ImGui.ColorConvertFloat4ToU32(TextColor), text);
+    }
+
     private void DrawMapZoomSlider(Vector2 origin, Vector2 size, Vector2 restoreCursor)
     {
         // Render after the canvas so the narrow overlay owns mouse input. Forty percent
@@ -3141,12 +3690,9 @@ internal sealed class MatchDetailWindow : Window
     private static Vector4 MapTeamColor(LocalMatchAnalysis match, byte team)
     {
         if (match.Schema == LocalMatchAnalyzer.CrystallineSchema)
-            return team switch
-            {
-                0 => new Vector4(.24f, .62f, 1f, 1f), // Astra / 星极
-                1 => new Vector4(.95f, .27f, .30f, 1f), // Umbra / 灵极
-                _ => new Vector4(.62f, .66f, .70f, 1f)
-            };
+            return team < CrystallineTeamPalette.Colors.Length
+                ? CrystallineTeamPalette.Colors[team]
+                : new Vector4(.62f, .66f, .70f, 1f);
         return team < TeamColors.Length ? TeamColors[team] : new Vector4(.62f, .66f, .70f, 1f);
     }
 
@@ -3494,7 +4040,9 @@ internal sealed class MatchDetailWindow : Window
         var healing = localTeam is byte ownHealing
             ? actions.Where(x => x.SourceTeam == ownHealing && x.Healing > 0).ToArray()
             : actions.Where(x => x.Healing > 0).ToArray();
-        var objectiveEvents = (detail.ObjectiveTimeline ?? []).Where(x => x.ElapsedMs > startMs && x.ElapsedMs <= endMs).ToArray();
+        var objectiveEvents = (detail.ObjectiveTimeline ?? []).Where(x =>
+            !SealRockObjectiveCatalog.IsCompleteSnapshot(x) &&
+            x.ElapsedMs > startMs && x.ElapsedMs <= endMs).ToArray();
         if (ImGui.BeginTable("slice-summary", 5, ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersInnerV |
             ImGuiTableFlags.SizingStretchSame))
         {
@@ -5415,6 +5963,14 @@ internal sealed class MatchDetailWindow : Window
     }
     private void DrawActionSource(ActionSliceEvent row)
     {
+        if (string.IsNullOrWhiteSpace(row.SourceName) && row.SourceWorldId == 0 &&
+            row.SourceJobId == 0 && string.IsNullOrWhiteSpace(row.SourceOwnerName) &&
+            WorqorWeatherMechanics.IsSnowSpiritSource(currentTerritoryId, row.ActionId))
+        {
+            DrawJobIcon(0); ImGui.SameLine(0, 4);
+            ImGui.TextDisabled(T("worqorSnowSpirit"));
+            return;
+        }
         if (row.SourceEntityId != 0 || !string.IsNullOrWhiteSpace(row.SourceName) ||
             !string.IsNullOrWhiteSpace(row.SourceOwnerName))
         {

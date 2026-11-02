@@ -15,9 +15,12 @@ internal sealed class Configuration : IPluginConfiguration
     private static readonly byte[] TokenEntropy =
         Encoding.UTF8.GetBytes("BattlefieldFrontlineCollector.UploadToken.v1");
 
-    public int Version { get; set; } = 13;
+    public int Version { get; set; } = 15;
     public bool AutoUpload { get; set; }
     public bool OpenAfterMatch { get; set; } = true;
+    // Opens the rolling, local-only combat slice when a supported duty starts.
+    // Capture itself is never disabled by this presentation preference.
+    public bool AutoOpenLiveSliceOnMatchStart { get; set; } = true;
     // Navigation preferences only. Hidden modes remain safely captured and
     // their existing local records are never deleted.
     public bool ShowFrontline { get; set; } = true;
@@ -35,6 +38,11 @@ internal sealed class Configuration : IPluginConfiguration
     public string MachineFallbackId { get; set; } = string.Empty;
     public string Language { get; set; } = "auto";
     public string UiTheme { get; set; } = "night";
+    // A manual upload click is intentionally shared by Frontline and
+    // Crystalline Conflict. Persisting the deadline prevents page switches or
+    // a plugin reload from turning the UI into a request flood. Automatic
+    // capture uploads and the bounded retry queue do not use this UI gate.
+    public DateTime ManualUploadCooldownUntilUtc { get; set; } = DateTime.MinValue;
 
     public void Migrate()
     {
@@ -42,7 +50,8 @@ internal sealed class Configuration : IPluginConfiguration
             Realm = Region.Equals("cn", System.StringComparison.OrdinalIgnoreCase) ? "CN" : "JP";
         // Public builds use the HTTPS service by default. Historical private
         // network migration addresses are intentionally not part of the
-        // public source tree, and user-supplied endpoints are never rewritten.
+        // public client source or package, and user-supplied endpoints are
+        // never rewritten.
         if (Realm is not ("CN" or "JP" or "NA" or "EU" or "OCE")) Realm = "CN";
         if (UiTheme is not ("day" or "night" or "eye" or "contrast")) UiTheme = "night";
         if (Version < 9 && !string.IsNullOrWhiteSpace(CollectorToken) &&
@@ -50,7 +59,16 @@ internal sealed class Configuration : IPluginConfiguration
             SetCollectorToken(CollectorToken);
         if (string.IsNullOrWhiteSpace(MachineFallbackId))
             MachineFallbackId = Guid.NewGuid().ToString("N");
-        Version = 13;
+        if (ManualUploadCooldownUntilUtc.Kind == DateTimeKind.Local)
+            ManualUploadCooldownUntilUtc = ManualUploadCooldownUntilUtc.ToUniversalTime();
+        else if (ManualUploadCooldownUntilUtc.Kind == DateTimeKind.Unspecified &&
+                 ManualUploadCooldownUntilUtc != DateTime.MinValue)
+            ManualUploadCooldownUntilUtc = DateTime.SpecifyKind(
+                ManualUploadCooldownUntilUtc, DateTimeKind.Utc);
+        // A corrupted/future clock must not lock the UI indefinitely.
+        if (ManualUploadCooldownUntilUtc > DateTime.UtcNow.AddMinutes(5))
+            ManualUploadCooldownUntilUtc = DateTime.UtcNow.AddMinutes(5);
+        Version = 15;
     }
 
     public string GetCollectorToken()

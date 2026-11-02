@@ -62,7 +62,8 @@ internal sealed class JsonlMatchWriter : IDisposable
         var done = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
         var header = new { schema = "battlefield-frontline-collector/v2", @event = "match_start", matchUid,
             observedAtUtc = DateTime.UtcNow, dutyId, territoryId, localPlayerName, realm,
-            layoutVersion = GameLayout.LayoutVersion, captureVersion = "0.8.93",
+            layoutVersion = GameLayout.LayoutVersion,
+            captureVersion = typeof(JsonlMatchWriter).Assembly.GetName().Version?.ToString(3) ?? "unknown",
             partyKeySource = "result_packet_verified",
             captureFeatures = new[] { "action_effect", "status_change", "periodic_effect", "death_event",
                 "coordination_chat_summary", "target_marker", "field_marker", "marker_state_diff_100ms",
@@ -81,6 +82,8 @@ internal sealed class JsonlMatchWriter : IDisposable
                 "objective_event_map_markers_500ms", "objective_action_target_position",
                 "objective_global_map_end_timestamp", "objective_ui_number_arrays_delta_500ms",
                 "objective_hp_range_freshness_gate_190y",
+                "shatter_global_map_countdown_hp_percent_v1",
+                "seal_rock_global_objective_reducer_v1",
                 "cc_mechanism_object_catalog_v1", "cc_mechanism_source_actions",
                 "cc_micro_decision_raw_observations",
                 "local_use_action_read_only_v2", "local_action_state_read_only_50ms",

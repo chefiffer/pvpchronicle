@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -22,10 +23,12 @@ using Dalamud.Utility.Signatures;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
+using FFXIVClientStructs.FFXIV.Client.LayoutEngine.Group;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using NativeBattleChara = FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara;
+using NativeEventObject = FFXIVClientStructs.FFXIV.Client.Game.Object.EventObject;
 
 namespace BattlefieldFrontlineCollector;
 
@@ -112,9 +115,14 @@ public sealed unsafe class Plugin : IDalamudPlugin
     private bool disposed;
     private readonly Dictionary<uint, uint> activeObservedCasts = new();
     private readonly Dictionary<uint, ObjectiveObjectSnapshot> observedObjectiveObjects = new();
+    private readonly Dictionary<uint, WorqorFieldVisualSnapshot> observedWorqorFieldVisuals = new();
     private readonly Dictionary<uint, ObjectiveMapMarkerSnapshot> observedObjectiveMapMarkers = new();
+    private long objectiveMapSnapshotOrdinal;
     private bool secureStaticObjectivesPublished;
     private readonly Dictionary<int, int[]> observedObjectiveUiArrays = new();
+    private WorqorWeatherMechanics.WeatherKind pendingWorqorWeather;
+    private WorqorWeatherMechanics.WeatherKind activeWorqorWeather;
+    private long worqorWeatherActiveUntilMs = -1;
     private readonly HashSet<uint> emittedActionObjectives = new();
     private readonly HashSet<uint> observedCrystallineCrystalIds = new();
     private CrystallineProgressSnapshot? previousCrystallineProgress;
@@ -125,6 +133,11 @@ public sealed unsafe class Plugin : IDalamudPlugin
         string ObjectKind, byte SubKind, string Name, float X, float Y, float Z,
         bool IsTargetable, uint CurrentHp, uint MaxHp, byte Battalion,
         bool RealtimeHpEligible);
+    private readonly record struct WorqorFieldVisualSnapshot(uint ObjectId, uint LayoutId,
+        uint Arg, byte Visibility, bool LayoutActive, bool WantToBeActive,
+        ushort SharedTimelineState, uint PlayingTimelineIndex,
+        float RenderRed, float RenderGreen, float RenderBlue, float RenderAlpha,
+        byte? OwnerTeam, float X, float Y, float Z);
     private readonly record struct ObjectiveMapMarkerSnapshot(uint MarkerId, uint IconId,
         ushort DataId, byte MarkerType, sbyte EventState, string Label,
         float X, float Y, float Z, float Radius, int EndTimestamp,
@@ -359,6 +372,8 @@ public sealed unsafe class Plugin : IDalamudPlugin
         movementAnomaly.Reset();
         var mode = GameLayout.IsCrystallineDuty(dutyId) ? "crystalline_conflict" : "frontline";
         output.Start(matchUid, dutyId, territoryId, localPlayerName, matchRealm, mode);
+        if (configuration.AutoOpenLiveSliceOnMatchStart)
+            liveCombatWindow.IsOpen = true;
         Log.Information("{Mode} capture started: {MatchUid}, duty {DutyId}", mode, matchUid, dutyId);
     }
 
@@ -977,6 +992,8 @@ public sealed unsafe class Plugin : IDalamudPlugin
                     previous != snapshot)
                     WriteObjectiveObjectObservation(elapsedMs, snapshot,
                         observedObjectiveObjects.ContainsKey(actor.EntityId) ? "change" : "load", true);
+                if (WorqorObjectiveCatalog.PerFieldOwnershipEnabled)
+                    CaptureWorqorFieldState(elapsedMs, actor, snapshot);
                 if (isCrystallineCrystal)
                 {
                     observedCrystallineCrystalIds.Add(actor.EntityId);
@@ -1003,7 +1020,12 @@ public sealed unsafe class Plugin : IDalamudPlugin
                         hasHp ? snapshot.CurrentHp : 0, hasHp ? snapshot.MaxHp : 0,
                         $"{CrystallineMechanismCatalog.Version}:observer_loaded_object_v1");
                 }
-                else if (IsTacticalObjectiveName(snapshot.Name))
+                // Seal Rock's point lifecycle is owned exclusively by the
+                // global AgentMap stream. Nearby 3D objects remain available
+                // in ObjectiveDiscovery for participant/damage analysis, but
+                // must never enter the global objective-state timeline.
+                else if (dutyId != SealRockObjectiveCatalog.DutyId &&
+                         IsTacticalObjectiveName(snapshot.Name))
                     PublishObjectiveState(elapsedMs, snapshot.ObjectId, snapshot.Name,
                         snapshot.RealtimeHpEligible && snapshot.MaxHp > 0 && snapshot.CurrentHp <= 1
                             ? "destroyed" : "active",
@@ -1030,14 +1052,84 @@ public sealed unsafe class Plugin : IDalamudPlugin
                 PublishObjectiveState(elapsedMs, missing.ObjectId, crystallineMechanism.Label,
                     "inactive", 255, missing.X, missing.Y, missing.Z, 0, 0,
                     $"{CrystallineMechanismCatalog.Version}:observer_loaded_object_v1");
-            else if (IsTacticalObjectiveName(missing.Name))
+            else if (dutyId != SealRockObjectiveCatalog.DutyId &&
+                     IsTacticalObjectiveName(missing.Name))
                 PublishObjectiveState(elapsedMs, missing.ObjectId, missing.Name, "inactive",
                     missing.Battalion, missing.X, missing.Y, missing.Z,
                     0, 0, "observer_loaded_object_unloaded_v2");
         }
         observedObjectiveObjects.Clear();
         foreach (var pair in current) observedObjectiveObjects[pair.Key] = pair.Value;
+
+        if (dutyId == WorqorObjectiveCatalog.DutyId)
+        {
+            var loaded = current.Keys.ToHashSet();
+            foreach (var missing in observedWorqorFieldVisuals.Values
+                         .Where(previous => !loaded.Contains(previous.ObjectId)).ToArray())
+            {
+                WriteWorqorFieldState(elapsedMs, missing, "inactive");
+                observedWorqorFieldVisuals.Remove(missing.ObjectId);
+            }
+        }
     }
+
+    /// <summary>
+    /// Input: the rendered colour and shared animation state of one anonymous
+    /// Worqor Field of Triumph visual.
+    /// Output: a change-only per-field state row with a directly observed
+    /// faction colour (or unknown when the colour is ambiguous). Game-object
+    /// load/unload is deliberately not treated as ownership evidence.
+    /// </summary>
+    private void CaptureWorqorFieldState(long elapsedMs,
+        Dalamud.Game.ClientState.Objects.Types.IGameObject actor,
+        ObjectiveObjectSnapshot snapshot)
+    {
+        if (dutyId != WorqorObjectiveCatalog.DutyId ||
+            snapshot.BaseId != WorqorObjectiveCatalog.FieldVisualCandidateBaseId ||
+            actor.Address == nint.Zero) return;
+
+        var native = (NativeEventObject*)actor.Address;
+        var group = native->GameObject.SharedGroupLayoutInstance;
+        var layoutActive = group != null && group->ILayoutInstance.IsActive;
+        var wantToBeActive = group != null && group->WantToBeActive();
+        var renderColor = Vector4.Zero;
+        if (group != null) group->GetColor(&renderColor);
+        var owner = WorqorObjectiveCatalog.OwnerFromRenderColor(
+            renderColor.X, renderColor.Y, renderColor.Z, renderColor.W);
+        var raw = new WorqorFieldVisualSnapshot(snapshot.ObjectId,
+            native->GameObject.LayoutId, native->Arg, native->GameObject.Visibility,
+            layoutActive, wantToBeActive, native->SharedTimelineState,
+            group == null ? uint.MaxValue : group->PlayingTimelineIndex,
+            renderColor.X, renderColor.Y, renderColor.Z, renderColor.W, owner,
+            snapshot.X, snapshot.Y, snapshot.Z);
+        if (observedWorqorFieldVisuals.TryGetValue(snapshot.ObjectId, out var previous) &&
+            previous == raw) return;
+
+        observedWorqorFieldVisuals[snapshot.ObjectId] = raw;
+        // A loaded helper is not ownership evidence by itself. Only a directly
+        // observed faction render colour receives the active prefix and enters
+        // the numerator. Raw timeline values remain in the row so a later
+        // verified catalogue can decode neutral/contested animations without
+        // guessing from absence of colour.
+        var prefix = owner.HasValue ? "active" : "observed";
+        var state = $"{prefix}:layout={raw.LayoutId}:arg={raw.Arg}:" +
+                    $"visible={(raw.Visibility == 0 ? 1 : 0)}:" +
+                    $"layoutActive={(raw.LayoutActive ? 1 : 0)}:" +
+                    $"wantActive={(raw.WantToBeActive ? 1 : 0)}:" +
+                    $"sharedTimeline={raw.SharedTimelineState}:" +
+                    $"playingTimeline={raw.PlayingTimelineIndex}:" +
+                    $"rgba={raw.RenderRed:F4},{raw.RenderGreen:F4}," +
+                    $"{raw.RenderBlue:F4},{raw.RenderAlpha:F4}";
+        WriteWorqorFieldState(elapsedMs, raw, state);
+    }
+
+    private void WriteWorqorFieldState(long elapsedMs,
+        WorqorFieldVisualSnapshot raw, string state) =>
+        output.Write(new ObjectiveStateCaptureEvent(Schema, "objective_state", matchUid!,
+            DateTime.UtcNow, elapsedMs, raw.ObjectId,
+            WorqorObjectiveCatalog.FieldStateLabel, state, raw.OwnerTeam,
+            raw.X, raw.Y, raw.Z, 0, 0,
+            WorqorObjectiveCatalog.FieldStateScope));
 
     private void CaptureObjectiveMapMarkers(long elapsedMs)
     {
@@ -1054,6 +1146,7 @@ public sealed unsafe class Plugin : IDalamudPlugin
                     node.X, node.Y, node.Z, 0, 0, SecureObjectiveCatalog.EvidenceScope);
         }
         var current = new Dictionary<uint, ObjectiveMapMarkerSnapshot>();
+        var scanCompleted = false;
         try
         {
             var agent = AgentMap.Instance();
@@ -1062,19 +1155,43 @@ public sealed unsafe class Plugin : IDalamudPlugin
             {
                 if (marker.IconId == 0 || (marker.Flags & 1) != 0) continue;
                 if (marker.TerritoryTypeId != 0 && marker.TerritoryTypeId != territoryId) continue;
-                if (dutyId == 127 && !SecureObjectiveCatalog.IsMechanicMapIcon(marker.IconId))
+                var spawnTeam = FrontlineSpawnCatalog.TeamFromIcon(marker.IconId);
+                if (dutyId == 127 && !spawnTeam.HasValue &&
+                    !SecureObjectiveCatalog.IsMechanicMapIcon(marker.IconId))
+                    continue;
+                if (dutyId == WorqorObjectiveCatalog.DutyId && !spawnTeam.HasValue &&
+                    !WorqorObjectiveCatalog.IsObjectiveMapIcon(marker.IconId))
+                    continue;
+                if (dutyId == OnsalObjectiveCatalog.DutyId && !spawnTeam.HasValue &&
+                    !OnsalObjectiveCatalog.IsObjectiveMapIcon(marker.IconId))
+                    continue;
+                if (dutyId == SealRockObjectiveCatalog.DutyId && !spawnTeam.HasValue &&
+                    !SealRockObjectiveCatalog.IsPointIcon(marker.IconId))
                     continue;
                 var label = marker.TooltipString == null
                     ? string.Empty : marker.TooltipString->ToString();
                 if (string.IsNullOrWhiteSpace(label))
                     label = marker.DataId != 0 ? $"#{marker.DataId}" : $"icon:{marker.IconId}";
-                var displayText = FindRenderedMarkerText(agent, marker.IconId, marker.DataId);
+                if (GameLayout.IsCrystallineDuty(dutyId) &&
+                    CrystallineMapMarkerCatalog.IsKnownIcon(marker.IconId))
+                    label = CrystallineMapMarkerCatalog.Label(marker.IconId);
+                var displayText = FindRenderedMarkerText(agent, marker.IconId, marker.DataId,
+                    allowSameIconFallback: dutyId != ShatterObjectiveCatalog.DutyId);
+                // Shatter shares AgentMap with moving player/alliance markers.
+                // Coordinates are not identity evidence: those icons can pass
+                // directly over A2/B14 and would otherwise become ghost ice.
+                // Admit only the versioned ice UI icon family.
+                if (dutyId == ShatterObjectiveCatalog.DutyId && !spawnTeam.HasValue &&
+                    !ShatterObjectiveCatalog.IsIceMapMarker(marker.IconId))
+                    continue;
                 // EventMarker tooltips already carry values such as
                 // "Data Remaining: 32%" even when the rendered map subtext is
                 // empty. Prefer the rendered UI, then fall back to the same
                 // client-owned tooltip instead of losing the percentage.
-                var progressPercent = ParseDisplayedPercent(displayText) ??
-                                      ParseDisplayedPercent(label);
+                var progressPercent = dutyId == ShatterObjectiveCatalog.DutyId
+                    ? ShatterObjectiveCatalog.ParseDisplayedHealthPercent(displayText) ??
+                      ShatterObjectiveCatalog.ParseDisplayedHealthPercent(label)
+                    : ParseDisplayedPercent(displayText) ?? ParseDisplayedPercent(label);
                 var now = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 int? remainingSeconds = marker.EndTimestamp >= now && marker.EndTimestamp - now <= 86_400
                     ? marker.EndTimestamp - now : null;
@@ -1084,8 +1201,32 @@ public sealed unsafe class Plugin : IDalamudPlugin
                 if (dutyId == 127 && !remainingSeconds.HasValue)
                     remainingSeconds = SecureObjectiveCatalog.ParseDisplayedCountdownSeconds(displayText) ??
                                        SecureObjectiveCatalog.ParseDisplayedCountdownSeconds(label);
+                // Worqor exposes the strategic-point spawn timer in the same
+                // map tooltip pattern. Keep it as structured evidence even
+                // though the visible point label is later shortened to "09".
+                if (dutyId == WorqorObjectiveCatalog.DutyId && !remainingSeconds.HasValue)
+                    remainingSeconds = WorqorObjectiveCatalog.ParseDisplayedCountdownSeconds(displayText) ??
+                                       WorqorObjectiveCatalog.ParseDisplayedCountdownSeconds(label);
+                // Onsal uses the same client-owned tooltip countdown pattern.
+                // Keep it structured while the visible label is shortened to
+                // the stable two-digit point code.
+                if (dutyId == OnsalObjectiveCatalog.DutyId && !remainingSeconds.HasValue)
+                    remainingSeconds = OnsalObjectiveCatalog.ParseDisplayedCountdownSeconds(displayText) ??
+                                       OnsalObjectiveCatalog.ParseDisplayedCountdownSeconds(label);
+                // Shatter's map UI exposes both the next-spawn timer and the
+                // remaining ice percentage. EndTimestamp may stay zero, so
+                // preserve the rendered/tooltip timer just as we do for the
+                // verified Secure and Worqor UI contracts.
+                if (dutyId == ShatterObjectiveCatalog.DutyId && !remainingSeconds.HasValue)
+                    remainingSeconds = ShatterObjectiveCatalog.ParseDisplayedCountdownSeconds(displayText) ??
+                                       ShatterObjectiveCatalog.ParseDisplayedCountdownSeconds(label);
+                var markerDiscriminator = dutyId == SealRockObjectiveCatalog.DutyId
+                    ? SealRockObjectiveCatalog.MarkerDiscriminator(marker.IconId)
+                    : GameLayout.IsCrystallineDuty(dutyId) &&
+                      CrystallineMapMarkerCatalog.IsKnownIcon(marker.IconId)
+                        ? marker.IconId : 0;
                 var id = StableObjectiveMarkerId(marker.MarkerType, marker.DataId,
-                    marker.Position.X, marker.Position.Z);
+                    marker.Position.X, marker.Position.Z, markerDiscriminator);
                 var snapshot = new ObjectiveMapMarkerSnapshot(id, marker.IconId, marker.DataId,
                     marker.MarkerType, marker.EventState, label,
                     MathF.Round(marker.Position.X, 2), MathF.Round(marker.Position.Y, 2),
@@ -1096,26 +1237,73 @@ public sealed unsafe class Plugin : IDalamudPlugin
                 {
                     WriteObjectiveMapMarkerObservation(elapsedMs, snapshot,
                         observedObjectiveMapMarkers.ContainsKey(id) ? "change" : "load", true);
-                    var mapOwner = ObjectiveOwnerFromMapIcon(dutyId, marker.IconId);
-                    var state = dutyId == 127 &&
+                    var mapOwner = spawnTeam ?? ObjectiveOwnerFromMapIcon(dutyId, marker.IconId);
+                    var state = spawnTeam.HasValue
+                        ? FrontlineSpawnCatalog.State(marker.IconId)
+                        : GameLayout.IsCrystallineDuty(dutyId) &&
+                          CrystallineMapMarkerCatalog.IsKnownIcon(marker.IconId)
+                            ? CrystallineMapMarkerCatalog.State(marker.IconId)
+                        : dutyId == ShatterObjectiveCatalog.DutyId
+                            ? ShatterObjectiveCatalog.CaptureState(marker.IconId, marker.EventState)
+                        : dutyId == 127 &&
                                 SecureObjectiveCatalog.IsInactiveDisplacementPanel(marker.IconId, label)
                         ? "inactive"
+                        : dutyId == SealRockObjectiveCatalog.DutyId &&
+                          SealRockObjectiveCatalog.IsNeutralIcon(marker.IconId)
+                            ? $"neutral:event={marker.EventState}:icon={marker.IconId}"
+                        : dutyId == OnsalObjectiveCatalog.DutyId &&
+                          OnsalObjectiveCatalog.IsNeutralIcon(marker.IconId)
+                            ? $"neutral:event={marker.EventState}:icon={marker.IconId}"
                         : $"active:event={marker.EventState}:icon={marker.IconId}";
-                    PublishObjectiveState(elapsedMs, id, label,
+                    var mapEvidenceScope = spawnTeam.HasValue
+                        ? FrontlineSpawnCatalog.EvidenceScope
+                        : GameLayout.IsCrystallineDuty(dutyId) &&
+                          CrystallineMapMarkerCatalog.IsKnownIcon(marker.IconId)
+                            ? CrystallineMapMarkerCatalog.EvidenceScope
+                        : dutyId == ShatterObjectiveCatalog.DutyId
+                        ? ShatterObjectiveCatalog.GlobalMapEvidenceScope
+                        : dutyId == OnsalObjectiveCatalog.DutyId
+                            ? OnsalObjectiveCatalog.EvidenceScope
+                        : "client_global_event_map_marker_v2";
+                    PublishObjectiveState(elapsedMs, id,
+                        spawnTeam is byte team ? FrontlineSpawnCatalog.Label(team) : label,
                         state, mapOwner ?? 255,
                         snapshot.X, snapshot.Y, snapshot.Z, 0, 0,
-                        "client_global_event_map_marker_v2", snapshot.RemainingSeconds,
+                        mapEvidenceScope, snapshot.RemainingSeconds,
                         snapshot.ProgressPercent, snapshot.DisplayText);
                 }
             }
+            scanCompleted = true;
         }
         catch (Exception ex) { Log.Verbose(ex, "Skipped an invalid event-map-marker sample."); }
+        // A partial AgentMap enumeration is positive evidence only. It must
+        // never emit absence/unload rows for markers that the failed scan did
+        // not reach, because that would erase remote points from the replay.
+        if (!scanCompleted) return;
         foreach (var missing in observedObjectiveMapMarkers.Values
                      .Where(previous => !current.ContainsKey(previous.MarkerId)))
         {
             WriteObjectiveMapMarkerObservation(elapsedMs, missing, "unload", false);
-            PublishObjectiveState(elapsedMs, missing.MarkerId, missing.Label, "inactive", 255,
-                missing.X, missing.Y, missing.Z, 0, 0, "client_global_event_map_marker_v2");
+            var mapEvidenceScope = GameLayout.IsCrystallineDuty(dutyId) &&
+                                   CrystallineMapMarkerCatalog.IsKnownIcon(missing.IconId)
+                ? CrystallineMapMarkerCatalog.EvidenceScope
+                : dutyId == ShatterObjectiveCatalog.DutyId
+                ? ShatterObjectiveCatalog.GlobalMapEvidenceScope
+                : "client_global_event_map_marker_v2";
+            var missingLabel = GameLayout.IsCrystallineDuty(dutyId) &&
+                               CrystallineMapMarkerCatalog.IsKnownIcon(missing.IconId)
+                ? CrystallineMapMarkerCatalog.Label(missing.IconId) : missing.Label;
+            PublishObjectiveState(elapsedMs, missing.MarkerId, missingLabel, "inactive", 255,
+                missing.X, missing.Y, missing.Z, 0, 0, mapEvidenceScope);
+        }
+        if (dutyId == SealRockObjectiveCatalog.DutyId)
+        {
+            objectiveMapSnapshotOrdinal++;
+            output.Write(new ObjectiveStateCaptureEvent(Schema, "objective_state", matchUid!,
+                DateTime.UtcNow, elapsedMs, SealRockObjectiveCatalog.CompleteSnapshotObjectId,
+                SealRockObjectiveCatalog.CompleteSnapshotLabel,
+                $"complete:sequence={objectiveMapSnapshotOrdinal}:markers={current.Count}", null,
+                0, 0, 0, 0, 0, SealRockObjectiveCatalog.CompleteSnapshotEvidenceScope));
         }
         observedObjectiveMapMarkers.Clear();
         foreach (var pair in current) observedObjectiveMapMarkers[pair.Key] = pair.Value;
@@ -1163,7 +1351,8 @@ public sealed unsafe class Plugin : IDalamudPlugin
             DateTime.UtcNow, elapsedMs, id, label, state, owner, x, y, z,
             currentHp, maxHp, evidenceScope, RemainingSeconds: remainingSeconds,
             ProgressPercent: progressPercent, DisplayText: displayText));
-        if (state == "inactive" || state.Contains("destroy", StringComparison.OrdinalIgnoreCase) ||
+        if (state.StartsWith("inactive", StringComparison.OrdinalIgnoreCase) ||
+            state.Contains("destroy", StringComparison.OrdinalIgnoreCase) ||
             state.Contains("unload", StringComparison.OrdinalIgnoreCase))
             liveMarkers.RemoveObjective(id);
         else liveMarkers.SetObjective(new LiveObjectiveMarker(id, label, state,
@@ -1172,16 +1361,25 @@ public sealed unsafe class Plugin : IDalamudPlugin
     }
 
     private void WriteObjectiveMapMarkerObservation(long elapsedMs,
-        ObjectiveMapMarkerSnapshot value, string change, bool active) =>
+        ObjectiveMapMarkerSnapshot value, string change, bool active)
+    {
+        var evidenceScope = GameLayout.IsCrystallineDuty(dutyId) &&
+                            CrystallineMapMarkerCatalog.IsKnownIcon(value.IconId)
+            ? CrystallineMapMarkerCatalog.EvidenceScope
+            : dutyId == ShatterObjectiveCatalog.DutyId
+            ? ShatterObjectiveCatalog.GlobalMapEvidenceScope
+            : "client_global_event_map_marker_v2";
         output.Write(new ObjectiveMapMarkerObservationEvent(Schema,
             "objective_map_marker_observation", matchUid!, DateTime.UtcNow, elapsedMs,
             dutyId, territoryId, value.MarkerId, value.IconId, value.DataId,
             value.MarkerType, value.EventState, value.Label, value.X, value.Y, value.Z,
-            value.Radius, active, change, "client_global_event_map_marker_v2",
+            value.Radius, active, change, evidenceScope,
             value.EndTimestamp, value.RemainingSeconds, value.DisplayText,
             value.ProgressPercent));
+    }
 
-    private static uint StableObjectiveMarkerId(byte markerType, ushort dataId, float x, float z)
+    private static uint StableObjectiveMarkerId(byte markerType, ushort dataId, float x, float z,
+        uint discriminator = 0)
     {
         unchecked
         {
@@ -1189,6 +1387,8 @@ public sealed unsafe class Plugin : IDalamudPlugin
             foreach (var value in new[] { (uint)markerType, dataId, (uint)BitConverter.SingleToInt32Bits(x),
                          (uint)BitConverter.SingleToInt32Bits(z) })
                 hash = (hash ^ value) * 16777619u;
+            if (discriminator != 0)
+                hash = (hash ^ discriminator) * 16777619u;
             return hash == 0 ? 1u : hash;
         }
     }
@@ -1197,20 +1397,19 @@ public sealed unsafe class Plugin : IDalamudPlugin
     {
         if (currentDutyId == 127)
             return SecureObjectiveCatalog.OwnerFromIcon(iconId);
-        if (currentDutyId != 130) return null;
-        // Seal Rock 7.4 map UI: A/S point icons and their radius overlays use
-        // the same faction ordering.  The mapping was verified against the
-        // simultaneously loaded EventObj battalion in the 2026-10-29 capture.
-        return iconId switch
-        {
-            60_485 or 60_591 or 60_595 => 0, // Maelstrom / red
-            60_484 or 60_590 or 60_594 => 1, // Adders / yellow
-            60_486 or 60_592 or 60_596 => 2, // Flames / blue
-            _ => null
-        };
+        if (currentDutyId == WorqorObjectiveCatalog.DutyId)
+            return WorqorObjectiveCatalog.OwnerFromIcon(iconId);
+        if (currentDutyId == OnsalObjectiveCatalog.DutyId)
+            return OnsalObjectiveCatalog.OwnerFromIcon(iconId);
+        if (currentDutyId == SealRockObjectiveCatalog.DutyId)
+            return SealRockObjectiveCatalog.OwnerFromIcon(iconId);
+        if (GameLayout.IsCrystallineDuty(currentDutyId))
+            return CrystallineMapMarkerCatalog.TeamFromIcon(iconId);
+        return null;
     }
 
-    private static string FindRenderedMarkerText(AgentMap* agent, uint iconId, ushort dataId)
+    private static string FindRenderedMarkerText(AgentMap* agent, uint iconId, ushort dataId,
+        bool allowSameIconFallback = true)
     {
         try
         {
@@ -1226,7 +1425,10 @@ public sealed unsafe class Plugin : IDalamudPlugin
                 if (rendered.DataKey == dataId && !string.IsNullOrWhiteSpace(text)) return text;
                 if (string.IsNullOrWhiteSpace(fallback) && !string.IsNullOrWhiteSpace(text)) fallback = text;
             }
-            return fallback;
+            // Several Shatter nodes can share the same icon simultaneously.
+            // Returning another node's subtext would attach its HP/countdown
+            // to the wrong ice, so that adapter requires an exact DataKey.
+            return allowSameIconFallback ? fallback : string.Empty;
         }
         catch { return string.Empty; }
     }
@@ -1237,9 +1439,11 @@ public sealed unsafe class Plugin : IDalamudPlugin
         var percent = text.IndexOf('%');
         if (percent < 1) return null;
         var start = percent - 1;
-        while (start >= 0 && char.IsDigit(text[start])) start--;
-        var digits = text[(start + 1)..percent];
-        return double.TryParse(digits, out var value) && value is >= 0 and <= 100 ? value : null;
+        while (start >= 0 && (char.IsDigit(text[start]) || text[start] == '.')) start--;
+        var token = text[(start + 1)..percent];
+        return double.TryParse(token, System.Globalization.NumberStyles.Float,
+                   System.Globalization.CultureInfo.InvariantCulture, out var value) &&
+               value is >= 0 and <= 100 ? value : null;
     }
 
     private void CaptureObjectiveUiNumberArrays(long elapsedMs)
@@ -1275,13 +1479,57 @@ public sealed unsafe class Plugin : IDalamudPlugin
             output.Write(new ObjectiveUiNumberArrayObservationEvent(Schema,
                 "objective_ui_number_array_observation", matchUid!, DateTime.UtcNow,
                 elapsedMs, dutyId, territoryId, name, key, values.Length, changes, evidenceScope));
+        if (dutyId == WorqorWeatherMechanics.DutyId && name == "PvPMKS")
+            CaptureWorqorWeather(elapsedMs, values, first ? null : previous);
         observedObjectiveUiArrays[key] = values;
+    }
+
+    /// <summary>
+    /// Converts the directly observed Worqor PvP HUD countdown into the shared
+    /// objective-state contract. Aurora is a global weather notice only; no
+    /// per-player statuses or map glyphs are synthesized here.
+    /// </summary>
+    private void CaptureWorqorWeather(long elapsedMs, int[] values, int[]? previous)
+    {
+        if (activeWorqorWeather != WorqorWeatherMechanics.WeatherKind.None &&
+            worqorWeatherActiveUntilMs >= 0 && elapsedMs >= worqorWeatherActiveUntilMs)
+        {
+            PublishObjectiveState(worqorWeatherActiveUntilMs,
+                WorqorWeatherMechanics.WeatherObjectiveId,
+                WorqorWeatherMechanics.WeatherLabel, WorqorWeatherMechanics.InactiveState, 255,
+                0, 0, 0, 0, 0, WorqorWeatherMechanics.Version);
+            activeWorqorWeather = WorqorWeatherMechanics.WeatherKind.None;
+            worqorWeatherActiveUntilMs = -1;
+        }
+        if (WorqorWeatherMechanics.TryReadWarning(values, out var warning))
+        {
+            pendingWorqorWeather = warning.Kind;
+            activeWorqorWeather = WorqorWeatherMechanics.WeatherKind.None;
+            worqorWeatherActiveUntilMs = -1;
+            PublishObjectiveState(elapsedMs, WorqorWeatherMechanics.WeatherObjectiveId,
+                WorqorWeatherMechanics.WeatherLabel,
+                WorqorWeatherMechanics.WarningState(warning.Kind), 255,
+                0, 0, 0, 0, 0, WorqorWeatherMechanics.Version,
+                warning.Seconds);
+            return;
+        }
+
+        if (pendingWorqorWeather == WorqorWeatherMechanics.WeatherKind.None || previous == null ||
+            !WorqorWeatherMechanics.TryReadWarning(previous, out _)) return;
+        PublishObjectiveState(elapsedMs, WorqorWeatherMechanics.WeatherObjectiveId,
+            WorqorWeatherMechanics.WeatherLabel,
+            WorqorWeatherMechanics.ActiveState(pendingWorqorWeather), 255,
+            0, 0, 0, 0, 0, WorqorWeatherMechanics.Version);
+        activeWorqorWeather = pendingWorqorWeather;
+        var durationMs = WorqorWeatherMechanics.ActiveDurationMs(activeWorqorWeather);
+        worqorWeatherActiveUntilMs = durationMs > 0 ? elapsedMs + durationMs : -1;
+        pendingWorqorWeather = WorqorWeatherMechanics.WeatherKind.None;
     }
 
     private static bool IsTacticalObjectiveName(string name)
     {
         if (string.IsNullOrWhiteSpace(name)) return false;
-        return name.Contains("冰封", StringComparison.OrdinalIgnoreCase) ||
+        return ShatterObjectiveCatalog.IsIceLabel(name) ||
                name.Contains("氷", StringComparison.OrdinalIgnoreCase) ||
                name.Contains("アイス", StringComparison.OrdinalIgnoreCase) ||
                name.Contains("石文", StringComparison.OrdinalIgnoreCase) ||
@@ -1454,7 +1702,11 @@ public sealed unsafe class Plugin : IDalamudPlugin
                     playerName, persistedPath);
                 repository.Save(analysis);
                 if (configuration.AutoUpload) uploads.Enqueue(uid, persistedPath, realm);
-                if (configuration.OpenAfterMatch) mainWindow.IsOpen = true;
+                if (configuration.OpenAfterMatch)
+                {
+                    mainWindow.SelectModeForDuty(result.DutyId);
+                    mainWindow.IsOpen = true;
+                }
                 Log.Information("Crystalline Conflict capture completed: {MatchUid}", uid);
             }
             catch (Exception ex)
@@ -1493,7 +1745,11 @@ public sealed unsafe class Plugin : IDalamudPlugin
                 var analysis = LocalMatchAnalyzer.Build(result, matchStartedAt, realm, playerName, persistedPath);
                 repository.Save(analysis);
                 if (configuration.AutoUpload) uploads.Enqueue(uid, persistedPath, realm);
-                if (configuration.OpenAfterMatch) mainWindow.IsOpen = true;
+                if (configuration.OpenAfterMatch)
+                {
+                    mainWindow.SelectModeForDuty(result.DutyId);
+                    mainWindow.IsOpen = true;
+                }
                 Log.Information("Frontline capture completed: {MatchUid}", uid);
             }
             catch (Exception ex) { Log.Error(ex, "Could not finalize Frontline capture {MatchUid}", uid); }
@@ -1532,7 +1788,12 @@ public sealed unsafe class Plugin : IDalamudPlugin
         localActionIntegrity.Reset(); lastLocalActionStateSampleMs = -10_000;
         lastObjectiveObjectSampleMs = -10_000; lastCastSampleMs = -10_000;
         activeObservedCasts.Clear(); observedObjectiveObjects.Clear();
+        observedWorqorFieldVisuals.Clear();
         observedObjectiveMapMarkers.Clear(); observedObjectiveUiArrays.Clear();
+        objectiveMapSnapshotOrdinal = 0;
+        pendingWorqorWeather = WorqorWeatherMechanics.WeatherKind.None;
+        activeWorqorWeather = WorqorWeatherMechanics.WeatherKind.None;
+        worqorWeatherActiveUntilMs = -1;
         previousCrystallineProgress = null; lastCrystallineProgressWriteMs = -10_000;
         secureStaticObjectivesPublished = false;
         emittedActionObjectives.Clear(); observedCrystallineCrystalIds.Clear();
@@ -1556,6 +1817,7 @@ public sealed unsafe class Plugin : IDalamudPlugin
             elapsed.ElapsedMilliseconds, output.CurrentPath ?? string.Empty, visibleActorCount,
             output.DroppedEvents, local?.Name.TextValue ?? localPlayerName, local?.EntityId ?? 0,
             (ushort)(local?.HomeWorld.RowId ?? 0), ReadBattalion(local?.Address ?? IntPtr.Zero), dutyId,
+            territoryId,
             liveScoreProjection.Snapshot(elapsed.ElapsedMilliseconds));
     }
     private void ToggleWindow() => mainWindow.Toggle();

@@ -22,13 +22,14 @@ covering each asset must be verified before a public release.
 
 The binary package contains the following MIT-licensed runtime libraries:
 
-- `ZstdSharp.dll`, from ZstdSharp.Port 0.8.8, Copyright Oleg Stepanischev
-  2026. Source: https://github.com/oleg-st/ZstdSharp
+- `ZstdSharp.dll`, from ZstdSharp.Port 0.8.8. Source:
+  https://github.com/oleg-st/ZstdSharp
 - `System.Security.Cryptography.ProtectedData.dll` 10.0.0, Copyright
   Microsoft Corporation. Source: https://github.com/dotnet/dotnet
 
 The complete MIT license notices distributed with the plugin are in
-`licenses/ZstdSharp.Port-MIT.txt` and `licenses/Microsoft-DotNet-MIT.txt`.
+`licenses/ZstdSharp.Port-MIT.txt` and
+`licenses/Microsoft-DotNet-MIT.txt`.
 
 ## Referenced or adapted implementations
 

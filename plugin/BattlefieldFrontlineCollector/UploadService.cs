@@ -22,7 +22,8 @@ internal sealed record CollectorUploadResponse(bool Ok, string MatchUid, string?
     string? Status, string? PollUrl, double? MatchLogs, string? AnalysisUrl,
     IReadOnlyDictionary<string, RemoteScore>? PlayerScores,
     IReadOnlyDictionary<string, IReadOnlyList<BehaviorTendency>>? BehaviorTable,
-    string? EvidenceNotice, string? Error);
+    string? EvidenceNotice, string? Error, string? ResponseTrace = null,
+    string? PublicState = null, int? PollAfterSeconds = null, bool? CanRetry = null);
 internal sealed record CollectorDetailResponse(bool Ok, string MatchUid, string? Realm,
     string? Status, DetailedAnalysis? Detail, string? Error);
 internal sealed record CollectorIntegrityCohortResponse(bool Ok, string? Schema,
@@ -49,12 +50,16 @@ internal sealed record CollectorMetaResponse(string? ServerVersion,
     int DatabaseSchema, int RequiredDatabaseSchema, string? AnalysisVersion,
     IReadOnlyList<string>? AcceptedPackageEncodings = null,
     IReadOnlyList<string>? DetailFormats = null,
-    IReadOnlyList<CollectorPublicCodebook>? PublicCodebooks = null);
+    IReadOnlyList<CollectorPublicCodebook>? PublicCodebooks = null,
+    CollectorDistributedCompute? DistributedCompute = null);
+internal sealed record CollectorDistributedCompute(string? Mode, string? WorkerProtocol,
+    string? ParserVersion, string? SnapshotSchema, string? OfficialScoreWriter);
 internal sealed record CollectorPublicCodebook(string? Kind, int Version, string? Sha256);
 internal sealed record CollectorReadyResponse(bool Ok, string? Code,
     int RequiredSchema, int ActualSchema);
 internal sealed record ServerCompatibilityState(bool Checked, bool Available,
-    bool Maintenance, string Code, string? ServerVersion);
+    bool Maintenance, string Code, string? ServerVersion,
+    string? DistributedComputeMode = null, string? SnapshotSchema = null);
 
 internal sealed class RateLimitException(TimeSpan retryAfter, string message) : Exception(message)
 {
@@ -80,6 +85,7 @@ internal sealed class UploadService : IDisposable
     private readonly HttpClient directClient = CreateDirectHttpClient();
     private readonly HttpClient publicClient = CreatePublicHttpClient();
     private readonly ConcurrentDictionary<string, UploadProgress> uploadProgress = new();
+    private readonly ConcurrentDictionary<string, UploadProgress> detailProgress = new();
     private readonly ConcurrentDictionary<string, int> retryAttempts = new();
     private readonly ConcurrentDictionary<string, Task> processingMonitors = new();
     private readonly Task compatibilityProbe;
@@ -129,7 +135,7 @@ internal sealed class UploadService : IDisposable
         // Cloudflare Browser Integrity rejects an empty/default .NET signature
         // with error 1010. A stable product identifier also makes legitimate
         // collector traffic auditable without exposing player information.
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("BattlefieldFrontlineCollector/0.8.105");
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("BattlefieldFrontlineCollector/0.8.128");
         return client;
     }
 
@@ -251,6 +257,9 @@ internal sealed class UploadService : IDisposable
     public bool TryGetUploadProgress(string matchUid, out UploadProgress progress)
         => uploadProgress.TryGetValue(matchUid, out progress!);
 
+    public bool TryGetDetailProgress(string matchUid, out UploadProgress progress)
+        => detailProgress.TryGetValue(matchUid, out progress!);
+
     public ServerCompatibilityState ServerCompatibility => serverCompatibility;
 
     public string MachineBindingId => machineId;
@@ -328,6 +337,8 @@ internal sealed class UploadService : IDisposable
     {
         if (!pendingDetails.TryAdd(localMatchUid, 0)) return;
         repository.SetDetailError(localMatchUid, null);
+        detailProgress[localMatchUid] = new UploadProgress(
+            "detail_waiting", 0, 0, 0, 0, 0, TimeSpan.Zero);
         detailQueue.Enqueue((localMatchUid, remoteMatchUid, realm));
         wake.Release();
     }
@@ -430,9 +441,22 @@ internal sealed class UploadService : IDisposable
     {
         if (!configuration.AutoUpload) return;
         foreach (var match in repository.Snapshot())
-            if (match.UploadState is not "complete" && File.Exists(match.CapturePath))
+        {
+            if (match.UploadState is "ready" or "complete") continue;
+            if (match.UploadState is "received" or "processing" &&
+                !string.IsNullOrWhiteSpace(match.RemoteMatchUid))
+            {
+                var remoteUid = match.RemoteMatchUid!;
+                var pollUrl = $"/api/collector/v2/matches/{match.Realm}/{remoteUid}";
+                StartProcessingMonitor(match.MatchUid, match.CapturePath, match.Realm,
+                    pollUrl, File.Exists(match.CapturePath)
+                        ? new FileInfo(match.CapturePath).Length : 0, TimeSpan.Zero, 15);
+                continue;
+            }
+            if (File.Exists(match.CapturePath))
                 Enqueue(match.MatchUid, match.CapturePath,
                     string.IsNullOrWhiteSpace(match.Realm) ? configuration.Realm : match.Realm);
+        }
     }
 
     private async Task RefreshServerCompatibilityAsync()
@@ -477,10 +501,12 @@ internal sealed class UploadService : IDisposable
                 .ConfigureAwait(false);
             var ready = JsonSerializer.Deserialize<CollectorReadyResponse>(readyBody, JsonOptions);
             if ((int)readyStatus is >= 200 and < 300 && ready?.Ok == true)
-                serverCompatibility = new(true, true, false, "ready", meta.ServerVersion);
+                serverCompatibility = new(true, true, false, "ready", meta.ServerVersion,
+                    meta.DistributedCompute?.Mode, meta.DistributedCompute?.SnapshotSchema);
             else
                 serverCompatibility = new(true, false, true,
-                    ready?.Code ?? $"ready_http_{(int)readyStatus}", meta.ServerVersion);
+                    ready?.Code ?? $"ready_http_{(int)readyStatus}", meta.ServerVersion,
+                    meta.DistributedCompute?.Mode, meta.DistributedCompute?.SnapshotSchema);
         }
         catch (Exception ex)
         {
@@ -656,12 +682,16 @@ internal sealed class UploadService : IDisposable
         {
             if (string.IsNullOrWhiteSpace(CollectorToken))
                 throw new InvalidOperationException("missing_token");
-            var (statusCode, body) = await SendAuthorizedGetAsync(url);
+            var (statusCode, body, responseTrace) = await SendAuthorizedGetAsync(url);
             if ((int)statusCode is < 200 or >= 300)
-                throw new InvalidOperationException($"HTTP {(int)statusCode}: {body}");
+                throw new InvalidOperationException(HttpResponseTrace.Append(
+                    $"HTTP {(int)statusCode}: {body}", responseTrace));
             var result = JsonSerializer.Deserialize<CollectorIntegrityCohortResponse>(body, JsonOptions)
-                         ?? throw new InvalidDataException("Server returned an empty cohort response.");
-            if (!result.Ok) throw new InvalidDataException(result.Error ?? "Cohort query failed.");
+                         ?? throw new InvalidDataException(HttpResponseTrace.Append(
+                             "Server returned an empty cohort response.", responseTrace));
+            if (!result.Ok)
+                throw new InvalidDataException(HttpResponseTrace.Append(
+                    result.Error ?? "Cohort query failed.", responseTrace));
             cohortCache[key] = new IntegrityCohortSnapshot(key, false,
                 result.Series?.OrderByDescending(x => x.Observations).FirstOrDefault(),
                 result.RealmCoverage);
@@ -675,11 +705,14 @@ internal sealed class UploadService : IDisposable
 
     private async Task DownloadDetailsAsync(string localMatchUid, string remoteMatchUid, string realm)
     {
+        var timer = Stopwatch.StartNew();
         try
         {
             if (string.IsNullOrWhiteSpace(CollectorToken))
                 throw new InvalidOperationException("missing_token");
-            var fetched = await FetchDetailsAsync(remoteMatchUid, realm);
+            detailProgress[localMatchUid] = new UploadProgress(
+                "detail_connecting", 0, 0, 0, 0, 0, timer.Elapsed);
+            var fetched = await FetchDetailsAsync(localMatchUid, remoteMatchUid, realm);
             var statusCode = fetched.StatusCode;
             var body = fetched.Body;
             if (UploadRecoveryPolicy.DetailAccessMustBeReestablished(statusCode, body) &&
@@ -700,7 +733,7 @@ internal sealed class UploadService : IDisposable
                     var refreshed = repository.Snapshot()
                         .FirstOrDefault(x => x.MatchUid == localMatchUid);
                     remoteMatchUid = refreshed?.RemoteMatchUid ?? remoteMatchUid;
-                    fetched = await FetchDetailsAsync(remoteMatchUid, realm);
+                    fetched = await FetchDetailsAsync(localMatchUid, remoteMatchUid, realm);
                     statusCode = fetched.StatusCode;
                     body = fetched.Body;
                 }
@@ -711,43 +744,57 @@ internal sealed class UploadService : IDisposable
                          ?? throw new InvalidDataException("Server returned an empty detail response.");
             if (!result.Ok || result.Detail == null)
                 throw new InvalidDataException(result.Error ?? "Server returned no detail analysis.");
+            var downloaded = detailProgress.GetValueOrDefault(localMatchUid);
+            detailProgress[localMatchUid] = new UploadProgress("detail_decoding",
+                downloaded?.CompletedBytes ?? 0, downloaded?.TotalBytes ?? 0,
+                0, 0, downloaded?.BytesPerSecond ?? 0, timer.Elapsed);
             repository.MergeDetail(localMatchUid, result.Detail, fetched.CompactPayload);
+            downloaded = detailProgress.GetValueOrDefault(localMatchUid);
+            detailProgress[localMatchUid] = new UploadProgress("detail_complete",
+                downloaded?.CompletedBytes ?? 0, downloaded?.TotalBytes ?? 0,
+                0, 0, downloaded?.BytesPerSecond ?? 0, timer.Elapsed);
         }
         catch (Exception ex) when (ex is not OperationCanceledException || !stop.IsCancellationRequested)
         {
             repository.SetDetailError(localMatchUid, UploadErrorCode(ex));
+            var downloaded = detailProgress.GetValueOrDefault(localMatchUid);
+            detailProgress[localMatchUid] = new UploadProgress("detail_failed",
+                downloaded?.CompletedBytes ?? 0, downloaded?.TotalBytes ?? 0,
+                0, 0, downloaded?.BytesPerSecond ?? 0, timer.Elapsed);
             log.Warning(ex, "Detailed analysis download failed for {MatchUid}", remoteMatchUid);
         }
     }
 
     private Task<DetailFetchResult> FetchDetailsAsync(
-        string remoteMatchUid, string realm)
+        string localMatchUid, string remoteMatchUid, string realm)
     {
         var url = configuration.ServerBaseUrl.TrimEnd('/') +
                   $"/api/collector/v2/matches/{realm}/{remoteMatchUid}/details";
-        return SendAuthorizedDetailGetAsync(url);
+        return SendAuthorizedDetailGetAsync(url, localMatchUid);
     }
 
-    private async Task<DetailFetchResult> SendAuthorizedDetailGetAsync(string url)
+    private async Task<DetailFetchResult> SendAuthorizedDetailGetAsync(
+        string url, string progressKey)
     {
         var endpoint = new Uri(url);
         try { return await SendAuthorizedDetailGetWithCodecFallbackAsync(
-            PrimaryClientFor(endpoint), endpoint); }
+            PrimaryClientFor(endpoint), endpoint, progressKey); }
         catch (Exception ex) when (FallbackClientFor(endpoint) is { } fallback &&
                                    IsRetryableTransportFailure(ex))
         {
             log.Warning(ex,"Direct BFDETAIL GET failed for {Url}; retrying via system proxy",url);
-            return await SendAuthorizedDetailGetWithCodecFallbackAsync(fallback, endpoint);
+            return await SendAuthorizedDetailGetWithCodecFallbackAsync(
+                fallback, endpoint, progressKey);
         }
     }
 
     private async Task<DetailFetchResult> SendAuthorizedDetailGetWithCodecFallbackAsync(
-        HttpClient client, Uri endpoint)
+        HttpClient client, Uri endpoint, string progressKey)
     {
         try
         {
             return await SendAuthorizedDetailGetAttemptAsync(client, endpoint,
-                preferCompact: true);
+                preferCompact: true, progressKey: progressKey);
         }
         catch (InvalidDataException exception) when (serverSupportsBfdetail)
         {
@@ -758,12 +805,12 @@ internal sealed class UploadService : IDisposable
             log.Warning(exception,
                 "BFDETAIL decode failed for {Url}; retrying as ordinary JSON", endpoint);
             return await SendAuthorizedDetailGetAttemptAsync(client, endpoint,
-                preferCompact: false);
+                preferCompact: false, progressKey: progressKey);
         }
     }
 
     private async Task<DetailFetchResult> SendAuthorizedDetailGetAttemptAsync(
-        HttpClient client, Uri endpoint, bool preferCompact)
+        HttpClient client, Uri endpoint, bool preferCompact, string progressKey)
     {
         using var request=new HttpRequestMessage(HttpMethod.Get,endpoint);
         PreferHttp2(request); AddAuthorization(request);
@@ -772,7 +819,22 @@ internal sealed class UploadService : IDisposable
         else
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         using var response=await client.SendAsync(request,HttpCompletionOption.ResponseHeadersRead,stop.Token);
-        var bytes=await response.Content.ReadAsByteArrayAsync(stop.Token);
+        var total=response.Content.Headers.ContentLength ?? 0;
+        var timer=Stopwatch.StartNew();
+        await using var stream=await response.Content.ReadAsStreamAsync(stop.Token);
+        using var buffer=new MemoryStream(total is > 0 and <= int.MaxValue ? (int)total : 0);
+        var block=new byte[64*1024];
+        long completed=0;
+        while (true)
+        {
+            var read=await stream.ReadAsync(block.AsMemory(),stop.Token);
+            if (read==0) break;
+            await buffer.WriteAsync(block.AsMemory(0,read),stop.Token);
+            completed+=read;
+            detailProgress[progressKey]=new UploadProgress("detail_downloading",
+                completed,total,0,0,completed/Math.Max(.001,timer.Elapsed.TotalSeconds),timer.Elapsed);
+        }
+        var bytes=buffer.ToArray();
         if (IsRetryableGatewayStatus(response.StatusCode))
             throw new InvalidOperationException(
                 $"HTTP {(int)response.StatusCode}: {Encoding.UTF8.GetString(bytes)}");
@@ -782,30 +844,37 @@ internal sealed class UploadService : IDisposable
         return new DetailFetchResult(response.StatusCode,body,isCompact ? bytes : null);
     }
 
-    private async Task<(HttpStatusCode StatusCode, string Body)> SendAuthorizedGetAsync(string url)
+    private async Task<(HttpStatusCode StatusCode, string Body, string? ResponseTrace)>
+        SendAuthorizedGetAsync(string url, bool matchStatusContract = false)
     {
         var endpoint = new Uri(url);
         try
         {
-            return await SendAuthorizedGetAttemptAsync(PrimaryClientFor(endpoint), endpoint);
+            return await SendAuthorizedGetAttemptAsync(
+                PrimaryClientFor(endpoint), endpoint, matchStatusContract);
         }
         catch (Exception ex) when (FallbackClientFor(endpoint) is { } fallback &&
                                    IsRetryableTransportFailure(ex))
         {
             log.Warning(ex, "Direct Cloudflare GET failed for {Url}; retrying via system proxy", url);
-            return await SendAuthorizedGetAttemptAsync(fallback, endpoint);
+            return await SendAuthorizedGetAttemptAsync(fallback, endpoint, matchStatusContract);
         }
     }
 
-    private async Task<(HttpStatusCode StatusCode, string Body)> SendAuthorizedGetAttemptAsync(
-        HttpClient client, Uri endpoint)
+    private async Task<(HttpStatusCode StatusCode, string Body, string? ResponseTrace)>
+        SendAuthorizedGetAttemptAsync(
+            HttpClient client, Uri endpoint, bool matchStatusContract)
     {
         using var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
         PreferHttp2(request);
         AddAuthorization(request);
+        if (matchStatusContract)
+            request.Headers.TryAddWithoutValidation(
+                "X-PvPChronicle-Status-Contract", "v1");
         using var response = await client.SendAsync(request,
             HttpCompletionOption.ResponseHeadersRead, stop.Token);
-        return (response.StatusCode, await response.Content.ReadAsStringAsync(stop.Token));
+        return (response.StatusCode, await response.Content.ReadAsStringAsync(stop.Token),
+            HttpResponseTrace.From(response));
     }
 
     private async Task<(HttpStatusCode StatusCode, string Body, string? ETag,
@@ -882,10 +951,15 @@ internal sealed class UploadService : IDisposable
                                    "/api/collector/v2/matches");
             var result = await SendChunkedUploadAsync(endpoint, compressedPath, matchUid, realm,
                 packageEncoding);
-            if (!result.Ok) throw new InvalidDataException(result.Error ?? "Server rejected the match.");
-            repository.SetUploadState(matchUid, "processing");
+            if (!result.Ok)
+                throw new InvalidDataException(HttpResponseTrace.Append(
+                    result.Error ?? "Server rejected the match.", result.ResponseTrace));
+            var acceptedState = MatchTransferContract.Normalize(result.PublicState ?? result.Status);
+            if (acceptedState is not ("received" or "processing" or "ready"))
+                acceptedState = "received";
+            repository.SetRemoteUploadState(matchUid, result.MatchUid, acceptedState);
             var packageBytes = new FileInfo(compressedPath).Length;
-            uploadProgress[matchUid] = new UploadProgress("processing", packageBytes,
+            uploadProgress[matchUid] = new UploadProgress(acceptedState, packageBytes,
                 packageBytes, 0, 0, packageBytes / Math.Max(.001, totalTimer.Elapsed.TotalSeconds),
                 totalTimer.Elapsed);
             // Safe package acceptance and CPU-heavy analysis are different stages.
@@ -893,11 +967,13 @@ internal sealed class UploadService : IDisposable
             // analysis workers parse this match. A bounded per-match monitor keeps
             // the durable "processing" state and publishes scores when ready.
             var pollUrl = result.PollUrl ??
-                          $"/api/collector/v2/matches/{realm}/{matchUid}";
+                          $"/api/collector/v2/matches/{realm}/{result.MatchUid}";
+            var pollAfterSeconds = MatchTransferContract.PollDelaySeconds(result.PollAfterSeconds,
+                acceptedState == "processing" ? 15 : 30);
             if (waitForAnalysis)
             {
-                await PollUntilReadyAsync(matchUid, pollUrl).ConfigureAwait(false);
-                uploadProgress[matchUid] = new UploadProgress("complete", packageBytes,
+                await PollUntilReadyAsync(matchUid, pollUrl, pollAfterSeconds).ConfigureAwait(false);
+                uploadProgress[matchUid] = new UploadProgress("ready", packageBytes,
                     packageBytes, 0, 0,
                     packageBytes / Math.Max(.001, totalTimer.Elapsed.TotalSeconds),
                     totalTimer.Elapsed);
@@ -905,19 +981,20 @@ internal sealed class UploadService : IDisposable
             else
             {
                 StartProcessingMonitor(matchUid, path, realm, pollUrl,
-                    packageBytes, totalTimer.Elapsed);
+                    packageBytes, totalTimer.Elapsed, pollAfterSeconds);
             }
             completed = true;
         }
         catch (OperationCanceledException) when (stop.IsCancellationRequested)
         {
-            repository.SetUploadState(matchUid, "processing");
+            // Preserve the last durable public state; cancellation is not a
+            // server failure and must not turn a received match into an error.
         }
         catch (Exception ex)
         {
-            repository.SetUploadState(matchUid, "failed", UploadErrorCode(ex));
+            repository.SetUploadState(matchUid, "action_required", UploadErrorCode(ex));
             var previous = uploadProgress.GetValueOrDefault(matchUid);
-            uploadProgress[matchUid] = new UploadProgress("failed",
+            uploadProgress[matchUid] = new UploadProgress("action_required",
                 previous?.CompletedBytes ?? 0, previous?.TotalBytes ?? 0,
                 previous?.CompletedChunks ?? 0, previous?.TotalChunks ?? 0,
                 previous?.BytesPerSecond ?? 0, totalTimer.Elapsed);
@@ -935,30 +1012,32 @@ internal sealed class UploadService : IDisposable
     }
 
     private void StartProcessingMonitor(string matchUid, string path, string realm,
-        string pollUrl, long packageBytes, TimeSpan acceptedElapsed)
+        string pollUrl, long packageBytes, TimeSpan acceptedElapsed, int initialPollAfterSeconds)
     {
         processingMonitors.GetOrAdd(matchUid, ignoredMatchUid => Task.Run(async () =>
         {
             try
             {
-                await PollUntilReadyAsync(matchUid, pollUrl).ConfigureAwait(false);
-                uploadProgress[matchUid] = new UploadProgress("complete", packageBytes,
+                await PollUntilReadyAsync(matchUid, pollUrl, initialPollAfterSeconds).ConfigureAwait(false);
+                uploadProgress[matchUid] = new UploadProgress("ready", packageBytes,
                     packageBytes, 0, 0,
                     packageBytes / Math.Max(.001, acceptedElapsed.TotalSeconds), acceptedElapsed);
                 retryAttempts.TryRemove(matchUid, out _);
             }
             catch (OperationCanceledException) when (stop.IsCancellationRequested)
             {
-                repository.SetUploadState(matchUid, "processing");
+                // Keep the last server-confirmed public state across logout or
+                // plugin shutdown so the next launch can resume status polling.
             }
             catch (Exception ex)
             {
-                repository.SetUploadState(matchUid, "failed", UploadErrorCode(ex));
-                uploadProgress[matchUid] = new UploadProgress("failed", packageBytes,
+                repository.SetUploadState(matchUid, "action_required", UploadErrorCode(ex));
+                uploadProgress[matchUid] = new UploadProgress("action_required", packageBytes,
                     packageBytes, 0, 0,
                     packageBytes / Math.Max(.001, acceptedElapsed.TotalSeconds), acceptedElapsed);
                 log.Warning(ex, "Collector analysis monitor failed for {MatchUid}", matchUid);
-                if (configuration.AutoUpload && File.Exists(path) &&
+                if (ex.Message != "server_action_required" &&
+                    configuration.AutoUpload && File.Exists(path) &&
                     !string.IsNullOrWhiteSpace(CollectorToken))
                     ScheduleRetry(matchUid, path, realm);
             }
@@ -1014,7 +1093,8 @@ internal sealed class UploadService : IDisposable
                 var response = await SendUploadChunkWithFallbackAsync(endpoint, buffer, length,
                     matchUid, realm, chunkIndex, chunkCount, packageEncoding);
                 if (!response.Ok)
-                    throw new InvalidDataException(response.Error ?? "Server rejected an upload chunk.");
+                    throw new InvalidDataException(HttpResponseTrace.Append(
+                        response.Error ?? "Server rejected an upload chunk.", response.ResponseTrace));
                 var bytes = Interlocked.Add(ref completedBytes, length);
                 var chunks = Interlocked.Increment(ref completedChunks);
                 uploadProgress[matchUid] = new UploadProgress("uploading", bytes,
@@ -1091,6 +1171,7 @@ internal sealed class UploadService : IDisposable
     {
         var primaryClient = PrimaryClientFor(endpoint);
         var fallbackClient = FallbackClientFor(endpoint);
+        string? lastRateLimitError = null;
         for (var attempt = 0; attempt < 5; attempt++)
         {
             try
@@ -1100,6 +1181,7 @@ internal sealed class UploadService : IDisposable
             }
             catch (RateLimitException rateLimit) when (attempt < 4)
             {
+                lastRateLimitError = rateLimit.Message;
                 var jitter = TimeSpan.FromMilliseconds(Random.Shared.Next(100, 450));
                 await Task.Delay(rateLimit.RetryAfter + jitter, stop.Token);
             }
@@ -1115,12 +1197,14 @@ internal sealed class UploadService : IDisposable
                 }
                 catch (RateLimitException rateLimit) when (attempt < 4)
                 {
+                    lastRateLimitError = rateLimit.Message;
                     var jitter = TimeSpan.FromMilliseconds(Random.Shared.Next(100, 450));
                     await Task.Delay(rateLimit.RetryAfter + jitter, stop.Token);
                 }
             }
         }
-        throw new InvalidOperationException("Upload remained rate limited after five attempts.");
+        throw new InvalidOperationException(lastRateLimitError ??
+                                            "Upload remained rate limited after five attempts.");
     }
 
     private async Task<CollectorUploadResponse> SendUploadChunkAttemptAsync(HttpClient client,
@@ -1140,18 +1224,23 @@ internal sealed class UploadService : IDisposable
         using var response = await client.SendAsync(request,
             HttpCompletionOption.ResponseHeadersRead, stop.Token);
         var body = await response.Content.ReadAsStringAsync(stop.Token);
+        var responseTrace = HttpResponseTrace.From(response);
         if (response.StatusCode == (HttpStatusCode)429)
         {
             var retryAfter = response.Headers.RetryAfter?.Delta ??
                 (response.Headers.RetryAfter?.Date is { } date
                     ? date - DateTimeOffset.UtcNow : TimeSpan.FromSeconds(2));
             retryAfter = TimeSpan.FromSeconds(Math.Clamp(retryAfter.TotalSeconds, 1, 30));
-            throw new RateLimitException(retryAfter, $"HTTP 429: {body}");
+            throw new RateLimitException(retryAfter,
+                HttpResponseTrace.Append($"HTTP 429: {body}", responseTrace));
         }
         if (!response.IsSuccessStatusCode)
-            throw new InvalidOperationException($"HTTP {(int)response.StatusCode}: {body}");
-        return JsonSerializer.Deserialize<CollectorUploadResponse>(body, JsonOptions)
-               ?? throw new InvalidDataException("Server returned an empty analysis response.");
+            throw new InvalidOperationException(HttpResponseTrace.Append(
+                $"HTTP {(int)response.StatusCode}: {body}", responseTrace));
+        var result = JsonSerializer.Deserialize<CollectorUploadResponse>(body, JsonOptions)
+                     ?? throw new InvalidDataException(HttpResponseTrace.Append(
+                         "Server returned an empty analysis response.", responseTrace));
+        return result with { ResponseTrace = responseTrace };
     }
 
     private static bool IsRetryableTransportFailure(Exception exception)
@@ -1204,30 +1293,62 @@ internal sealed class UploadService : IDisposable
         return exception.Message.Length <= 240 ? exception.Message : exception.Message[..240];
     }
 
-    private async Task PollUntilReadyAsync(string matchUid, string pollUrl)
+    private async Task PollUntilReadyAsync(
+        string matchUid, string pollUrl, int initialPollAfterSeconds)
     {
         var url = pollUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)
             ? pollUrl : configuration.ServerBaseUrl.TrimEnd('/') + "/" + pollUrl.TrimStart('/');
-        var deadline = DateTime.UtcNow.AddMinutes(3);
-        var delay = 500;
-        while (DateTime.UtcNow < deadline)
+        var delaySeconds = MatchTransferContract.PollDelaySeconds(initialPollAfterSeconds, 30);
+        while (!stop.IsCancellationRequested)
         {
-            await Task.Delay(delay, stop.Token);
-            var (statusCode, body) = await SendAuthorizedGetAsync(url);
+            var jitterMilliseconds = Random.Shared.Next(0, 1501);
+            await Task.Delay(TimeSpan.FromSeconds(delaySeconds) +
+                             TimeSpan.FromMilliseconds(jitterMilliseconds), stop.Token);
+            var (statusCode, body, responseTrace) = await SendAuthorizedGetAsync(
+                url, matchStatusContract: true);
+            if (statusCode == (HttpStatusCode)429)
+            {
+                try
+                {
+                    using var limited = JsonDocument.Parse(body);
+                    delaySeconds = MatchTransferContract.PollDelaySeconds(
+                        limited.RootElement.TryGetProperty("retryAfterSeconds", out var retry)
+                            ? retry.GetInt32() : 30, 30);
+                }
+                catch (JsonException) { delaySeconds = 30; }
+                continue;
+            }
             if ((int)statusCode is < 200 or >= 300)
-                throw new InvalidOperationException($"Polling HTTP {(int)statusCode}: {body}");
+                throw new InvalidOperationException(HttpResponseTrace.Append(
+                    $"Polling HTTP {(int)statusCode}: {body}", responseTrace));
             var result = JsonSerializer.Deserialize<CollectorUploadResponse>(body, JsonOptions)
-                         ?? throw new InvalidDataException("Server returned an empty polling response.");
-            if (result.Status == "ready")
+                         ?? throw new InvalidDataException(HttpResponseTrace.Append(
+                             "Server returned an empty polling response.", responseTrace));
+            // A durable receipt exists before the server knows the canonical
+            // match identity. Once ingestion finishes, follow the server's
+            // authenticated hand-off to the ordinary result endpoint.
+            if (!string.IsNullOrWhiteSpace(result.PollUrl))
+                url = result.PollUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)
+                    ? result.PollUrl
+                    : configuration.ServerBaseUrl.TrimEnd('/') + "/" +
+                      result.PollUrl.TrimStart('/');
+            var publicState = MatchTransferContract.Normalize(result.PublicState ?? result.Status);
+            if (publicState == "ready")
             {
                 repository.MergeRemote(matchUid, result);
                 return;
             }
-            if (result.Status == "failed")
-                throw new InvalidDataException(result.Error ?? "Server analysis failed.");
-            delay = Math.Min(2000, delay + 250);
+            if (publicState == "action_required")
+                throw new InvalidDataException("server_action_required");
+            repository.SetUploadState(matchUid, publicState);
+            var previous = uploadProgress.GetValueOrDefault(matchUid);
+            uploadProgress[matchUid] = new UploadProgress(publicState,
+                previous?.CompletedBytes ?? 0, previous?.TotalBytes ?? 0,
+                previous?.CompletedChunks ?? 0, previous?.TotalChunks ?? 0,
+                previous?.BytesPerSecond ?? 0, previous?.Elapsed ?? TimeSpan.Zero);
+            delaySeconds = MatchTransferContract.PollDelaySeconds(result.PollAfterSeconds,
+                publicState == "processing" ? 15 : 30);
         }
-        throw new TimeoutException("Server analysis did not finish within three minutes.");
     }
 
     private void AddAuthorization(HttpRequestMessage request)

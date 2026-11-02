@@ -12,6 +12,7 @@ using Dalamud.Plugin.Services;
 using ActionSheet = Lumina.Excel.Sheets.Action;
 using StatusSheet = Lumina.Excel.Sheets.Status;
 using WorldSheet = Lumina.Excel.Sheets.World;
+using TerritoryTypeSheet = Lumina.Excel.Sheets.TerritoryType;
 
 namespace BattlefieldFrontlineCollector;
 
@@ -23,12 +24,8 @@ namespace BattlefieldFrontlineCollector;
 internal sealed class LiveCombatWindow : Window
 {
     private enum LiveSide { Unknown, Own, Enemy }
-    private static readonly Vector4[] TeamColors =
-    [
-        new(.96f, .31f, .37f, 1f),
-        new(.97f, .76f, .23f, 1f),
-        new(.28f, .64f, 1f, 1f)
-    ];
+    private static readonly Vector4[] TeamColors = FrontlineTeamPalette.Colors;
+    private static readonly Vector4[] CrystallineTeamColors = CrystallineTeamPalette.Colors;
     private static readonly Vector4 OwnSideColor = new(.30f, .78f, 1f, 1f);
     private static readonly Vector4 EnemySideColor = new(1f, .48f, .42f, 1f);
     private readonly Configuration configuration;
@@ -98,15 +95,20 @@ internal sealed class LiveCombatWindow : Window
 
     public override void Draw()
     {
-        WindowName = T("liveCombatTitle") + "###BattlefieldLiveCombat";
         var ui = state();
+        var crystalline = GameLayout.IsCrystallineDuty(ui.DutyId);
+        WindowName = crystalline
+            ? $"{T("crystallineMode")} · {T("liveCombatSlice")}###BattlefieldLiveCombat"
+            : T("liveCombatTitle") + "###BattlefieldLiveCombat";
         if (ui.MatchUid.Length > 0 && ui.MatchUid != activeMatchUid)
         {
             activeMatchUid = ui.MatchUid; frozen = false; cached = []; cachedCoordination = [];
             cachedMatchTendencyRows = []; cachedMatchCoordination = [];
             cachedObservedKda = [];
             cachedEndMs = -1; cachedMatchEvidenceEndMs = -1; nextRefreshAt = 0;
+            viewMode = 0;
         }
+        if (crystalline && viewMode == 2) viewMode = 0;
         var now = Environment.TickCount64;
         if (!frozen && now >= nextRefreshAt)
         {
@@ -114,27 +116,40 @@ internal sealed class LiveCombatWindow : Window
             nextRefreshAt = now + 250;
         }
         ImGui.TextColored(ui.Capturing ? new Vector4(.25f,.85f,.62f,1) : new Vector4(.65f,.7f,.76f,1),
-            ui.Capturing ? T("recording") : T("waiting"));
-        ImGui.SameLine(); ImGui.TextDisabled(T("liveObserverBoundary"));
+            ui.Capturing ? T(crystalline ? "recordingCrystalline" : "recording") : T("waiting"));
+        ImGui.SameLine(); ImGui.TextDisabled(T(crystalline
+            ? "liveObserverBoundaryCrystalline" : "liveObserverBoundary"));
         if (ui.Capturing)
         {
             DrawLocalObservedKdaHeader(ui);
-            DrawLiveScoreHeader(ui);
+            if (crystalline) DrawCrystallineTeamHeader(ui);
+            else DrawLiveScoreHeader(ui);
         }
 
         if (ImGui.Button(T("liveCombatSlice") + (viewMode == 0 ? "  ●" : string.Empty))) viewMode = 0;
         ImGui.SameLine();
         if (ImGui.Button(T("liveMarkerMap") + (viewMode == 1 ? "  ●" : string.Empty))) viewMode = 1;
-        ImGui.SameLine();
-        if (ImGui.Button(T("liveTendencyCandidates") + (viewMode == 2 ? "  ●" : string.Empty))) viewMode = 2;
+        if (!crystalline)
+        {
+            ImGui.SameLine();
+            if (ImGui.Button(T("liveTendencyCandidates") + (viewMode == 2 ? "  ●" : string.Empty)))
+                viewMode = 2;
+        }
         ImGui.SameLine();
         if (ImGui.Button(T("liveObservedKda") + (viewMode == 3 ? "  ●" : string.Empty))) viewMode = 3;
         ImGui.Separator();
         if (viewMode == 1) { DrawLiveMarkerMap(ui); return; }
         if (viewMode == 2)
         {
+            if (crystalline)
+            {
+                viewMode = 0;
+            }
+            else
+            {
             DrawLiveTendencyCandidates(ui);
             return;
+            }
         }
         if (viewMode == 3) { DrawObservedKda(); return; }
 
@@ -181,17 +196,17 @@ internal sealed class LiveCombatWindow : Window
                 : incoming || outgoing && row.Kind == "heal" ? LiveSide.Own : LiveSide.Unknown;
             ImGui.TableNextRow(); Cell(RelativeTime(row.ElapsedMs));
             ImGui.TableNextColumn(); DrawActor(row.SourceJobId, row.SourceName, row.SourceWorldId,
-                row.SourceTeam, row.SourceBattalion, ui.LocalPlayerBattalion, sourceSide);
+                row.SourceTeam, row.SourceBattalion, ui.LocalPlayerBattalion, sourceSide, crystalline);
             ImGui.TableNextColumn(); DrawAction(row.ActionId, row.ActionType);
             ImGui.TableNextColumn(); DrawActor(row.TargetJobId, row.TargetName, row.TargetWorldId,
-                row.TargetTeam, row.TargetBattalion, ui.LocalPlayerBattalion, targetSide);
+                row.TargetTeam, row.TargetBattalion, ui.LocalPlayerBattalion, targetSide, crystalline);
             ImGui.TableNextColumn(); ImGui.TextColored(row.Kind == "heal" ? new Vector4(.35f,.86f,.58f,1) : new Vector4(1f,.52f,.42f,1),
                 $"{(row.Kind == "heal" ? "+" : "-")}{row.Amount:N0}");
             ImGui.TableNextColumn();
             CombatUiPrimitives.DrawHpShieldBar(row.TargetCurrentHp, row.TargetMaxHp,
                 row.TargetShieldPercent, new Vector2(168, 17), $"live-{i}-{row.ElapsedMs}-{row.TargetEntityId}");
             ImGui.TableNextColumn(); DrawOperations(row, incoming, outgoing, sourceSide, targetSide,
-                ui.LocalPlayerBattalion, i);
+                ui.LocalPlayerBattalion, i, crystalline);
         }
         ImGui.EndTable();
     }
@@ -216,6 +231,9 @@ internal sealed class LiveCombatWindow : Window
         var spanX = viewport.SpanX; var spanY = viewport.SpanY;
         var uvMin = viewport.UvMin; var uvMax = viewport.UvMax;
 
+        var mapFactor = 100;
+        var mapOffsetX = 0;
+        var mapOffsetY = 0;
         if (MapAssets.TryGetValue(ui.DutyId, out var mapAsset))
         {
             try
@@ -229,10 +247,30 @@ internal sealed class LiveCombatWindow : Window
             }
             catch { /* Optional map asset: coordinate grid remains usable. */ }
         }
+        else if (GameLayout.IsCrystallineDuty(ui.DutyId) && ui.TerritoryId != 0)
+        {
+            try
+            {
+                var territory = dataManager.GetExcelSheet<TerritoryTypeSheet>().GetRow(ui.TerritoryId);
+                var map = territory.Map.Value;
+                mapFactor = Math.Max(1, (int)map.SizeFactor);
+                mapOffsetX = map.OffsetX;
+                mapOffsetY = map.OffsetY;
+                var id = map.Id.ToString();
+                var texturePath = $"ui/map/{id}/{id.Replace("/", string.Empty)}_m.tex";
+                var textureKey = 0x8000_0000u | ui.TerritoryId;
+                if (!mapTextures.TryGetValue(textureKey, out var texture))
+                    mapTextures[textureKey] = texture = textureProvider.GetFromGame(texturePath);
+                var wrap = texture.GetWrapOrDefault();
+                if (wrap != null) draw.AddImage(wrap.Handle, origin, origin + size, uvMin, uvMax,
+                    ImGui.ColorConvertFloat4ToU32(new Vector4(1, 1, 1, .9f)));
+            }
+            catch { /* Keep the coordinate grid when the game map texture is unavailable. */ }
+        }
 
         Vector2 Point(float x, float z)
         {
-            var uv = new Vector2(.5f + x / 2048f, .5f + z / 2048f);
+            var uv = MapCoordinateProjection.WorldToUv(x, z, mapFactor, mapOffsetX, mapOffsetY);
             return origin + new Vector2((uv.X - uvMin.X) / spanX * size.X,
                 (uv.Y - uvMin.Y) / spanY * size.Y);
         }
@@ -247,28 +285,141 @@ internal sealed class LiveCombatWindow : Window
         }
         foreach (var field in snapshot.Fields)
             DrawMarkerIcon(draw, Point(field.X, field.Z), field.Key, true, 14f, field.Index);
-        foreach (var objective in snapshot.Objectives.Where(x => x.MaxHp == 0 || x.CurrentHp > 1))
+        var weather = snapshot.Objectives
+            .Where(x => x.Id == WorqorWeatherMechanics.WeatherObjectiveId ||
+                        x.Label == WorqorWeatherMechanics.WeatherLabel)
+            .OrderByDescending(x => WorqorWeatherMechanics.IsWarningState(x.State))
+            .FirstOrDefault();
+        if (ui.DutyId == 127)
+        {
+            foreach (var node in SecureObjectiveCatalog.Nodes)
+            {
+                var dynamicState = snapshot.Objectives
+                    .Where(row => !SecureObjectiveCatalog.IsFixedNodeId(row.Id) &&
+                                  SecureObjectiveCatalog.TryGetMapIcon(row.State, out var icon) &&
+                                  SecureObjectiveCatalog.IsOccupationIcon(icon) &&
+                                  Math.Pow(row.X - node.X, 2) + Math.Pow(row.Z - node.Z, 2) <= 12 * 12)
+                    .FirstOrDefault();
+                var owner = dynamicState != null && dynamicState.OwnerTeam < 3
+                    ? dynamicState.OwnerTeam : (byte?)null;
+                var neutral = dynamicState != null &&
+                              SecureObjectiveCatalog.TryGetMapIcon(dynamicState.State, out var icon) &&
+                              SecureObjectiveCatalog.IsNeutralOccupationIcon(icon);
+                var ownerColor = owner is byte team ? TeamColors[team]
+                    : neutral ? new Vector4(.92f, .92f, .82f, 1f)
+                    : new Vector4(.56f, .60f, .62f, .92f);
+                var labelColor = node.HomeTeam is byte homeTeam ? TeamColors[homeTeam] : ownerColor;
+                ObjectiveMapGlyphRenderer.DrawSecureNode(draw, Point(node.X, node.Z), node.Code,
+                    node.HomeTeam.HasValue, ownerColor, labelColor);
+            }
+        }
+
+        IEnumerable<LiveObjectiveMarker> objectivesToRender = snapshot.Objectives;
+        if (ui.DutyId == SealRockObjectiveCatalog.DutyId)
+        {
+            var spawns = snapshot.Objectives.Where(row =>
+                FrontlineSpawnCatalog.TryGetTeam(row.State, out _));
+            var reduced = SealRockGlobalObjectiveReducer.ReduceLive(snapshot.Objectives)
+                .Select(point => point.ToObjectiveStateEvent())
+                .Select(row => new LiveObjectiveMarker(row.ObjectId, row.Label, row.State,
+                    row.OwnerTeam ?? 255, (float)row.X, (float)row.Y, (float)row.Z,
+                    EvidenceScope: row.EvidenceScope, ProgressPercent: row.ProgressPercent));
+            objectivesToRender = spawns.Concat(reduced);
+        }
+
+        foreach (var objective in objectivesToRender.Where(x =>
+                     x.Id != WorqorWeatherMechanics.WeatherObjectiveId &&
+                     x.Label != WorqorWeatherMechanics.WeatherLabel &&
+                     (ui.DutyId != 127 ||
+                      !SecureObjectiveCatalog.IsFixedNodeId(x.Id) &&
+                      (!SecureObjectiveCatalog.TryGetMapIcon(x.State, out var secureIcon) ||
+                       !SecureObjectiveCatalog.IsOccupationIcon(secureIcon))) &&
+                     (!GameLayout.IsCrystallineDuty(ui.DutyId) ||
+                      !IsRawMapIdentifier(x.Label) ||
+                      CrystallineMapMarkerCatalog.TryGetIcon(x.State, out _)) &&
+                     (x.MaxHp == 0 || x.CurrentHp > 1) &&
+                     (ui.DutyId != ShatterObjectiveCatalog.DutyId ||
+                      !string.Equals(x.EvidenceScope, ShatterObjectiveCatalog.GlobalMapEvidenceScope,
+                          StringComparison.Ordinal) ||
+                      ShatterObjectiveCatalog.ShouldDisplayMapState(x.State, x.RemainingSeconds,
+                          x.ProgressPercent, x.DisplayText, x.Label)) &&
+                     (ui.DutyId != OnsalObjectiveCatalog.DutyId ||
+                      FrontlineSpawnCatalog.TryGetTeam(x.State, out _) ||
+                      OnsalObjectiveCatalog.IsObjectiveState(x.State))))
         {
             var point = Point(objective.X, objective.Z);
-            var color = objective.OwnerTeam < 3
-                ? TeamColors[objective.OwnerTeam]
-                : new Vector4(1f, .78f, .24f, 1f);
-            var packed = ImGui.ColorConvertFloat4ToU32(color);
-            draw.AddCircleFilled(point, 8f, ImGui.ColorConvertFloat4ToU32(
-                new Vector4(.035f, .055f, .06f, .94f)));
-            draw.AddCircle(point, 8f, packed, 20, 2.5f);
-            draw.AddLine(point + new Vector2(-5, 0), point + new Vector2(5, 0), packed, 1.5f);
-            draw.AddLine(point + new Vector2(0, -5), point + new Vector2(0, 5), packed, 1.5f);
-            var suffix = objective.ProgressPercent.HasValue
-                ? $" {objective.ProgressPercent.Value:0}%"
-                : objective.MaxHp > 0
-                    ? $" {100d * objective.CurrentHp / objective.MaxHp:0}%"
-                    : objective.RemainingSeconds.HasValue
-                        ? $" T-{objective.RemainingSeconds.Value}s"
-                        : string.IsNullOrWhiteSpace(objective.DisplayText)
-                            ? string.Empty : $" {objective.DisplayText}";
+            if (FrontlineSpawnCatalog.TryGetTeam(objective.State, out var spawnTeam))
+            {
+                var spawnColor = TeamColors[spawnTeam];
+                ObjectiveMapGlyphRenderer.DrawSpawnLabel(draw, point, TeamName(spawnTeam),
+                    spawnColor, ui.LocalPlayerBattalion == spawnTeam);
+                continue;
+            }
+            var ownerTeam = objective.OwnerTeam < 3 ? objective.OwnerTeam :
+                ui.DutyId == OnsalObjectiveCatalog.DutyId
+                    ? OnsalObjectiveCatalog.OwnerFromState(objective.State) ?? (byte)255
+                    : (byte)255;
+            var onsalNeutral = ui.DutyId == OnsalObjectiveCatalog.DutyId &&
+                               OnsalObjectiveCatalog.IsNeutralState(objective.State);
+            var color = GameLayout.IsCrystallineDuty(ui.DutyId) && ownerTeam < 2
+                ? CrystallineTeamColors[ownerTeam]
+                : ownerTeam < 3
+                    ? TeamColors[ownerTeam]
+                    : onsalNeutral
+                        ? new Vector4(.92f, .92f, .82f, 1f)
+                        : new Vector4(.48f, .52f, .55f, .9f);
+            if (ui.DutyId == WorqorObjectiveCatalog.DutyId)
+                draw.AddCircleFilled(point, 10f, ImGui.ColorConvertFloat4ToU32(
+                    color with { W = ownerTeam < 3 ? .46f : .18f }), 24);
+            ObjectiveMapGlyphRenderer.Draw(draw, point, ui.DutyId,
+                objective.Label ?? string.Empty, objective.MaxHp, color,
+                (objective.State ?? string.Empty).Contains("captur",
+                    StringComparison.OrdinalIgnoreCase), objective.State ?? string.Empty);
+            var shatterPercent = ui.DutyId == ShatterObjectiveCatalog.DutyId
+                ? ShatterObjectiveCatalog.ResolveDisplayedHealthPercent(
+                    objective.CurrentHp, objective.MaxHp, objective.ProgressPercent)
+                : null;
+            var suffix = shatterPercent.HasValue
+                ? $" {shatterPercent.Value:0}%"
+                : objective.ProgressPercent.HasValue
+                    ? $" {objective.ProgressPercent.Value:0}%"
+                    : objective.MaxHp > 0
+                        ? $" {100d * objective.CurrentHp / objective.MaxHp:0}%"
+                        : (objective.RemainingSeconds ??
+                           (ui.DutyId == OnsalObjectiveCatalog.DutyId
+                               ? OnsalObjectiveCatalog.ParseDisplayedCountdownSeconds(objective.DisplayText) ??
+                                 OnsalObjectiveCatalog.ParseDisplayedCountdownSeconds(objective.Label)
+                               : null)) is int remainingSeconds
+                            ? $" T-{remainingSeconds}s"
+                            : ui.DutyId == OnsalObjectiveCatalog.DutyId ||
+                              string.IsNullOrWhiteSpace(objective.DisplayText)
+                                ? string.Empty : $" {objective.DisplayText}";
+            var objectiveLabel = ui.DutyId == WorqorObjectiveCatalog.DutyId
+                ? WorqorObjectiveCatalog.ShortPointCode(objective.Label)
+                : ui.DutyId == OnsalObjectiveCatalog.DutyId
+                    ? OnsalObjectiveCatalog.ShortPointCode(objective.Label)
+                : ui.DutyId == ShatterObjectiveCatalog.DutyId
+                    ? ShatterObjectiveCatalog.DisplayCode(objective.Label, objective.X, objective.Z)
+                : objective.Label == "cc_tactical_crystal"
+                    ? T("ccTacticalCrystal")
+                : objective.Label == "cc_tactical_checkpoint"
+                    ? T("ccHarmoniasCheckpoint")
+                    : objective.Label;
+            if (string.IsNullOrWhiteSpace(objectiveLabel))
+                objectiveLabel = ui.DutyId is ShatterObjectiveCatalog.DutyId or OnsalObjectiveCatalog.DutyId
+                    ? T("unresolvedObjective") : objective.Label;
+            // The global point icon proves only the final aggregate owner. It
+            // does not expose each field's colour during a contested capture,
+            // so never fabricate N/N from that aggregate state.
             draw.AddText(point + new Vector2(11, -9),
-                ImGui.ColorConvertFloat4ToU32(Vector4.One), objective.Label + suffix);
+                ImGui.ColorConvertFloat4ToU32(Vector4.One), objectiveLabel + suffix);
+            if (ui.DutyId == OnsalObjectiveCatalog.DutyId &&
+                (objective.RemainingSeconds ??
+                 OnsalObjectiveCatalog.ParseDisplayedCountdownSeconds(objective.DisplayText) ??
+                 OnsalObjectiveCatalog.ParseDisplayedCountdownSeconds(objective.Label)) is int onsalSeconds)
+            {
+                DrawCompactCountdownBar(draw, point + new Vector2(-16, 12), onsalSeconds, color);
+            }
         }
         foreach (var target in snapshot.Targets.Where(x => x.PositionVisible))
         {
@@ -288,6 +439,19 @@ internal sealed class LiveCombatWindow : Window
         }
         draw.AddText(origin + new Vector2(12, 10), ImGui.ColorConvertFloat4ToU32(Vector4.One),
             MapAssets.TryGetValue(ui.DutyId, out var asset) ? T(asset.NameKey) : T("mapOverlay"));
+        if (ui.DutyId == WorqorWeatherMechanics.DutyId && weather != null)
+        {
+            var key = WorqorWeatherMechanics.TextKey(weather.State);
+            if (!string.IsNullOrEmpty(key))
+            {
+                var text = WorqorWeatherMechanics.IsWarningState(weather.State) &&
+                           weather.RemainingSeconds is int seconds
+                    ? string.Format(T(key), seconds)
+                    : T(key);
+                draw.AddText(origin + new Vector2(12, 32),
+                    ImGui.ColorConvertFloat4ToU32(new Vector4(.30f, .88f, 1f, 1f)), text);
+            }
+        }
         draw.AddText(origin + new Vector2(12, size.Y - 23),
             ImGui.ColorConvertFloat4ToU32(new Vector4(.53f, .61f, .66f, 1f)), T("mapControls"));
         draw.PopClipRect();
@@ -301,6 +465,43 @@ internal sealed class LiveCombatWindow : Window
         if (ImGui.IsItemHovered()) ImGui.SetTooltip($"{T("mapZoom")} {markerMapZoom:0.0}×");
         ImGui.PopStyleColor(2);
         ImGui.SetCursorScreenPos(afterCanvas);
+    }
+
+    private static bool IsRawMapIdentifier(string? label)
+    {
+        if (string.IsNullOrWhiteSpace(label)) return true;
+        var value = label.Trim();
+        return value.StartsWith("icon:", StringComparison.OrdinalIgnoreCase) ||
+               value.StartsWith('#') && value[1..].All(char.IsDigit);
+    }
+
+    private static void DrawCompactObjectivePolygon(ImDrawListPtr draw, Vector2 center, int sides,
+        Vector4 color)
+    {
+        if (sides is < 3 or > 5) return;
+        var rotation = sides == 4 ? MathF.PI / 4 : -MathF.PI / 2;
+        var fill = ImGui.ColorConvertFloat4ToU32(color with { W = .46f });
+        var outline = ImGui.ColorConvertFloat4ToU32(color);
+        for (var index = 0; index < sides; index++)
+        {
+            var fromAngle = rotation + index * MathF.Tau / sides;
+            var toAngle = rotation + (index + 1) * MathF.Tau / sides;
+            var from = center + new Vector2(MathF.Cos(fromAngle), MathF.Sin(fromAngle)) * 9f;
+            var to = center + new Vector2(MathF.Cos(toAngle), MathF.Sin(toAngle)) * 9f;
+            draw.AddTriangleFilled(center, from, to, fill);
+            draw.AddLine(from, to, outline, 2.5f);
+        }
+    }
+
+    private static void DrawCompactCountdownBar(ImDrawListPtr draw, Vector2 at, int remainingSeconds,
+        Vector4 color)
+    {
+        const float width = 32, height = 4;
+        draw.AddRectFilled(at, at + new Vector2(width, height),
+            ImGui.ColorConvertFloat4ToU32(new Vector4(.04f, .06f, .07f, .88f)), 2);
+        draw.AddRectFilled(at, at + new Vector2(width *
+                (float)(OnsalObjectiveCatalog.CountdownPercent(remainingSeconds) / 100d), height),
+            ImGui.ColorConvertFloat4ToU32(color), 2);
     }
 
     private void DrawLiveScoreHeader(CollectorUiState ui)
@@ -337,6 +538,29 @@ internal sealed class LiveCombatWindow : Window
                     ? string.Format(T("liveProjectedScoreHelp"), projected - ui.Score.Current(team))
                     : T("liveCurrentScoreHelp"));
             if (team < 2) ImGui.SameLine(0, spacing);
+        }
+    }
+
+    private void DrawCrystallineTeamHeader(CollectorUiState ui)
+    {
+        ImGui.NewLine();
+        var labels = new[] { T("ccAstra"), T("ccUmbra") };
+        const float spacing = 22f;
+        var totalWidth = labels.Sum(label => ImGui.CalcTextSize(label).X) + spacing;
+        var right = ImGui.GetWindowContentRegionMax().X;
+        ImGui.SetCursorPosX(Math.Max(ImGui.GetWindowContentRegionMin().X, right - totalWidth));
+        for (byte team = 0; team < 2; team++)
+        {
+            var begin = ImGui.GetCursorScreenPos();
+            ImGui.TextColored(CrystallineTeamColors[team], labels[team]);
+            if (ui.LocalPlayerBattalion == team)
+            {
+                var end = ImGui.GetItemRectMax();
+                ImGui.GetWindowDrawList().AddLine(new Vector2(begin.X, end.Y + 1),
+                    new Vector2(end.X, end.Y + 1),
+                    ImGui.ColorConvertFloat4ToU32(CrystallineTeamColors[team]), 3.5f);
+            }
+            if (team == 0) ImGui.SameLine(0, spacing);
         }
     }
 
@@ -509,7 +733,7 @@ internal sealed class LiveCombatWindow : Window
     }
 
     private void DrawOperations(LiveCombatRow row, bool incoming, bool outgoing,
-        LiveSide sourceSide, LiveSide targetSide, byte localBattalion, int index)
+        LiveSide sourceSide, LiveSide targetSide, byte localBattalion, int index, bool crystalline)
     {
         // The targeting button always means "select the other side of my event":
         // my outgoing event -> target; incoming event -> source.  For a row not
@@ -538,23 +762,24 @@ internal sealed class LiveCombatWindow : Window
         ImGui.SameLine(0, 6);
         if (ImGui.SmallButton($"⧉##live-copy-{index}-{row.ElapsedMs}-{row.ActionId}"))
         {
-            ImGui.SetClipboardText(BuildEvidenceText(row, sourceSide, targetSide, localBattalion));
+            ImGui.SetClipboardText(BuildEvidenceText(row, sourceSide, targetSide,
+                localBattalion, crystalline));
             copiedUntil = Environment.TickCount64 + 1800;
         }
         if (ImGui.IsItemHovered()) ImGui.SetTooltip(T("copyCombatRecord"));
     }
 
     private string BuildEvidenceText(LiveCombatRow row, LiveSide sourceSide, LiveSide targetSide,
-        byte localBattalion)
+        byte localBattalion, bool crystalline)
     {
         var shield = CombatUiPrimitives.ShieldAmount(row.TargetMaxHp, row.TargetShieldPercent);
         var statuses = row.TargetStatusIds is { Count: > 0 }
             ? string.Join(", ", row.TargetStatusIds.Select(id => StatusName(id))) : T("noCapturedStatuses");
         var amountKind = row.Kind == "heal" ? T("healingEvent") : T("damage");
         return $"[{TimeSpan.FromMilliseconds(row.ElapsedMs):mm\\:ss}] " +
-               $"{T("source")}: {ActorText(row.SourceName, row.SourceWorldId, row.SourceTeam, row.SourceBattalion, localBattalion, sourceSide)} | " +
+               $"{T("source")}: {ActorText(row.SourceName, row.SourceWorldId, row.SourceTeam, row.SourceBattalion, localBattalion, sourceSide, crystalline)} | " +
                $"{T("action")}: {ActionName(row.ActionId)} | {amountKind}: {row.Amount:N0} | " +
-               $"{T("target")}: {ActorText(row.TargetName, row.TargetWorldId, row.TargetTeam, row.TargetBattalion, localBattalion, targetSide)} | " +
+               $"{T("target")}: {ActorText(row.TargetName, row.TargetWorldId, row.TargetTeam, row.TargetBattalion, localBattalion, targetSide, crystalline)} | " +
                $"{T("stateAfterEvent")}: HP {row.TargetCurrentHp:N0}/{row.TargetMaxHp:N0} (+{T("shield")} {shield:N0}); " +
                $"{T("statuses")}: {statuses}";
     }
@@ -567,27 +792,36 @@ internal sealed class LiveCombatWindow : Window
     }
 
     private void DrawActor(byte jobId, string name, ushort worldId, byte team, byte battalion,
-        byte localBattalion, LiveSide side)
+        byte localBattalion, LiveSide side, bool crystalline)
     {
         DrawJob(jobId); ImGui.SameLine(0, 5);
         ImGui.TextUnformatted(Display(name, worldId));
-        var label = TeamOrSideText(team, battalion, localBattalion, side);
+        var label = TeamOrSideText(team, battalion, localBattalion, side, crystalline);
         if (label.Length == 0) return;
         ImGui.SameLine(0, 5);
-        var isOwn = localBattalion <= 2 && battalion == localBattalion || side == LiveSide.Own;
-        var color = team < TeamColors.Length ? TeamColors[team] : isOwn ? OwnSideColor : EnemySideColor;
+        var isOwn = localBattalion <= (crystalline ? 1 : 2) && battalion == localBattalion ||
+                    side == LiveSide.Own;
+        var color = crystalline && ResolveCrystallineTeam(team, battalion) is byte ccTeam
+            ? CrystallineTeamColors[ccTeam]
+            : team < TeamColors.Length ? TeamColors[team] : isOwn ? OwnSideColor : EnemySideColor;
         ImGui.TextColored(color, label);
     }
 
     private string ActorText(string name, ushort worldId, byte team, byte battalion,
-        byte localBattalion, LiveSide side)
+        byte localBattalion, LiveSide side, bool crystalline)
     {
-        var label = TeamOrSideText(team, battalion, localBattalion, side);
+        var label = TeamOrSideText(team, battalion, localBattalion, side, crystalline);
         return label.Length == 0 ? Display(name, worldId) : $"{Display(name, worldId)} · {label}";
     }
 
-    private string TeamOrSideText(byte team, byte battalion, byte localBattalion, LiveSide side)
+    private string TeamOrSideText(byte team, byte battalion, byte localBattalion, LiveSide side,
+        bool crystalline)
     {
+        if (crystalline)
+        {
+            var ccTeam = ResolveCrystallineTeam(team, battalion);
+            return ccTeam switch { 0 => T("ccAstra"), 1 => T("ccUmbra"), _ => string.Empty };
+        }
         if (team < 3) return team switch { 0 => T("maelstrom"), 1 => T("adders"), _ => T("flames") };
         if (battalion <= 2)
         {
@@ -598,6 +832,9 @@ internal sealed class LiveCombatWindow : Window
         return side == LiveSide.Own ? T("ownSide")
             : side == LiveSide.Enemy ? T("enemySide") : string.Empty;
     }
+
+    private static byte? ResolveCrystallineTeam(byte team, byte battalion) =>
+        team <= 1 ? team : battalion <= 1 ? battalion : null;
 
     private string TeamName(byte team) => team switch
     {
